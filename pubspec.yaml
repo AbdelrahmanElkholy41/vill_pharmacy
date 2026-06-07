@@ -1,0 +1,31 @@
+name: pharmacy_app
+description: صيدلية القرية - Clean Architecture + Provider
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.1.2
+  dartz: ^0.10.1
+  equatable: ^2.0.5
+  cupertino_icons: ^1.0.6
+  flutter_screenutil: ^5.9.3
+  flutter_native_splash: ^2.4.6
+  flutter_native_splash_ohos: ^1.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  flutter_native_splash: ^2.4.6
+
+
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
