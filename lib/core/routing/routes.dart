@@ -3,9 +3,9 @@ class Routes {
 
   static const String login = '/login';
   static const String homeScreen = '/homeScreen';
-  static const String signUpScreen = '/signUpScreen';
-  static const String completeSigUp='/completeSigUp';
-  static const String completeSigUp2='/completeSigUp2';
+  static const String dashboardScreen = '/dashboardScreen';
+  static const String track='/trackScreen';
+  static const String newOrder='/newOrder';
   static const String AllMySigns='/AllMySigns';
   static const String SaveSing='/SaveSing';
   static const String RecordSign='/RecordSign';

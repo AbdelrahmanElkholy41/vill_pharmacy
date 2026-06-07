@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pharmacy_app/core/helpers/extensions.dart';
 
+import '../../../../core/routing/routes.dart';
 import '../widgets/parmacy_card.dart';
 
 class PharmacyHomeScreen extends StatefulWidget {
@@ -99,7 +101,9 @@ class _PharmacyHomeScreenState extends State<PharmacyHomeScreen> {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: widget.onNewOrder,
+        onPressed: (){
+          context.pushNamed(Routes.newOrder);
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF22C55E),
           foregroundColor: Colors.white,
@@ -159,7 +163,9 @@ class _PharmacyHomeScreenState extends State<PharmacyHomeScreen> {
         children: [
           Expanded(
             child: OutlinedButton(
-              onPressed: widget.onDashboard,
+              onPressed:(){
+                context.pushNamed(Routes.dashboardScreen,);
+              },
               style: OutlinedButton.styleFrom(
                 foregroundColor: const Color(0xFF22C55E),
                 side: const BorderSide(color: Color(0xFF22C55E), width: 1.5),
@@ -174,7 +180,9 @@ class _PharmacyHomeScreenState extends State<PharmacyHomeScreen> {
           const SizedBox(width: 12),
           Expanded(
             child: ElevatedButton(
-              onPressed: widget.onTrack,
+              onPressed: (){
+                context.pushNamed(Routes.track);
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF22C55E),
                 foregroundColor: Colors.white,

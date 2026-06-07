@@ -60,7 +60,7 @@ class _PharmacyDashboardScreenState extends State<PharmacyDashboardScreen> {
                   children: [
                     GestureDetector(
                       onTap: widget.onBack,
-                      child: Row(
+                      child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.arrow_forward,
