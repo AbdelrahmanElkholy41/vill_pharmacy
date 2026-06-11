@@ -24,7 +24,7 @@ class PharmacyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: AppTheme.theme,
 
-          initialRoute:Routes.homeScreen,
+          initialRoute:Routes.login,
           onGenerateRoute: AppRouter().generateRoute,
         );
       },
