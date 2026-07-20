@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../domain/user_entity.dart';
+import '../../domain/entities/user_entity.dart';
 
 class RoleSelector extends StatelessWidget {
   final UserRole selectedRole;

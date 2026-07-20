@@ -1,6 +1,12 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pharmacy_app/core/routing/routes.dart';
 
+import '../../features/auth/data/datasource/auth_remote_data_source_impl.dart';
+import '../../features/auth/data/repositories/auth_repository_impl.dart';
+import '../../features/auth/domain/usecases/login_use_case.dart';
+import '../../features/auth/presentation/Cubit/login_cubit.dart';
 import '../../features/auth/presentation/screens/login.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/dashboard/presentation/screens/dashboard.dart';
@@ -14,7 +20,20 @@ class AppRouter {
     //this arguments to be passed in any screen like this ( arguments as ClassName )
     switch (settings.name) {
       case Routes.login:
-        return MaterialPageRoute(builder: (_) => Login());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => LoginCubit(
+              LoginUseCase(
+                AuthRepositoryImpl(
+                  AuthRemoteDataSourceImpl(
+                    Dio(),
+                  ),
+                ),
+              ),
+            ),
+            child: Login(),
+          ),
+        );
       case Routes.homeScreen:
         return MaterialPageRoute(
             builder: (_) => PharmacyHomeScreen(
