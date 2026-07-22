@@ -2,4 +2,5 @@ import '../entities/user_entity.dart';
 
 abstract class AuthRepository {
   Future<UserEntity> login(LoginEntity request);
+  Future<UserEntity> register(RegisterEntity request);
 }

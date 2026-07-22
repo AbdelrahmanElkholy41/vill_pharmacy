@@ -6,7 +6,9 @@ import 'package:pharmacy_app/core/routing/routes.dart';
 import '../../features/auth/data/datasource/auth_remote_data_source_impl.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
 import '../../features/auth/domain/usecases/login_use_case.dart';
+import '../../features/auth/domain/usecases/register_use_case.dart';
 import '../../features/auth/presentation/Cubit/login_cubit.dart';
+import '../../features/auth/presentation/Cubit/register_cubit.dart';
 import '../../features/auth/presentation/screens/login.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/dashboard/presentation/screens/dashboard.dart';
@@ -42,7 +44,15 @@ class AppRouter {
                   onTrack: () {},
                 ));
       case Routes.registrationScreen:
-        return MaterialPageRoute(builder: (_) => const RegisterScreen());
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                create: (_) {
+                  return RegisterCubit(RegisterUseCase(
+                      AuthRepositoryImpl(AuthRemoteDataSourceImpl(
+                    Dio(),
+                  ))));
+                },
+                child: const RegisterScreen()));
 
       case Routes.dashboardScreen:
         return MaterialPageRoute(

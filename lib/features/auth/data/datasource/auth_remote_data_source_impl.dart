@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:pharmacy_app/features/auth/data/models/regester_request_modal.dart';
 
 import '../models/login_request_model.dart';
 import '../models/login_response_modal.dart';
@@ -37,5 +38,44 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       rethrow;
     }
+  }
+
+  @override
+  Future<AuthResponseModel> register(registerRequestModel request) async {
+    try {
+
+      final response = await dio.post(
+        'https://pharmacy-nu-ivory.vercel.app/api/v1/auth/register',
+        data: {
+          'fullName': request.fullName,
+          'email': request.email,
+          'password': request.password,
+          'phone': request.phone,
+          'role': request.role.name,
+        },
+      );
+      print("-------------------------------------");
+print(request.role);
+      print("STATUS CODE: ${response.statusCode}");
+      print("DATA: ${response.data}");
+
+      return AuthResponseModel.fromJson(response.data);
+
+    } catch (e) {
+
+      if (e is DioException) {
+
+        print("STATUS CODE: ${e.response?.statusCode}");
+
+        print("RESPONSE DATA:");
+        print(e.response?.data);
+
+      }
+
+      print("REMOTE ERROR: $e");
+
+      rethrow;
+    }
+
   }
 }
