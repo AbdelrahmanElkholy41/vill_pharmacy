@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../home/presentation/screens/home.dart';
+import '../../../home/presentation/screens/customer_home.dart';
 
 class NewOrderScreen extends StatefulWidget {
   final VoidCallback onBack;

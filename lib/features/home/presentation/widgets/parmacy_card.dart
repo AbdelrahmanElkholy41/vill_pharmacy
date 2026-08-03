@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import '../screens/home.dart';
+import '../screens/customer_home.dart';
 
 class PharmacyCard extends StatelessWidget {
   final Pharmacy pharmacy;

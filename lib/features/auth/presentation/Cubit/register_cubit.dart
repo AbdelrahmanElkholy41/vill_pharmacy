@@ -8,6 +8,7 @@ import '../../domain/usecases/register_use_case.dart';
 class RegisterCubit extends Cubit<RegisterState> {
 
   final RegisterUseCase registerUseCase;
+
   RegisterCubit(this.registerUseCase) : super(RegisterInitial());
 
 
@@ -17,11 +18,14 @@ class RegisterCubit extends Cubit<RegisterState> {
     required String password,
     required String phone,
     required UserRole role,
-}) async {
-    print("REGISTER START: $email - $password");
+  }) async {
+
+
     emit(RegisterLoading());
+
     try {
-      final user = await registerUseCase(
+
+      final response = await registerUseCase(
         RegisterEntity(
           fullName: fullName,
           email: email,
@@ -30,9 +34,19 @@ class RegisterCubit extends Cubit<RegisterState> {
           role: role,
         ),
       );
-      emit(RegisterSuccess(user));
+
+
+      emit(
+        RegisterSuccess(response),
+      );
+
+
     } catch (e) {
-      emit(RegisterError(e.toString()));
+
+      emit(
+        RegisterError(e.toString()),
+      );
+
     }
   }
 

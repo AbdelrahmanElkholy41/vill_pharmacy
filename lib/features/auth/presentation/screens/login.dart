@@ -8,6 +8,7 @@ import '../../../../core/helpers/extensions.dart';
 import '../../../../core/routing/routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../Cubit/auth_cubit.dart';
 import '../Cubit/login_cubit.dart';
 import '../widgets/auth_header.dart';
 import '../widgets/auth_text_field.dart';
@@ -26,7 +27,12 @@ class Login extends StatelessWidget {
             content: Text(state.message), backgroundColor: AppColors.white));
       }
       if (state is LoginSuccess) {
-        context.pushNamed(Routes.homeScreen);
+
+        context.read<AuthCubit>().login(state.response.user);
+        print(state.response.user);
+        print(state.response.accessToken);
+       context.pushNamed(Routes.RoleGeta,arguments: state.response.user);
+
       }
     }, builder: (context, state) {
       return Scaffold(

@@ -8,9 +8,9 @@ class LoginInitial extends LoginState {}
 class LoginLoading extends LoginState {}
 
 class LoginSuccess extends LoginState {
-  final UserEntity user;
+  final AuthResponseEntity response;
 
-  LoginSuccess(this.user);
+  LoginSuccess(this.response);
 }
 
 class LoginError extends LoginState {

@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pharmacy_app/core/routing/routes.dart';
 
+import '../../features/auth/data/datasource/auth_local_data_source_impl.dart';
 import '../../features/auth/data/datasource/auth_remote_data_source_impl.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
+import '../../features/auth/domain/entities/user_entity.dart';
 import '../../features/auth/domain/usecases/login_use_case.dart';
 import '../../features/auth/domain/usecases/register_use_case.dart';
 import '../../features/auth/presentation/Cubit/login_cubit.dart';
@@ -12,7 +14,8 @@ import '../../features/auth/presentation/Cubit/register_cubit.dart';
 import '../../features/auth/presentation/screens/login.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/dashboard/presentation/screens/dashboard.dart';
-import '../../features/home/presentation/screens/home.dart';
+import '../../features/home/presentation/screens/customer_home.dart';
+import '../../features/home/presentation/screens/role_screen.dart';
 import '../../features/new_order/presentation/screens/new_order.dart';
 import '../../features/order_status/presentation/screens/order_status.dart';
 import '../helpers/extensions.dart';
@@ -30,6 +33,7 @@ class AppRouter {
                   AuthRemoteDataSourceImpl(
                     Dio(),
                   ),
+                  AuthLocalDataSourceImpl(),
                 ),
               ),
             ),
@@ -38,19 +42,21 @@ class AppRouter {
         );
       case Routes.homeScreen:
         return MaterialPageRoute(
-            builder: (_) => PharmacyHomeScreen(
+            builder: (_) => CustomerHomeScreen(
                   onDashboard: () {},
                   onNewOrder: () {},
-                  onTrack: () {},
+                  onTrack: () {}, userRole: settings.arguments as UserRole,
                 ));
       case Routes.registrationScreen:
         return MaterialPageRoute(
             builder: (_) => BlocProvider(
                 create: (_) {
-                  return RegisterCubit(RegisterUseCase(
-                      AuthRepositoryImpl(AuthRemoteDataSourceImpl(
-                    Dio(),
-                  ))));
+                  return RegisterCubit(RegisterUseCase(AuthRepositoryImpl(
+                    AuthRemoteDataSourceImpl(
+                      Dio(),
+                    ),
+                    AuthLocalDataSourceImpl(),
+                  )));
                 },
                 child: const RegisterScreen()));
 
@@ -61,6 +67,13 @@ class AppRouter {
                     Navigator.pop(_);
                   },
                 ));
+        case Routes.RoleGeta:
+          return MaterialPageRoute(builder: (BuildContext context) {
+
+            return RoleGate(user: settings.arguments as UserEntity,);
+          }
+
+          );
 
       case Routes.track:
         return MaterialPageRoute(

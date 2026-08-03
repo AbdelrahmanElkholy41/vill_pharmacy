@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:pharmacy_app/core/helpers/extensions.dart';
+import 'package:pharmacy_app/features/auth/domain/entities/user_entity.dart';
 
 import '../../../../core/routing/routes.dart';
+import '../../../auth/domain/entities/user_entity.dart';
 import '../widgets/parmacy_card.dart';
 
-class PharmacyHomeScreen extends StatefulWidget {
+class CustomerHomeScreen extends StatefulWidget {
   final VoidCallback onDashboard;
   final VoidCallback onNewOrder;
   final VoidCallback onTrack;
+  final UserRole userRole;
 
-  const PharmacyHomeScreen({
+
+  const CustomerHomeScreen({
     super.key,
     required this.onDashboard,
     required this.onNewOrder,
-    required this.onTrack,
+    required this.onTrack, required this.userRole,
   });
 
   @override
-  State<PharmacyHomeScreen> createState() => _PharmacyHomeScreenState();
+  State<CustomerHomeScreen> createState() => _PharmacyHomeScreenState();
 }
 
-class _PharmacyHomeScreenState extends State<PharmacyHomeScreen> {
+class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
   final List<Pharmacy> _pharmacies = [
     Pharmacy(name: 'صيدلية النور', rating: 4.5, distance: '500م', isOpen: true),
     Pharmacy(name: 'صيدلية الشفاء', rating: 4.8, distance: '800م', isOpen: true),
@@ -29,6 +33,8 @@ class _PharmacyHomeScreenState extends State<PharmacyHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(UserRole);
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -161,22 +167,22 @@ class _PharmacyHomeScreenState extends State<PharmacyHomeScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
-          Expanded(
-            child: OutlinedButton(
-              onPressed:(){
-                context.pushNamed(Routes.dashboardScreen,);
-              },
-              style: OutlinedButton.styleFrom(
-                foregroundColor: const Color(0xFF22C55E),
-                side: const BorderSide(color: Color(0xFF22C55E), width: 1.5),
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
-              ),
-              child: const Text('لوحة الصيدلية',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-            ),
-          ),
+          // Expanded(
+          //   child: OutlinedButton(
+          //     onPressed:(){
+          //       context.pushNamed(Routes.dashboardScreen,);
+          //     },
+          //     style: OutlinedButton.styleFrom(
+          //       foregroundColor: const Color(0xFF22C55E),
+          //       side: const BorderSide(color: Color(0xFF22C55E), width: 1.5),
+          //       padding: const EdgeInsets.symmetric(vertical: 14),
+          //       shape: RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.circular(12)),
+          //     ),
+          //     child: const Text('لوحة الصيدلية',
+          //         style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+          //   ),
+          // ),
           const SizedBox(width: 12),
           Expanded(
             child: ElevatedButton(

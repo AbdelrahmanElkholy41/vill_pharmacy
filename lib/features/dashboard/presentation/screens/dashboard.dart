@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../home/presentation/screens/home.dart';
+import '../../../home/presentation/screens/customer_home.dart';
 import '../widgets/dashbordCard.dart';
 
 class PharmacyDashboardScreen extends StatefulWidget {

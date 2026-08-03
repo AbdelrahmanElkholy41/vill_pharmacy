@@ -8,11 +8,9 @@ class LoginUseCase {
   LoginUseCase(this.repository);
 
 
-  Future<UserEntity> call(LoginEntity request) async {
+  Future<AuthResponseEntity> call(LoginEntity request) {
 
-    print("REPOSITORY CALL FROM USECASE");
+    return repository.login(request);
 
-    return await repository.login(request);
   }
 }
-

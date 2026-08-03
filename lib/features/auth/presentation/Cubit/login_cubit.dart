@@ -1,5 +1,3 @@
-
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/entities/user_entity.dart';
@@ -18,24 +16,31 @@ class LoginCubit extends Cubit<LoginState> {
     required String email,
     required String password,
   }) async {
+
     print("LOGIN START: $email - $password");
 
     emit(LoginLoading());
 
     try {
 
-      final user = await loginUseCase(
+      final response = await loginUseCase(
         LoginEntity(
           email: email,
           password: password,
         ),
       );
 
-      emit(LoginSuccess(user));
+
+      emit(
+        LoginSuccess(response),
+      );
+
 
     } catch (e) {
 
-      emit(LoginError(e.toString()));
+      emit(
+        LoginError(e.toString()),
+      );
 
     }
   }

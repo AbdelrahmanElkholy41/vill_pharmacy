@@ -25,7 +25,7 @@ class RegisterScreen extends StatelessWidget {
         if(state is RegisterSuccess){
 
           context.pushNamed(
-            Routes.homeScreen,
+            Routes.RoleGeta,arguments: state.response.user,
           );
 
         }
