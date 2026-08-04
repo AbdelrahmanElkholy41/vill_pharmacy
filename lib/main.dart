@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +8,9 @@ import 'core/routing/routes.dart';
 import 'core/theme/app_theme.dart';
 
 import 'features/auth/data/datasource/auth_local_data_source_impl.dart';
+import 'features/auth/data/datasource/auth_remote_data_source_impl.dart';
+import 'features/auth/data/repositories/auth_repository_impl.dart';
+import 'features/auth/domain/usecases/logout_use_case.dart';
 import 'features/auth/presentation/Cubit/auth_cubit.dart';
 import 'features/auth/presentation/screens/app_start.dart';
 
@@ -14,8 +18,14 @@ import 'features/auth/presentation/screens/app_start.dart';
 void main() {
   runApp(
     BlocProvider(
-      create: (_) => AuthCubit(
+      create: (_) =>AuthCubit(
         AuthLocalDataSourceImpl(),
+        LogoutUseCase(
+          AuthRepositoryImpl(
+            AuthRemoteDataSourceImpl(Dio()),
+            AuthLocalDataSourceImpl(),
+          ),
+        ),
       )..checkAuth(),
 
       child: const PharmacyApp(),

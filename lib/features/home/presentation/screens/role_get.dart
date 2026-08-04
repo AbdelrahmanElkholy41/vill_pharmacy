@@ -4,6 +4,7 @@ import 'package:pharmacy_app/features/home/presentation/screens/pharmacy_home.da
 
 import '../../../auth/domain/entities/user_entity.dart';
 import '../../../auth/presentation/Cubit/auth_cubit.dart';
+import '../../../dashboard/presentation/screens/dashboard.dart';
 import 'customer_home.dart';
 
 class RoleGate extends StatelessWidget {
@@ -22,7 +23,7 @@ class RoleGate extends StatelessWidget {
         );
 
       case UserRole.pharmacist:
-        return PharmacyHome();
+        return PharmacyDashboardScreen(onBack: () {  },);
     }
   }
 }

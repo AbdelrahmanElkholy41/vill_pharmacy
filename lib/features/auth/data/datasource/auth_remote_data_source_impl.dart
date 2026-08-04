@@ -39,6 +39,17 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       rethrow;
     }
   }
+  @override
+  Future<void> logout(String token) async {
+    await dio.post(
+      'https://pharmacy-nu-ivory.vercel.app/api/v1/auth/logout',
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+  }
 
   @override
   Future<AuthResponseModel> register(registerRequestModel request) async {

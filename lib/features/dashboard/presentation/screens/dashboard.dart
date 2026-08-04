@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pharmacy_app/core/helpers/extensions.dart';
 
+import '../../../../core/routing/routes.dart';
 import '../../../home/presentation/screens/customer_home.dart';
 import '../widgets/dashbordCard.dart';
 
@@ -56,30 +58,24 @@ class _PharmacyDashboardScreenState extends State<PharmacyDashboardScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    GestureDetector(
-                      onTap: widget.onBack,
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.arrow_forward,
-                              size: 16, color: Color(0xFF22C55E)),
-                          SizedBox(width: 4),
-                          Text('رجوع',
-                              style: TextStyle(
-                                  color: Color(0xFF22C55E),
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14)),
-                        ],
-                      ),
-                    ),
                     const SizedBox(height: 12),
-                    const Text('لوحة تحكم الصيدلية',
-                        style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF111827))),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+
+                        const Text('لوحة تحكم الصيدلية',
+                            style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF111827))),
+                    IconButton(onPressed: (){
+                      context.pushNamed(Routes.pharmacyProfile);
+                    }, icon: const Icon(Icons.local_pharmacy, size: 24),)
+
+
+                      ],
+                    ),
                   ],
                 ),
               ),

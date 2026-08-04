@@ -15,9 +15,12 @@ import '../../features/auth/presentation/screens/login.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/dashboard/presentation/screens/dashboard.dart';
 import '../../features/home/presentation/screens/customer_home.dart';
-import '../../features/home/presentation/screens/role_screen.dart';
+import '../../features/home/presentation/screens/role_get.dart';
 import '../../features/new_order/presentation/screens/new_order.dart';
 import '../../features/order_status/presentation/screens/order_status.dart';
+import '../../features/setting_pharmacy/data/models/pharmacy_modal.dart';
+import '../../features/setting_pharmacy/presentation/screens/pharmacy_edit_screen.dart';
+import '../../features/setting_pharmacy/presentation/screens/pharmacy_profile_screen.dart';
 import '../helpers/extensions.dart';
 
 class AppRouter {
@@ -45,7 +48,8 @@ class AppRouter {
             builder: (_) => CustomerHomeScreen(
                   onDashboard: () {},
                   onNewOrder: () {},
-                  onTrack: () {}, userRole: settings.arguments as UserRole,
+                  onTrack: () {},
+                  userRole: settings.arguments as UserRole,
                 ));
       case Routes.registrationScreen:
         return MaterialPageRoute(
@@ -67,13 +71,37 @@ class AppRouter {
                     Navigator.pop(_);
                   },
                 ));
-        case Routes.RoleGeta:
-          return MaterialPageRoute(builder: (BuildContext context) {
-
-            return RoleGate(user: settings.arguments as UserEntity,);
-          }
-
+      case Routes.RoleGeta:
+        return MaterialPageRoute(builder: (BuildContext context) {
+          return RoleGate(
+            user: settings.arguments as UserEntity,
           );
+        });
+      case Routes.pharmacyProfile:
+        return MaterialPageRoute(builder: (BuildContext context) {
+          return const PharmacyProfileScreen(
+              pharmacy: PharmacyProfile(
+                  name: '',
+                  pharmacistName: '',
+                  address: '',
+                  openTime: '',
+                  closeTime: '',
+                  isOpen: false,
+                  rating: 4,
+                  deliveredCount: 5,
+                  todayOrdersCount: 5));
+        });
+      case Routes.profileEdit:
+        return MaterialPageRoute(builder: (BuildContext context) {
+          return const PharmacyEditScreen(
+            initialName: '',
+            initialPharmacistName: '',
+            initialAddress: '',
+            initialOpenTime: TimeOfDay(hour: 1, minute: 15),
+            initialCloseTime: TimeOfDay(hour: 1, minute: 15),
+            initialIsOpen: true,
+          );
+        });
 
       case Routes.track:
         return MaterialPageRoute(

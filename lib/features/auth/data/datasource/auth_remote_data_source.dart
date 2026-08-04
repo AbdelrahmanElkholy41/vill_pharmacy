@@ -5,4 +5,4 @@ import '../models/regester_request_modal.dart';
 abstract class AuthRemoteDataSource {
   Future<AuthResponseModel> login(LoginRequestModel request);
   Future<AuthResponseModel> register(registerRequestModel request);
-}
+  Future<void> logout(String token);}

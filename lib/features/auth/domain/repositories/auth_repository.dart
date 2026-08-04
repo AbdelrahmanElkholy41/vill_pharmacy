@@ -5,5 +5,7 @@ abstract class AuthRepository {
   Future<AuthResponseEntity> login(LoginEntity request);
 
   Future<AuthResponseEntity> register(RegisterEntity request);
+  Future<void> logout();
+
 
 }
