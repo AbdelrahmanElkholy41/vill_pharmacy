@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pharmacy_app/core/routing/routes.dart';
-
 import '../../features/auth/data/datasource/auth_local_data_source_impl.dart';
 import '../../features/auth/data/datasource/auth_remote_data_source_impl.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
@@ -16,12 +15,14 @@ import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/dashboard/presentation/screens/dashboard.dart';
 import '../../features/home/presentation/screens/customer_home.dart';
 import '../../features/home/presentation/screens/role_get.dart';
+import '../../features/new_order/data/datasource/remot_data_source_Imp.dart';
+import '../../features/new_order/data/repositories/order_repository_impl.dart.dart';
+import '../../features/new_order/presentation/cubit/order_cubit.dart';
 import '../../features/new_order/presentation/screens/new_order.dart';
 import '../../features/order_status/presentation/screens/order_status.dart';
 import '../../features/setting_pharmacy/data/models/pharmacy_modal.dart';
 import '../../features/setting_pharmacy/presentation/screens/pharmacy_edit_screen.dart';
 import '../../features/setting_pharmacy/presentation/screens/pharmacy_profile_screen.dart';
-import '../helpers/extensions.dart';
 
 class AppRouter {
   Route generateRoute(RouteSettings settings) {
@@ -113,11 +114,23 @@ class AppRouter {
 
       case Routes.newOrder:
         return MaterialPageRoute(
-            builder: (_) => NewOrderScreen(
-                  onBack: () {
-                    Navigator.pop(_);
-                  },
-                ));
+          builder: (_) => BlocProvider(
+            create: (_) => CreateOrderCubit(
+              OrderRepositoryImpl(
+                OrderRemoteDataSourceImpl(
+                  Dio(),
+                  AuthLocalDataSourceImpl(),
+                ),
+              ),
+            ),
+            child: NewOrderScreen(
+              onBack: () {
+                Navigator.pop(_);
+              },
+            ),
+          ),
+        );
+
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

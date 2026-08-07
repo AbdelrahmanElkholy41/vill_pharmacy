@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import '../screens/pharmacy_profile_screen.dart';
+import '../../../../core/theme/app_colors.dart';
 
 
 class StatCard extends StatelessWidget {

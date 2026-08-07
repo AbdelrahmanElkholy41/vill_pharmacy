@@ -10,6 +10,7 @@ class Routes {
   static const String RoleGeta='/RoleGeta';
   static const String pharmacyProfile='/pharmacyProfile';
   static const String profileEdit='/profileEdit';
+  static const String customerProfile='/customerProfile';
 
 
 

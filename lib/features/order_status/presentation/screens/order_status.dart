@@ -21,9 +21,9 @@ class OrderStatusScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 GestureDetector(
                   onTap: onBack,
-                  child: Row(
+                  child: const Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       Icon(Icons.arrow_forward,
                           size: 16, color: Color(0xFF22C55E)),
                       SizedBox(width: 4),
@@ -126,24 +126,24 @@ class OrderStatusScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(color: const Color(0xFFBBF7D0)),
                   ),
-                  child: Column(
+                  child: const Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('🧑‍⚕️',
+                          Text('🧑‍⚕️',
                               style: TextStyle(fontSize: 28)),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              const Text('صيدلية النور',
+                              Text('صيدلية النور',
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                       color: Color(0xFF111827))),
-                              const SizedBox(height: 4),
-                              Row(children: const [
+                              SizedBox(height: 4),
+                              Row(children: [
                                 Text('⭐',
                                     style: TextStyle(fontSize: 12)),
                                 SizedBox(width: 4),
@@ -165,12 +165,12 @@ class OrderStatusScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 12),
-                      const Divider(color: Color(0xFFDCFCE7)),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
+                      Divider(color: Color(0xFFDCFCE7)),
+                      SizedBox(height: 12),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
+                        children: [
                           Text('شارع الجمهورية - وسط البلد',
                               style: TextStyle(
                                   fontSize: 13, color: Color(0xFF374151))),
@@ -178,10 +178,10 @@ class OrderStatusScreen extends StatelessWidget {
                           Text('📍', style: TextStyle(fontSize: 13)),
                         ],
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
+                        children: [
                           Text('010 1234 5678',
                               style: TextStyle(
                                   fontSize: 13,
@@ -191,10 +191,10 @@ class OrderStatusScreen extends StatelessWidget {
                           Text('📞', style: TextStyle(fontSize: 13)),
                         ],
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
+                        children: [
                           Text('وقت التوصيل المتوقع: ٢٠ دقيقة',
                               style: TextStyle(
                                   fontSize: 13, color: Color(0xFF374151))),
