@@ -4,23 +4,23 @@ import '../../data/models/create_order_request_model.dart';
 import '../../data/repositories/order_repository_impl.dart.dart';
 import 'order_state.dart';
 
-class CreateOrderCubit extends Cubit<CreateOrderState> {
+class OrderCubit extends Cubit<OrderState> {
   final OrderRepositoryImpl repository;
 
-  CreateOrderCubit(this.repository)
-      : super(CreateOrderInitial());
+  OrderCubit(this.repository) : super(OrderInitial());
 
   Future<void> createOrder(
       CreateOrderRequestModel request,
       ) async {
-    emit(CreateOrderLoading());
+    emit(OrderLoading());
 
     try {
       final order = await repository.createOrder(request);
 
-      emit(CreateOrderSuccess(order));
+      emit(OrderSuccess(order));
     } catch (e) {
-      emit(CreateOrderError(e.toString()));
+      emit(OrderError(e.toString()));
     }
   }
+
 }

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum UserRole { customer, pharmacist }
+enum UserRole { customer, pharmacist, super_admin }
 
 class UserEntity extends Equatable {
   final String id;
@@ -19,6 +19,7 @@ class UserEntity extends Equatable {
 
   bool get isPharmacist => role == UserRole.pharmacist;
   bool get isCustomer => role == UserRole.customer;
+  bool get isSuperAdmin => role == UserRole.super_admin;
 
   @override
   List<Object> get props => [id, email, name, phone, role];

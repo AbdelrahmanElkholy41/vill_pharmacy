@@ -102,8 +102,14 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<void> logout() async {
     final token = await localDataSource.getAccessToken();
+    final retoken = await localDataSource.getRefreshToken();
 
+    if (retoken != null) {
+      print('LOGOUTre TOKEN: $retoken');
+
+    }
     if (token != null) {
+      print('LOGOUT TOKEN: $token');
       await remoteDataSource.logout(token);
     }
 

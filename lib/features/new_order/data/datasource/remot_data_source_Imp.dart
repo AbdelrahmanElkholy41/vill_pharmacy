@@ -8,17 +8,12 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
   final Dio dio;
   final AuthLocalDataSource localDataSource;
 
-  OrderRemoteDataSourceImpl(
-    this.dio,
-    this.localDataSource,
-  );
+  OrderRemoteDataSourceImpl(this.dio,
+      this.localDataSource,);
 
 
   @override
-  Future<OrderModel> createOrder(
-      CreateOrderRequestModel  request,
-      ) async {
-
+  Future<OrderModel> createOrder(CreateOrderRequestModel request,) async {
     final token = await localDataSource.getAccessToken();
 
     FormData formData = FormData.fromMap({
@@ -46,5 +41,25 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
     );
 
     return OrderModel.fromJson(response.data["data"]);
+  }
+
+  @override
+  Future<List<IncomingOrderModel>> getOrders() async {
+    final token = await localDataSource.getAccessToken();
+
+    final response = await dio.get(
+      "https://pharmacy-nu-ivory.vercel.app/api/v1/orders/pharmacy/incoming",
+      options: Options(
+        headers: {
+          "Authorization": "Bearer $token",
+        },
+      ),
+    );
+
+    final List<dynamic> data = response.data["data"];
+
+    return data
+        .map((json) => IncomingOrderModel.fromJson(json))
+        .toList();
   }
 }

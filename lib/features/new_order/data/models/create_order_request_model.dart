@@ -12,6 +12,7 @@ class CreateOrderRequestModel {
   });
 }
 
+
 class OrderModel {
   final String id;
   final String details;
@@ -43,6 +44,36 @@ class OrderModel {
       prescriptionImage: json["prescriptionImage"],
       createdAt: DateTime.parse(json["createdAt"]),
       updatedAt: DateTime.parse(json["updatedAt"]),
+    );
+  }
+}
+
+
+class IncomingOrderModel {
+  final String id;
+  final String orderNumber;
+  final String details;
+  final bool hasPrescriptionImage;
+  final bool isTargeted;
+  final DateTime createdAt;
+
+  IncomingOrderModel({
+    required this.id,
+    required this.orderNumber,
+    required this.details,
+    required this.hasPrescriptionImage,
+    required this.isTargeted,
+    required this.createdAt,
+  });
+
+  factory IncomingOrderModel.fromJson(Map<String, dynamic> json) {
+    return IncomingOrderModel(
+      id: json["id"],
+      orderNumber: json["orderNumber"],
+      details: json["details"],
+      hasPrescriptionImage: json["hasPrescriptionImage"],
+      isTargeted: json["isTargeted"],
+      createdAt: DateTime.parse(json["createdAt"]),
     );
   }
 }

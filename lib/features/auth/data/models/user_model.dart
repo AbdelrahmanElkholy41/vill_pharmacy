@@ -46,9 +46,12 @@ extension UserModelMapper on UserModel {
       email: email,
       name: fullName,
       phone: phone,
-      role: role == "customer"
-          ? UserRole.customer
-          : UserRole.pharmacist,
+      role: switch (role) {
+        "customer" => UserRole.customer,
+        "pharmacist" => UserRole.pharmacist,
+        "super_admin" => UserRole.super_admin,
+        _ => throw Exception("Unknown user role: $role"),
+      },
     );
   }
 }

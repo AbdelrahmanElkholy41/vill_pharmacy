@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../home/presentation/screens/customer_home.dart';
 import '../../data/models/create_order_request_model.dart';
 import '../cubit/order_cubit.dart';
 import '../cubit/order_state.dart';
@@ -132,7 +131,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
 
   void _submitOrder(BuildContext context) {
     if (!_canSubmit) return;
-    context.read<CreateOrderCubit>().createOrder(
+    context.read<OrderCubit>().createOrder(
       CreateOrderRequestModel(
         details: _controller.text.trim(),
         pharmacyId: _selectedPharmacyId,
@@ -143,21 +142,21 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CreateOrderCubit, CreateOrderState>(
+    return BlocConsumer<OrderCubit, OrderState>(
       listener: (context, state) {
-        if (state is CreateOrderSuccess) {
+        if (state is OrderSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('تم إرسال الطلب بنجاح')),
           );
           widget.onOrderSent?.call();
-        } else if (state is CreateOrderError) {
+        } else if (state is OrderError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
           );
         }
       },
       builder: (context, state) {
-        final isSubmitting = state is CreateOrderLoading;
+        final isSubmitting = state is OrderLoading;
         return Directionality(
           textDirection: TextDirection.rtl,
           child: Scaffold(

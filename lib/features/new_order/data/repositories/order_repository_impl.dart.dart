@@ -11,4 +11,8 @@ class OrderRepositoryImpl {
       ) async {
     return await remoteDataSource.createOrder(request);
   }
+
+  Future<List<IncomingOrderModel>> getOrders() async {
+    return await remoteDataSource.getOrders();
+  }
 }

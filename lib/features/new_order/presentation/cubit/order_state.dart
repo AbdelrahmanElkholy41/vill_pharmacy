@@ -1,21 +1,27 @@
-
-
 import '../../data/models/create_order_request_model.dart';
 
-abstract class CreateOrderState {}
+abstract class OrderState {}
 
-class CreateOrderInitial extends CreateOrderState {}
+class OrderInitial extends OrderState {}
 
-class CreateOrderLoading extends CreateOrderState {}
+class OrderLoading extends OrderState {}
 
-class CreateOrderSuccess extends CreateOrderState {
+class OrderSuccess extends OrderState {
   final OrderModel order;
 
-  CreateOrderSuccess(this.order);
+  OrderSuccess(this.order);
 }
 
-class CreateOrderError extends CreateOrderState {
+class OrdersLoading extends OrderState {}
+
+class OrdersSuccess extends OrderState {
+  final List<OrderModel> orders;
+
+  OrdersSuccess(this.orders);
+}
+
+class OrderError extends OrderState {
   final String message;
 
-  CreateOrderError(this.message);
+  OrderError(this.message);
 }

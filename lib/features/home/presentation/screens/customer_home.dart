@@ -12,12 +12,12 @@ class CustomerHomeScreen extends StatefulWidget {
   final VoidCallback onTrack;
   final UserRole userRole;
 
-
   const CustomerHomeScreen({
     super.key,
     required this.onDashboard,
     required this.onNewOrder,
-    required this.onTrack, required this.userRole,
+    required this.onTrack,
+    required this.userRole,
   });
 
   @override
@@ -27,17 +27,35 @@ class CustomerHomeScreen extends StatefulWidget {
 class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
   final List<Pharmacy> _pharmacies = [
     Pharmacy(name: 'صيدلية النور', rating: 4.5, distance: '500م', isOpen: true),
-    Pharmacy(name: 'صيدلية الشفاء', rating: 4.8, distance: '800م', isOpen: true),
-    Pharmacy(name: 'صيدلية الحياة', rating: 4.2, distance: '1.2كم', isOpen: false),
+    Pharmacy(
+        name: 'صيدلية الشفاء', rating: 4.8, distance: '800م', isOpen: true),
+    Pharmacy(
+        name: 'صيدلية الحياة', rating: 4.2, distance: '1.2كم', isOpen: false),
   ];
 
   @override
   Widget build(BuildContext context) {
-    print(UserRole);
-
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            IconButton(
+                onPressed: () {},
+                icon:
+                    Icon(Icons.notification_add_outlined, color: Colors.green)),
+            Spacer(),
+            IconButton(
+              onPressed: () {
+                context.pushNamed(Routes.UserProfile);
+              },
+              icon: const Icon(
+                Icons.person_2_outlined,
+                color: Colors.green,
+              ),
+            ),
+          ],
+        ),
         backgroundColor: const Color(0xFFF0FDF4),
         body: SafeArea(
           child: Column(
@@ -83,7 +101,8 @@ class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
               ),
             ],
           ),
-          child: const Center(child: Text('💊', style: TextStyle(fontSize: 36))),
+          child:
+              const Center(child: Text('💊', style: TextStyle(fontSize: 36))),
         ),
         const SizedBox(height: 16),
         const Text(
@@ -107,14 +126,15 @@ class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: (){
+        onPressed: () {
           context.pushNamed(Routes.newOrder);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF22C55E),
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 18),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           elevation: 4,
           shadowColor: const Color(0xFF22C55E).withOpacity(0.4),
         ),
@@ -138,12 +158,14 @@ class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
         const Text(
           'صيدليات قريبة منك',
           style: TextStyle(
-              fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF111827)),
         ),
         const SizedBox(height: 14),
         ...List.generate(
           _pharmacies.length,
-              (i) => Padding(
+          (i) => Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: PharmacyCard(pharmacy: _pharmacies[i]),
           ),
@@ -167,26 +189,10 @@ class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
-          // Expanded(
-          //   child: OutlinedButton(
-          //     onPressed:(){
-          //       context.pushNamed(Routes.dashboardScreen,);
-          //     },
-          //     style: OutlinedButton.styleFrom(
-          //       foregroundColor: const Color(0xFF22C55E),
-          //       side: const BorderSide(color: Color(0xFF22C55E), width: 1.5),
-          //       padding: const EdgeInsets.symmetric(vertical: 14),
-          //       shape: RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.circular(12)),
-          //     ),
-          //     child: const Text('لوحة الصيدلية',
-          //         style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-          //   ),
-          // ),
           const SizedBox(width: 12),
           Expanded(
             child: ElevatedButton(
-              onPressed: (){
+              onPressed: () {
                 context.pushNamed(Routes.track);
               },
               style: ElevatedButton.styleFrom(
@@ -234,4 +240,3 @@ class OrderRequest {
     required this.hasPrescription,
   });
 }
-

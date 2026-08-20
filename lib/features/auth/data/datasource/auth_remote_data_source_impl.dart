@@ -41,16 +41,26 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
   @override
   Future<void> logout(String token) async {
-    await dio.post(
-      'https://pharmacy-nu-ivory.vercel.app/api/v1/auth/logout',
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
-      ),
-    );
-  }
+    print('LOGOUT TOKEN: $token');
+    try {
+      final response = await dio.post(
+        'https://pharmacy-nu-ivory.vercel.app/api/v1/auth/logout',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
 
+      print('LOGOUT STATUS: ${response.statusCode}');
+      print('LOGOUT RESPONSE: ${response.data}');
+    } on DioException catch (e) {
+      print('LOGOUT STATUS: ${e.response?.statusCode}');
+      print('LOGOUT RESPONSE: ${e.response?.data}');
+      print('LOGOUT HEADERS: ${e.response?.headers}');
+      rethrow;
+    }
+  }
   @override
   Future<AuthResponseModel> register(registerRequestModel request) async {
     try {

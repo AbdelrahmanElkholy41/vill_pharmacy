@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pharmacy_app/core/routing/routes.dart';
+import 'package:pharmacy_app/features/user_profile/profile_screen.dart';
 import '../../features/auth/data/datasource/auth_local_data_source_impl.dart';
 import '../../features/auth/data/datasource/auth_remote_data_source_impl.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
@@ -12,7 +13,8 @@ import '../../features/auth/presentation/Cubit/login_cubit.dart';
 import '../../features/auth/presentation/Cubit/register_cubit.dart';
 import '../../features/auth/presentation/screens/login.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
-import '../../features/dashboard/presentation/screens/dashboard.dart';
+import '../../features/dashboard_pharmacy/presentation/Cubit/income_cubit.dart';
+import '../../features/dashboard_pharmacy/presentation/screens/dashboard.dart';
 import '../../features/home/presentation/screens/customer_home.dart';
 import '../../features/home/presentation/screens/role_get.dart';
 import '../../features/new_order/data/datasource/remot_data_source_Imp.dart';
@@ -67,11 +69,28 @@ class AppRouter {
 
       case Routes.dashboardScreen:
         return MaterialPageRoute(
-            builder: (_) => PharmacyDashboardScreen(
-                  onBack: () {
-                    Navigator.pop(_);
-                  },
-                ));
+          builder: (context) => BlocProvider<IncomeCubit>(
+            create: (_) {
+              final cubit = IncomeCubit(
+                repository: OrderRepositoryImpl(
+                  OrderRemoteDataSourceImpl(
+                    Dio(),
+                    AuthLocalDataSourceImpl(),
+                  ),
+                ),
+              );
+
+              cubit.getOrders();
+
+              return cubit;
+            },
+            child: PharmacyDashboardScreen(
+              onBack: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        );
       case Routes.RoleGeta:
         return MaterialPageRoute(builder: (BuildContext context) {
           return RoleGate(
@@ -115,7 +134,7 @@ class AppRouter {
       case Routes.newOrder:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (_) => CreateOrderCubit(
+            create: (_) => OrderCubit(
               OrderRepositoryImpl(
                 OrderRemoteDataSourceImpl(
                   Dio(),
@@ -130,7 +149,10 @@ class AppRouter {
             ),
           ),
         );
-
+        case Routes.UserProfile:
+          return MaterialPageRoute(builder: (BuildContext context) {
+           return const ProfileScreen();
+    });
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
