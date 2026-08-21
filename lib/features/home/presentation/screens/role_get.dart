@@ -10,11 +10,11 @@ import '../../../dashbord_admin/presentaion/screens/dashborde_for_admin.dart';
 import '../../../new_order/data/datasource/remot_data_source_Imp.dart';
 import '../../../new_order/data/repositories/order_repository_impl.dart.dart';
 import '../../../new_order/presentation/cubit/order_cubit.dart';
+import '../../../setting_pharmacy/data/models/pharmacy_modal.dart';
 import 'customer_home.dart';
 
 class RoleGate extends StatelessWidget {
   final UserEntity user;
-
   const RoleGate({
     super.key,
     required this.user,

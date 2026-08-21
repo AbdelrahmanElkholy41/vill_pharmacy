@@ -1,274 +1,263 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/theme/app_colors.dart';
+import '../../data/models/pharmacy_modal.dart';
+import '../Cubit/register_pharmacy_cubit.dart';
+import '../Cubit/register_pharmacy_state.dart';
+import '../widgets/Text_field.dart';
 import '../widgets/save_buttom.dart';
+import '../widgets/section_card.dart';
 
-/// -----------------------------------------------------------------------
-/// Reuse the same AppColors as the profile screen.
-/// If it's already defined in `core/constants/app_colors.dart`, delete this
-/// block and import that file instead.
-/// -----------------------------------------------------------------------
-class AppColors {
-  static const primaryGreen = Color(0xFF1E8E4F);
-  static const lightGreenBg = Color(0xFFE9F7EF);
-  static const scaffoldBg = Color(0xFFF4F6F8);
-  static const cardBg = Colors.white;
-  static const textDark = Color(0xFF1D2129);
-  static const textGrey = Color(0xFF8A9099);
-  static const red = Color(0xFFE5473A);
-  static const borderGrey = Color(0xFFE3E6EA);
-}
-
-/// -----------------------------------------------------------------------
-/// Data submitted when the pharmacist saves the form.
-/// Map this to your Supabase update call / Cubit event.
-/// -----------------------------------------------------------------------
-class PharmacyEditData {
-  final String name;
-  final String pharmacistName;
-  final String address;
-  final TimeOfDay openTime;
-  final TimeOfDay closeTime;
-  final bool isOpen;
-
-  const PharmacyEditData({
-    required this.name,
-    required this.pharmacistName,
-    required this.address,
-    required this.openTime,
-    required this.closeTime,
-    required this.isOpen,
-  });
-}
-
-/// -----------------------------------------------------------------------
-/// Screen
-/// -----------------------------------------------------------------------
-class PharmacyEditScreen extends StatefulWidget {
-  final String initialName;
-  final String initialPharmacistName;
-  final String initialAddress;
-  final TimeOfDay initialOpenTime;
-  final TimeOfDay initialCloseTime;
-  final bool initialIsOpen;
-
-  /// Called with the new values when the pharmacist taps "حفظ التعديلات".
-  final ValueChanged<PharmacyEditData>? onSave;
-
-  const PharmacyEditScreen({
+class PharmacyRegisterScreen extends StatefulWidget {
+  const PharmacyRegisterScreen({
     super.key,
-    required this.initialName,
-    required this.initialPharmacistName,
-    required this.initialAddress,
-    required this.initialOpenTime,
-    required this.initialCloseTime,
-    required this.initialIsOpen,
-    this.onSave,
   });
 
   @override
-  State<PharmacyEditScreen> createState() => _PharmacyEditScreenState();
+  State<PharmacyRegisterScreen> createState() =>
+      _PharmacyRegisterScreenState();
 }
 
-class _PharmacyEditScreenState extends State<PharmacyEditScreen> {
+class _PharmacyRegisterScreenState
+    extends State<PharmacyRegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  late final TextEditingController _nameController;
-  late final TextEditingController _pharmacistController;
-  late final TextEditingController _addressController;
+  final _nameArController = TextEditingController();
+  final _nameEnController = TextEditingController();
 
-  late TimeOfDay _openTime;
-  late TimeOfDay _closeTime;
-  late bool _isOpen;
+  final _addressArController = TextEditingController();
+  final _addressEnController = TextEditingController();
 
-  bool _saving = false;
+  final _areaController = TextEditingController();
+  final _phoneController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController(text: widget.initialName);
-    _pharmacistController =
-        TextEditingController(text: widget.initialPharmacistName);
-    _addressController = TextEditingController(text: widget.initialAddress);
-    _openTime = widget.initialOpenTime;
-    _closeTime = widget.initialCloseTime;
-    _isOpen = widget.initialIsOpen;
-  }
+  final _latController = TextEditingController();
+  final _lngController = TextEditingController();
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _pharmacistController.dispose();
-    _addressController.dispose();
+    _nameArController.dispose();
+    _nameEnController.dispose();
+    _addressArController.dispose();
+    _addressEnController.dispose();
+    _areaController.dispose();
+    _phoneController.dispose();
+    _latController.dispose();
+    _lngController.dispose();
+
     super.dispose();
   }
 
-  Future<void> _pickTime({required bool isOpenTime}) async {
-    final initial = isOpenTime ? _openTime : _closeTime;
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: initial,
+  void _registerPharmacy() {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    final lat = double.tryParse(
+      _latController.text.trim(),
     );
-    if (picked == null) return;
-    setState(() {
-      if (isOpenTime) {
-        _openTime = picked;
-      } else {
-        _closeTime = picked;
-      }
-    });
-  }
 
-  Future<void> _handleSave() async {
-    if (!_formKey.currentState!.validate()) return;
+    final lng = double.tryParse(
+      _lngController.text.trim(),
+    );
 
-    setState(() => _saving = true);
-    try {
-      widget.onSave?.call(
-        PharmacyEditData(
-          name: _nameController.text.trim(),
-          pharmacistName: _pharmacistController.text.trim(),
-          address: _addressController.text.trim(),
-          openTime: _openTime,
-          closeTime: _closeTime,
-          isOpen: _isOpen,
+    if (lat == null || lng == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('من فضلك أدخل Latitude و Longitude صحيحين'),
         ),
       );
-      if (mounted) Navigator.of(context).maybePop();
-    } finally {
-      if (mounted) setState(() => _saving = false);
+      return;
     }
-  }
 
-  String _formatTime(TimeOfDay time) {
-    final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
-    final minute = time.minute.toString().padLeft(2, '0');
-    final period = time.period == DayPeriod.am ? 'ص' : 'م';
-    return '$hour:$minute $period';
+    final pharmacy = PharmacyModel(
+      name: PharmacyLocalizedText(
+        ar: _nameArController.text.trim(),
+        en: _nameEnController.text.trim(),
+      ),
+      address: PharmacyLocalizedText(
+        ar: _addressArController.text.trim(),
+        en: _addressEnController.text.trim(),
+      ),
+      area: _areaController.text.trim(),
+      phone: _phoneController.text.trim(),
+      location: PharmacyLocation(
+        lat: lat,
+        lng: lng,
+      ),
+    );
+
+    context.read<PharmacyCubit>().registerPharmacy(
+      pharmacy,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: AppColors.scaffoldBg,
-        appBar: _buildAppBar(context),
-        body: SafeArea(
-          child: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              child: Column(
-                children: [
-                  const _AvatarPicker(),
-                  const SizedBox(height: 20),
-                  _SectionCard(
-                    title: 'بيانات الصيدلية',
-                    child: Column(
-                      children: [
-                        _LabeledField(
-                          label: 'اسم الصيدلية',
-                          controller: _nameController,
-                          icon: Icons.storefront_outlined,
-                        ),
-                        const SizedBox(height: 14),
-                        _LabeledField(
-                          label: 'اسم الصيدلاني',
-                          controller: _pharmacistController,
-                          icon: Icons.person_outline_rounded,
-                        ),
-                        const SizedBox(height: 14),
-                        _LabeledField(
-                          label: 'العنوان',
-                          controller: _addressController,
-                          icon: Icons.location_on_outlined,
-                          maxLines: 2,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _SectionCard(
-                    title: 'مواعيد العمل',
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: _TimePickerField(
-                            label: 'فتح',
-                            value: _formatTime(_openTime),
-                            onTap: () => _pickTime(isOpenTime: true),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: _TimePickerField(
-                            label: 'غلق',
-                            value: _formatTime(_closeTime),
-                            onTap: () => _pickTime(isOpenTime: false),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _SectionCard(
-                    title: 'حالة الصيدلية',
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            _isOpen ? 'الصيدلية مفتوحة الآن' : 'الصيدلية مغلقة الآن',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: AppColors.textDark,
-                            ),
-                          ),
-                        ),
-                        Switch(
-                          value: _isOpen,
-                          onChanged: (v) => setState(() => _isOpen = v),
-                          activeColor: AppColors.primaryGreen,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 28),
-                  SaveButton(saving: _saving, onPressed: _handleSave),
-                  const SizedBox(height: 12),
-                ],
+      child: BlocConsumer<PharmacyCubit, PharmacyState>(
+        listener: (context, state) {
+          if (state is PharmacySuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  'تم تسجيل الصيدلية بنجاح',
+                ),
+              ),
+            );
+
+            Navigator.of(context).pop();
+          }
+
+          if (state is PharmacyError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: AppColors.red,
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          final saving = state is PharmacyLoading;
+
+          return Scaffold(
+            backgroundColor: AppColors.scaffoldBg,
+
+            appBar: AppBar(
+              backgroundColor: AppColors.primaryGreen,
+              centerTitle: true,
+              elevation: 0,
+              title: const Text(
+                'إضافة الصيدلية',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-          ),
-        ),
-      ),
-    );
-  }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
-    return AppBar(
-      backgroundColor: AppColors.primaryGreen,
-      elevation: 0,
-      centerTitle: true,
-      title: const Text(
-        'تعديل بيانات الصيدلية',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      leading: TextButton.icon(
-        onPressed: () => Navigator.of(context).maybePop(),
-        icon: const Icon(Icons.arrow_back, color: Colors.white, size: 18),
-        label: const Text('رجوع', style: TextStyle(color: Colors.white)),
+            body: SafeArea(
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 20,
+                  ),
+                  child: Column(
+                    children: [
+                      const _AvatarPicker(),
+
+                      const SizedBox(height: 20),
+
+                      // بيانات الصيدلية
+                      SectionCard(
+                        title: 'بيانات الصيدلية',
+                        child: Column(
+                          children: [
+                            LabeledField(
+                              label: 'اسم الصيدلية بالعربي',
+                              controller: _nameArController,
+                              icon: Icons.storefront_outlined,
+                            ),
+
+                            const SizedBox(height: 14),
+
+                            LabeledField(
+                              label: 'اسم الصيدلية بالإنجليزي',
+                              controller: _nameEnController,
+                              icon: Icons.storefront_outlined,
+                            ),
+
+                            const SizedBox(height: 14),
+
+                            LabeledField(
+                              label: 'العنوان بالعربي',
+                              controller: _addressArController,
+                              icon: Icons.location_on_outlined,
+                              maxLines: 2,
+                            ),
+
+                            const SizedBox(height: 14),
+
+                            LabeledField(
+                              label: 'العنوان بالإنجليزي',
+                              controller: _addressEnController,
+                              icon: Icons.location_on_outlined,
+                              maxLines: 2,
+                            ),
+
+                            const SizedBox(height: 14),
+
+                            LabeledField(
+                              label: 'المنطقة',
+                              controller: _areaController,
+                              icon: Icons.map_outlined,
+                            ),
+
+                            const SizedBox(height: 14),
+
+                            LabeledField(
+                              label: 'رقم الهاتف',
+                              controller: _phoneController,
+                              icon: Icons.phone_outlined,
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Location
+                      SectionCard(
+                        title: 'موقع الصيدلية',
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: LabeledField(
+                                label: 'Latitude',
+                                controller: _latController,
+                                icon: Icons.location_on_outlined,
+                              ),
+                            ),
+
+                            const SizedBox(width: 12),
+
+                            Expanded(
+                              child: LabeledField(
+                                label: 'Longitude',
+                                controller: _lngController,
+                                icon: Icons.location_on_outlined,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 28),
+
+                      SaveButton(
+                        saving: saving,
+                        onPressed: _registerPharmacy,
+                      ),
+
+                      const SizedBox(height: 12),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 }
 
-/// -----------------------------------------------------------------------
-/// Avatar with an edit-photo badge
-/// -----------------------------------------------------------------------
 class _AvatarPicker extends StatelessWidget {
   const _AvatarPicker();
 
@@ -299,7 +288,10 @@ class _AvatarPicker extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.primaryGreen,
                 shape: BoxShape.circle,
-                border: Border.all(color: AppColors.scaffoldBg, width: 2),
+                border: Border.all(
+                  color: AppColors.scaffoldBg,
+                  width: 2,
+                ),
               ),
               child: const Icon(
                 Icons.camera_alt_rounded,
@@ -313,157 +305,3 @@ class _AvatarPicker extends StatelessWidget {
     );
   }
 }
-
-/// -----------------------------------------------------------------------
-/// Shared white rounded card with a title header
-/// -----------------------------------------------------------------------
-class _SectionCard extends StatelessWidget {
-  final String title;
-  final Widget child;
-
-  const _SectionCard({required this.title, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.cardBg,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.borderGrey),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textDark,
-            ),
-          ),
-          const SizedBox(height: 12),
-          child,
-        ],
-      ),
-    );
-  }
-}
-
-/// -----------------------------------------------------------------------
-/// Labeled text field used for name / pharmacist / address
-/// -----------------------------------------------------------------------
-class _LabeledField extends StatelessWidget {
-  final String label;
-  final TextEditingController controller;
-  final IconData icon;
-  final int maxLines;
-
-  const _LabeledField({
-    required this.label,
-    required this.controller,
-    required this.icon,
-    this.maxLines = 1,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(fontSize: 12, color: AppColors.textGrey),
-        ),
-        const SizedBox(height: 6),
-        TextFormField(
-          controller: controller,
-          maxLines: maxLines,
-          style: const TextStyle(fontSize: 14, color: AppColors.textDark),
-          validator: (value) =>
-              (value == null || value.trim().isEmpty) ? 'مطلوب' : null,
-          decoration: InputDecoration(
-            prefixIcon: Icon(icon, size: 18, color: AppColors.textGrey),
-            filled: true,
-            fillColor: AppColors.scaffoldBg,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: AppColors.borderGrey),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: AppColors.borderGrey),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: AppColors.primaryGreen),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-/// -----------------------------------------------------------------------
-/// Tappable field that opens a TimePicker
-/// -----------------------------------------------------------------------
-class _TimePickerField extends StatelessWidget {
-  final String label;
-  final String value;
-  final VoidCallback onTap;
-
-  const _TimePickerField({
-    required this.label,
-    required this.value,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(fontSize: 12, color: AppColors.textGrey),
-        ),
-        const SizedBox(height: 6),
-        InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(10),
-          child: Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            decoration: BoxDecoration(
-              color: AppColors.scaffoldBg,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: AppColors.borderGrey),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    value,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textDark,
-                    ),
-                  ),
-                ),
-                const Icon(Icons.access_time_rounded,
-                    size: 16, color: AppColors.textGrey),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-

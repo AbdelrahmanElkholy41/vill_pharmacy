@@ -29,9 +29,8 @@ class Login extends StatelessWidget {
       if (state is LoginSuccess) {
 
         context.read<AuthCubit>().login(state.response.user);
-        print(state.response.user);
-        print(state.response.accessToken);
-       context.pushNamed(Routes.RoleGeta,arguments: state.response.user);
+
+       context.pushNamed(Routes.RoleGeta,arguments: state.response.user,);
 
       }
     }, builder: (context, state) {

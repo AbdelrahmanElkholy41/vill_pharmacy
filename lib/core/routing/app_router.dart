@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pharmacy_app/core/routing/routes.dart';
+import 'package:pharmacy_app/features/setting_pharmacy/data/datasource/edit_pharmacy_remote_date_source_Imp.dart';
 import 'package:pharmacy_app/features/user_profile/profile_screen.dart';
 import '../../features/auth/data/datasource/auth_local_data_source_impl.dart';
 import '../../features/auth/data/datasource/auth_remote_data_source_impl.dart';
@@ -22,7 +23,10 @@ import '../../features/new_order/data/repositories/order_repository_impl.dart.da
 import '../../features/new_order/presentation/cubit/order_cubit.dart';
 import '../../features/new_order/presentation/screens/new_order.dart';
 import '../../features/order_status/presentation/screens/order_status.dart';
+import '../../features/setting_pharmacy/data/datasource/edit_pharmacy_remote_date_source.dart';
 import '../../features/setting_pharmacy/data/models/pharmacy_modal.dart';
+import '../../features/setting_pharmacy/data/repositories/pharmacy_repositories.dart';
+import '../../features/setting_pharmacy/presentation/Cubit/register_pharmacy_cubit.dart';
 import '../../features/setting_pharmacy/presentation/screens/pharmacy_edit_screen.dart';
 import '../../features/setting_pharmacy/presentation/screens/pharmacy_profile_screen.dart';
 
@@ -98,31 +102,35 @@ class AppRouter {
           );
         });
       case Routes.pharmacyProfile:
-        return MaterialPageRoute(builder: (BuildContext context) {
-          return const PharmacyProfileScreen(
-              pharmacy: PharmacyProfile(
-                  name: '',
-                  pharmacistName: '',
-                  address: '',
-                  openTime: '',
-                  closeTime: '',
-                  isOpen: false,
-                  rating: 4,
-                  deliveredCount: 5,
-                  todayOrdersCount: 5));
-        });
-      case Routes.profileEdit:
-        return MaterialPageRoute(builder: (BuildContext context) {
-          return const PharmacyEditScreen(
-            initialName: '',
-            initialPharmacistName: '',
-            initialAddress: '',
-            initialOpenTime: TimeOfDay(hour: 1, minute: 15),
-            initialCloseTime: TimeOfDay(hour: 1, minute: 15),
-            initialIsOpen: true,
-          );
-        });
 
+        return MaterialPageRoute(
+          builder: (_) => PharmacyProfileScreen(
+            pharmacy: PharmacyProfile(
+                name: "",
+                pharmacistName: '',
+                address: "",
+                openTime: "",
+                closeTime: '',
+                isOpen: false,
+                rating: 6,
+                deliveredCount: 4,
+                todayOrdersCount: 6),
+          ),
+        );
+      case Routes.profileEdit:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (_) => PharmacyCubit(
+              repository: PharmacyRepositoryImpl(
+                EditPharmacyRemoteDataSourceImpl(
+                  Dio(),
+                  AuthLocalDataSourceImpl(),
+                ),
+              ),
+            ),
+            child: const PharmacyRegisterScreen(),
+          ),
+        );
       case Routes.track:
         return MaterialPageRoute(
             builder: (_) => OrderStatusScreen(
@@ -149,10 +157,10 @@ class AppRouter {
             ),
           ),
         );
-        case Routes.UserProfile:
-          return MaterialPageRoute(builder: (BuildContext context) {
-           return const ProfileScreen();
-    });
+      case Routes.UserProfile:
+        return MaterialPageRoute(builder: (BuildContext context) {
+          return const ProfileScreen();
+        });
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

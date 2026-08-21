@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
+import '../../../../core/theme/app_colors.dart';
 import '../screens/pharmacy_edit_screen.dart';
 
 class SectionCard extends StatelessWidget {

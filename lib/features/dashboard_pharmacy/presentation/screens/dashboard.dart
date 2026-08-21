@@ -4,11 +4,13 @@ import 'package:pharmacy_app/core/helpers/extensions.dart';
 import 'package:pharmacy_app/features/dashboard_pharmacy/presentation/Cubit/income_state.dart';
 
 import '../../../../core/routing/routes.dart';
+import '../../../setting_pharmacy/data/models/pharmacy_modal.dart';
 import '../Cubit/income_cubit.dart';
 import '../widgets/dashbordCard.dart';
 
 class PharmacyDashboardScreen extends StatelessWidget {
   final VoidCallback onBack;
+
 
   const PharmacyDashboardScreen({
     super.key,
@@ -63,6 +65,30 @@ class PharmacyDashboardScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+        Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'لوحة تحكم الصيدلية',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF111827),
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  context.pushNamed(
+                    Routes.pharmacyProfile,
+                  );
+                },
+                icon: const Icon(
+                  Icons.local_pharmacy,
+                  size: 24,
+                ),
+              ),
+            ],
+          ),
           const Text(
             'حدث خطأ أثناء تحميل الطلبات',
             style: TextStyle(
