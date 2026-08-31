@@ -9,6 +9,7 @@ class PharmacyProfile {
   final int deliveredCount;
   final int todayOrdersCount;
 
+
   const PharmacyProfile({
     required this.name,
     required this.pharmacistName,
@@ -27,6 +28,7 @@ class PharmacyModel {
   final String area;
   final String phone;
   final PharmacyLocation location;
+
 
   PharmacyModel({
     required this.name,

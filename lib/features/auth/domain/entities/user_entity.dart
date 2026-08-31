@@ -1,6 +1,10 @@
 import 'package:equatable/equatable.dart';
 
-enum UserRole { customer, pharmacist, super_admin }
+enum UserRole {
+  customer,
+  pharmacist,
+  super_admin,
+}
 
 class UserEntity extends Equatable {
   final String id;
@@ -9,20 +13,37 @@ class UserEntity extends Equatable {
   final String phone;
   final UserRole role;
 
+
+// null لو Customer
+// فيه ID لو Pharmacist عنده Pharmacy
+  final String? pharmacyId;
+
   const UserEntity({
     required this.id,
     required this.email,
     required this.name,
     required this.phone,
     required this.role,
+    this.pharmacyId,
   });
 
   bool get isPharmacist => role == UserRole.pharmacist;
+
   bool get isCustomer => role == UserRole.customer;
+
   bool get isSuperAdmin => role == UserRole.super_admin;
 
+  bool get hasPharmacy => isPharmacist && pharmacyId != null;
+
   @override
-  List<Object> get props => [id, email, name, phone, role];
+  List<Object?> get props => [
+        id,
+        email,
+        name,
+        phone,
+        role,
+        pharmacyId,
+      ];
 }
 
 class LoginEntity {
@@ -42,15 +63,16 @@ class RegisterEntity {
   final String password;
   final UserRole role;
 
-  RegisterEntity(
-      {required this.fullName,
-      required this.email,
-      required this.phone,
-      required this.password,
-      required this.role});
+  RegisterEntity({
+    required this.fullName,
+    required this.email,
+    required this.phone,
+    required this.password,
+    required this.role,
+  });
 }
-class AuthResponseEntity {
 
+class AuthResponseEntity {
   final UserEntity user;
   final String accessToken;
   final String refreshToken;
@@ -60,5 +82,4 @@ class AuthResponseEntity {
     required this.accessToken,
     required this.refreshToken,
   });
-
 }

@@ -85,7 +85,6 @@ class Login extends StatelessWidget {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          print("-----------------------------------");
                           context.read<LoginCubit>().login(
                                 email: _emailCtrl.text,
                                 password:_passwordCtrl.text ,

@@ -66,6 +66,7 @@ class AuthRepositoryImpl implements AuthRepository {
       phone: request.phone,
       password: request.password,
       role: request.role,
+
     );
 
 

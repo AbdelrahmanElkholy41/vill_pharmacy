@@ -7,6 +7,10 @@ class UserModel {
   final String phone;
   final String role;
   final String status;
+  final String? pharmacyId;
+  final DateTime? deletedAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   UserModel({
     required this.id,
@@ -15,16 +19,30 @@ class UserModel {
     required this.phone,
     required this.role,
     required this.status,
+    required this.pharmacyId,
+    required this.deletedAt,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'],
-      fullName: json['fullName'],
-      email: json['email'],
-      phone: json['phone'],
-      role: json['role'],
-      status: json['status'],
+      id: json['id'] as String,
+      fullName: json['fullName'] as String,
+      email: json['email'] as String,
+      phone: json['phone'] as String,
+      role: json['role'] as String,
+      status: json['status'] as String,
+      pharmacyId: json['pharmacyId'] as String?,
+      deletedAt: json['deletedAt'] != null
+          ? DateTime.parse(json['deletedAt'] as String)
+          : null,
+      createdAt: DateTime.parse(
+        json['createdAt'] as String,
+      ),
+      updatedAt: DateTime.parse(
+        json['updatedAt'] as String,
+      ),
     );
   }
 
@@ -36,22 +54,41 @@ class UserModel {
       'phone': phone,
       'role': role,
       'status': status,
+      'pharmacyId': pharmacyId,
+      'deletedAt': deletedAt?.toIso8601String(),
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
     };
   }
-}
-extension UserModelMapper on UserModel {
+
+// =========================
+// Model -> Entity
+// =========================
+
   UserEntity toEntity() {
     return UserEntity(
       id: id,
       email: email,
       name: fullName,
       phone: phone,
-      role: switch (role) {
-        "customer" => UserRole.customer,
-        "pharmacist" => UserRole.pharmacist,
-        "super_admin" => UserRole.super_admin,
-        _ => throw Exception("Unknown user role: $role"),
-      },
+      role: _mapRole(role),
+      pharmacyId: pharmacyId,
     );
+  }
+
+  UserRole _mapRole(String role) {
+    switch (role) {
+      case 'customer':
+        return UserRole.customer;
+
+      case 'pharmacist':
+        return UserRole.pharmacist;
+
+      case 'super_admin':
+        return UserRole.super_admin;
+
+      default:
+        throw Exception('Unknown user role: $role');
+    }
   }
 }

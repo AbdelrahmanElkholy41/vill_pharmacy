@@ -2,9 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/routing/app_router.dart';
-import '../../../../core/routing/routes.dart';
-import '../../../home/presentation/screens/customer_home.dart';
 import '../../../home/presentation/screens/role_get.dart';
 import '../../data/datasource/auth_local_data_source_impl.dart';
 import '../../data/datasource/auth_remote_data_source_impl.dart';
@@ -23,6 +20,7 @@ class AppStart extends StatelessWidget {
       builder: (context, state) {
         if (state is AuthAuthenticated) {
           return RoleGate(user: state.user,);
+
         }
 
         if (state is AuthUnauthenticated) {
