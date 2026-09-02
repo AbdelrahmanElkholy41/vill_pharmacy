@@ -12,4 +12,7 @@ class PharmacyRepositoryImpl  {
   Future<PharmacyModel> registerPharmacy(PharmacyModel request) async {
     return await remoteDataSource.registerPharmacy(request);
   }
+  Future<PharmacyModel> getPharmacy() async {
+    return await remoteDataSource.getPharmacy();
+  }
 }

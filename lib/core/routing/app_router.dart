@@ -102,19 +102,16 @@ class AppRouter {
           );
         });
       case Routes.pharmacyProfile:
-
         return MaterialPageRoute(
-          builder: (_) => PharmacyProfileScreen(
-            pharmacy: PharmacyProfile(
-                name: "",
-                pharmacistName: '',
-                address: "",
-                openTime: "",
-                closeTime: '',
-                isOpen: false,
-                rating: 6,
-                deliveredCount: 4,
-                todayOrdersCount: 6),
+          builder: (_) => BlocProvider<PharmacyCubit>(
+            create: (_) => PharmacyCubit(
+                repository: PharmacyRepositoryImpl(
+              EditPharmacyRemoteDataSourceImpl(
+                Dio(),
+                AuthLocalDataSourceImpl(),
+              ),
+            )),
+            child: const PharmacyProfileScreen(),
           ),
         );
       case Routes.profileEdit:

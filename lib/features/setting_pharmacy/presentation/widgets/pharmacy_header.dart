@@ -4,7 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../data/models/pharmacy_modal.dart';
 
 class PharmacyHeader extends StatelessWidget {
-  final PharmacyProfile pharmacy;
+  final PharmacyModel pharmacy;
   const PharmacyHeader({required this.pharmacy});
 
   @override
@@ -26,7 +26,7 @@ class PharmacyHeader extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Text(
-          pharmacy.name,
+          pharmacy.name.ar,
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,

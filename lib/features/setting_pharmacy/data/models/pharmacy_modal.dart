@@ -93,16 +93,18 @@ class PharmacyLocation {
   });
 
   factory PharmacyLocation.fromJson(Map<String, dynamic> json) {
+    final coordinates = json['coordinates'] as List;
+
     return PharmacyLocation(
-      lat: (json['lat'] as num).toDouble(),
-      lng: (json['lng'] as num).toDouble(),
+      lng: (coordinates[0] as num).toDouble(),
+      lat: (coordinates[1] as num).toDouble(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'lat': lat,
-      'lng': lng,
+      'type': 'Point',
+      'coordinates': [lng, lat],
     };
   }
 }

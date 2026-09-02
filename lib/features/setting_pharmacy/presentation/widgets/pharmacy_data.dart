@@ -7,7 +7,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../data/models/pharmacy_modal.dart';
 
 class PharmacyDataCard extends StatelessWidget {
-  final PharmacyProfile pharmacy;
+  final PharmacyModel pharmacy;
   const PharmacyDataCard({required this.pharmacy});
 
   @override
@@ -16,25 +16,25 @@ class PharmacyDataCard extends StatelessWidget {
       title: 'بيانات الصيدلية',
       child: Column(
         children: [
-          InfoRow(label: 'اسم الصيدلية', value: pharmacy.name),
+          InfoRow(label: 'اسم الصيدلية', value: pharmacy.name.ar),
           const InfoDivider(),
-          InfoRow(label: 'اسم الصيدلاني', value: pharmacy.pharmacistName),
+          InfoRow(label: 'اسم الصيدلاني', value: pharmacy.name.ar),
           const InfoDivider(),
-          InfoRow(label: 'العنوان', value: pharmacy.address),
+          InfoRow(label: 'العنوان', value: pharmacy.address.ar),
           const InfoDivider(),
-          Row(
+          const Row(
             children: [
               Expanded(
                 child: InfoRow(
                   label: 'فتح',
-                  value: pharmacy.openTime,
+                  value: "false",
                   trailingIcon: Icons.access_time_rounded,
                 ),
               ),
               Expanded(
                 child: InfoRow(
                   label: 'غلق',
-                  value: pharmacy.closeTime,
+                  value: "true",
                   trailingIcon: Icons.access_time_rounded,
                 ),
               ),
