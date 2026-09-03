@@ -6,4 +6,8 @@ abstract class OrderRemoteDataSource {
       );
 
   Future<List<IncomingOrderModel>> getOrders();
+  Future<void> acceptOrder(String orderId);
+  Future<void> rejectOrder(String orderId);
 }
+
+

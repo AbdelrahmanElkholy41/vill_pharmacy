@@ -99,7 +99,7 @@ class PharmacyDashboardScreen extends StatelessWidget {
           const SizedBox(height: 12),
           ElevatedButton(
             onPressed: () {
-              context.read<IncomeCubit>().getOrders();
+              context.read<IncomeCubit>()..getOrders()..startPolling();
             },
             child: const Text('إعادة المحاولة'),
           ),
@@ -113,7 +113,6 @@ class PharmacyDashboardScreen extends StatelessWidget {
       IncomeSuccess state,
       ) {
     final orders = state.orders;
-
     return Column(
       children: [
         // Header
@@ -172,14 +171,16 @@ class PharmacyDashboardScreen extends StatelessWidget {
                 child: DashboardOrderCard(
                   order: order,
                   onAccept: () {
-                    print(
-                      'Accept order: ${order.id}',
-                    );
+                    context.read<IncomeCubit>().acceptOrder(
+                        order.id    );
+                    print(order.id);
+
+
                   },
                   onReject: () {
-                    print(
-                      'Reject order: ${order.id}',
-                    );
+                    context.read<IncomeCubit>().rejectOrder(
+                        order.id                 );
+
                   },
                 ),
               );

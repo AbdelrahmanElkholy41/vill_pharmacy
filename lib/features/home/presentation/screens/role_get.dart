@@ -72,7 +72,9 @@ class RoleGate extends StatelessWidget {
                 AuthLocalDataSourceImpl(),
               ),
             ),
-          )..getOrders(),
+          )
+            ..getOrders()
+            ..startPolling(),
           child: PharmacyDashboardScreen(
             onBack: () {
               Navigator.pop(context);

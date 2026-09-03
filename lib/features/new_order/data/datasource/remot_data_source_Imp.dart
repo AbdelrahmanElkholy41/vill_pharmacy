@@ -62,4 +62,31 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
         .map((json) => IncomingOrderModel.fromJson(json))
         .toList();
   }
+  @override
+  Future<void> acceptOrder(String orderId) async {
+
+    final token = await localDataSource.getAccessToken();
+    final response = await dio.post(
+      "https://pharmacy-nu-ivory.vercel.app/api/v1/orders/$orderId/accept",
+      options: Options(
+        headers: {
+          "Authorization": "Bearer $token",
+        },
+
+    ));
+
+  }
+  @override
+  Future<void> rejectOrder(String orderId) async {
+
+    final token = await localDataSource.getAccessToken();
+    final response = await dio.post(
+        "https://pharmacy-nu-ivory.vercel.app/api/v1/orders/$orderId/reject",
+        options: Options(
+        headers: {
+          "Authorization": "Bearer $token",
+
+        }
+        ));
+  }
 }
