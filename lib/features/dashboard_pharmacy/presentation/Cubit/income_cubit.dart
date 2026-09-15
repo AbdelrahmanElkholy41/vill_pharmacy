@@ -39,9 +39,9 @@ class IncomeCubit extends Cubit<IncomeState> {
     }
   }
 
-  Future<void> acceptOrder(String orderId) async {
+  Future<void> acceptOrder(String orderId,double price,int deliveryTime) async {
     try {
-      await repository.acceptOrder(orderId);
+      await repository.acceptOrder(orderId ,price,deliveryTime);
 
       await getOrders(showLoading: false);
     } catch (e) {
@@ -49,9 +49,9 @@ class IncomeCubit extends Cubit<IncomeState> {
     }
   }
 
-  Future<void> rejectOrder(String orderId) async {
+  Future<void> rejectOrder(String orderId,String reson) async {
     try {
-      await repository.rejectOrder(orderId);
+      await repository.rejectOrder(orderId,reson);
 
       await getOrders(showLoading: false);
     } catch (e) {

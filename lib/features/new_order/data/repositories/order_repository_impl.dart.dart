@@ -15,10 +15,10 @@ class OrderRepositoryImpl {
   Future<List<IncomingOrderModel>> getOrders() async {
     return await remoteDataSource.getOrders();
   }
-  Future<void> acceptOrder(String orderId) async {
-    return await remoteDataSource.acceptOrder(orderId);
+  Future<void> acceptOrder(String orderId,double price,int deliveryTime) async {
+    return await remoteDataSource.acceptOrder(orderId,price,deliveryTime);
   }
-  Future<void> rejectOrder(String orderId) async {
-    return await remoteDataSource.rejectOrder(orderId);
+  Future<void> rejectOrder(String orderId,String reson) async {
+    return await remoteDataSource.rejectOrder(orderId,reson);
 }
 }

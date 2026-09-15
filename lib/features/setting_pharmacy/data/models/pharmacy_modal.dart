@@ -28,6 +28,7 @@ class PharmacyModel {
   final String area;
   final String phone;
   final PharmacyLocation location;
+   String? approvalStatus;
 
 
   PharmacyModel({
@@ -35,7 +36,7 @@ class PharmacyModel {
     required this.address,
     required this.area,
     required this.phone,
-    required this.location,
+    required this.location,  this.approvalStatus,
   });
 
   factory PharmacyModel.fromJson(Map<String, dynamic> json) {
@@ -45,6 +46,7 @@ class PharmacyModel {
       area: json['area'],
       phone: json['phone'],
       location: PharmacyLocation.fromJson(json['location']),
+      approvalStatus: json['approvalStatus'],
     );
   }
 
@@ -55,6 +57,7 @@ class PharmacyModel {
       'area': area,
       'phone': phone,
       'location': location.toJson(),
+      'approvalStatus': approvalStatus,
     };
   }
 }

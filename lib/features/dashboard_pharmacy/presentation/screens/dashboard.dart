@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pharmacy_app/core/helpers/extensions.dart';
 import 'package:pharmacy_app/features/dashboard_pharmacy/presentation/Cubit/income_state.dart';
+import 'package:pharmacy_app/features/dashboard_pharmacy/presentation/widgets/dialog_card_regict.dart';
 
 import '../../../../core/routing/routes.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../setting_pharmacy/data/models/pharmacy_modal.dart';
 import '../Cubit/income_cubit.dart';
 import '../widgets/dashbordCard.dart';
+import '../widgets/dialog_card_accepted.dart';
 
 class PharmacyDashboardScreen extends StatelessWidget {
   final VoidCallback onBack;
-
 
   const PharmacyDashboardScreen({
     super.key,
@@ -19,6 +21,9 @@ class PharmacyDashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final incomeCubit = context.read<IncomeCubit>();
+
+    print("INCOME CUBIT FOUND: $incomeCubit");
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -65,7 +70,7 @@ class PharmacyDashboardScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-        Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
@@ -99,7 +104,9 @@ class PharmacyDashboardScreen extends StatelessWidget {
           const SizedBox(height: 12),
           ElevatedButton(
             onPressed: () {
-              context.read<IncomeCubit>()..getOrders()..startPolling();
+              context.read<IncomeCubit>()
+                ..getOrders()
+                ..startPolling();
             },
             child: const Text('إعادة المحاولة'),
           ),
@@ -109,9 +116,9 @@ class PharmacyDashboardScreen extends StatelessWidget {
   }
 
   Widget _buildSuccess(
-      BuildContext context,
-      IncomeSuccess state,
-      ) {
+    BuildContext context,
+    IncomeSuccess state,
+  ) {
     final orders = state.orders;
     return Column(
       children: [
@@ -156,36 +163,64 @@ class PharmacyDashboardScreen extends StatelessWidget {
           child: orders.isEmpty
               ? _buildEmptyOrders()
               : ListView.builder(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 8,
-            ),
-            itemCount: orders.length,
-            itemBuilder: (context, index) {
-              final order = orders[index];
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  itemCount: orders.length,
+                  itemBuilder: (context, index) {
+                    final order = orders[index];
 
-              return Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 14,
-                ),
-                child: DashboardOrderCard(
-                  order: order,
-                  onAccept: () {
-                    context.read<IncomeCubit>().acceptOrder(
-                        order.id    );
-                    print(order.id);
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 14,
+                      ),
+                      child: DashboardOrderCard(
+                        order: order,
+                        onAccept: () {
+                          final incomeCubit = context.read<IncomeCubit>();
+
+                          showDialog(
+                            context: context,
+                            builder: (_) {
+                              return DialogCard(
+                                onConfirm: (price, deliveryTime) {
+                                  incomeCubit.acceptOrder(
+                                    order.id,
+                                    price,
+                                    deliveryTime,
+                                  );
+                                },
+                              );
+                            },
+                          );
+                        },
 
 
+                        onReject: () {
+                          final incomeCubit = context.read<IncomeCubit>();
+
+                          showDialog(
+                            context: context,
+                            builder: (_) {
+                              return DialogCardRegict(
+                                onConfirm: (reason) {
+                                  incomeCubit.rejectOrder(order.id,
+                                  reason
+
+                                  );
+                                },
+                              );
+
+                            },
+                          );
+
+                          print("ORDER ID: ${order.id}");
+                        },
+                      ),
+                    );
                   },
-                  onReject: () {
-                    context.read<IncomeCubit>().rejectOrder(
-                        order.id                 );
-
-                  },
                 ),
-              );
-            },
-          ),
         ),
       ],
     );

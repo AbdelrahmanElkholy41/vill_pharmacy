@@ -63,12 +63,18 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
         .toList();
   }
   @override
-  Future<void> acceptOrder(String orderId) async {
+  Future<void> acceptOrder(String orderId,double price,int deliveryTime) async {
 
     final token = await localDataSource.getAccessToken();
-    final response = await dio.post(
+    final response = await dio.patch(
       "https://pharmacy-nu-ivory.vercel.app/api/v1/orders/$orderId/accept",
-      options: Options(
+      data: {
+        "price": price,
+        "estimatedDeliveryMinutes":  deliveryTime,
+
+      },
+        options: Options(
+
         headers: {
           "Authorization": "Bearer $token",
         },
@@ -77,16 +83,20 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
 
   }
   @override
-  Future<void> rejectOrder(String orderId) async {
+  Future<void> rejectOrder(String orderId,String reson) async {
 
     final token = await localDataSource.getAccessToken();
-    final response = await dio.post(
+    final response = await dio.patch(
         "https://pharmacy-nu-ivory.vercel.app/api/v1/orders/$orderId/reject",
+        data: {
+          "rejectionReason":reson
+        },
         options: Options(
         headers: {
           "Authorization": "Bearer $token",
 
         }
         ));
+
   }
 }

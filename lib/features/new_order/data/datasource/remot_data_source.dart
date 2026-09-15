@@ -6,8 +6,8 @@ abstract class OrderRemoteDataSource {
       );
 
   Future<List<IncomingOrderModel>> getOrders();
-  Future<void> acceptOrder(String orderId);
-  Future<void> rejectOrder(String orderId);
+  Future<void> acceptOrder(String orderId, double price, int deliveryTime);
+  Future<void> rejectOrder(String orderId, String reson);
 }
 
 

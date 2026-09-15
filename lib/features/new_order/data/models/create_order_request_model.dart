@@ -57,6 +57,10 @@ class IncomingOrderModel {
   final bool isTargeted;
   final DateTime createdAt;
 
+  final double? price;
+  final int? estimatedDeliveryMinutes;
+  final String? rejectionReason;
+
   IncomingOrderModel({
     required this.id,
     required this.orderNumber,
@@ -64,6 +68,8 @@ class IncomingOrderModel {
     required this.hasPrescriptionImage,
     required this.isTargeted,
     required this.createdAt,
+    this.price,
+    this.estimatedDeliveryMinutes, this.rejectionReason,
   });
 
   factory IncomingOrderModel.fromJson(Map<String, dynamic> json) {
@@ -74,6 +80,13 @@ class IncomingOrderModel {
       hasPrescriptionImage: json["hasPrescriptionImage"],
       isTargeted: json["isTargeted"],
       createdAt: DateTime.parse(json["createdAt"]),
+
+      price: (json["price"] as num?)?.toDouble(),
+
+      estimatedDeliveryMinutes:
+      (json["estimatedDeliveryMinutes"] as num?)?.toInt(),
+      rejectionReason: json["rejectionReason"],
     );
   }
-}
+
+  }
