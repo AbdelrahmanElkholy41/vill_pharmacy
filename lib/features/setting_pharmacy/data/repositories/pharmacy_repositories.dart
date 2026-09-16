@@ -2,16 +2,17 @@ import 'package:pharmacy_app/features/setting_pharmacy/data/datasource/edit_phar
 
 import '../models/pharmacy_modal.dart';
 
-
-class PharmacyRepositoryImpl  {
+class PharmacyRepositoryImpl {
   final EditPharmacyRemoteDataSource remoteDataSource;
 
   PharmacyRepositoryImpl(this.remoteDataSource);
 
-
-  Future<PharmacyModel> registerPharmacy(PharmacyModel request) async {
+  Future<PharmacyModel> registerPharmacy(
+      PharmacyModel request,
+      ) async {
     return await remoteDataSource.registerPharmacy(request);
   }
+
   Future<PharmacyModel> getPharmacy() async {
     return await remoteDataSource.getPharmacy();
   }

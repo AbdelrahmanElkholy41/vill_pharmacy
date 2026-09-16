@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../new_order/data/models/create_order_request_model.dart';
 
-
 class DashboardOrderCard extends StatelessWidget {
   final IncomingOrderModel order;
   final VoidCallback onAccept;
@@ -52,7 +51,6 @@ class DashboardOrderCard extends StatelessWidget {
                   ),
                 ],
               ),
-
               Text(
                 'طلب رقم: ${order.orderNumber}',
                 style: const TextStyle(
@@ -62,9 +60,7 @@ class DashboardOrderCard extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 10),
-
           Align(
             alignment: Alignment.centerRight,
             child: Text(
@@ -76,7 +72,6 @@ class DashboardOrderCard extends StatelessWidget {
               ),
             ),
           ),
-
           if (order.hasPrescriptionImage) ...[
             const SizedBox(height: 8),
             const Row(
@@ -97,9 +92,7 @@ class DashboardOrderCard extends StatelessWidget {
               ],
             ),
           ],
-
           const SizedBox(height: 14),
-
           Row(
             children: [
               Expanded(
@@ -123,30 +116,30 @@ class DashboardOrderCard extends StatelessWidget {
                   ),
                 ),
               ),
-
               const SizedBox(width: 10),
-
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: onReject,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFEF4444),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: const Text(
-                    '✕ رفض',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ),
+              order.isTargeted
+                  ? Expanded(
+                      child: ElevatedButton(
+                        onPressed: onReject,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFEF4444),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: const Text(
+                          '✕ رفض',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    )
+                  : SizedBox(),
             ],
           ),
         ],

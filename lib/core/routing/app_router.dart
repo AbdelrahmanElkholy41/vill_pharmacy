@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pharmacy_app/core/routing/routes.dart';
 import 'package:pharmacy_app/features/setting_pharmacy/data/datasource/edit_pharmacy_remote_date_source_Imp.dart';
 import 'package:pharmacy_app/features/user_profile/profile_screen.dart';
@@ -103,30 +104,40 @@ class AppRouter {
         });
       case Routes.pharmacyProfile:
         return MaterialPageRoute(
-          builder: (_) => BlocProvider<PharmacyCubit>(
-            create: (_) => PharmacyCubit(
+          builder: (_) {
+            const storage = FlutterSecureStorage();
+            return BlocProvider<PharmacyCubit>(
+              create: (_) => PharmacyCubit(
                 repository: PharmacyRepositoryImpl(
-              EditPharmacyRemoteDataSourceImpl(
-                Dio(),
-                AuthLocalDataSourceImpl(),
+                  EditPharmacyRemoteDataSourceImpl(
+                    Dio(),
+                    AuthLocalDataSourceImpl(),
+                  ),
+                ),
+                storage: storage,
               ),
-            )),
-            child: const PharmacyProfileScreen(),
-          ),
+              child: const PharmacyProfileScreen(),
+            );
+          },
         );
       case Routes.profileEdit:
         return MaterialPageRoute(
-          builder: (context) => BlocProvider(
-            create: (_) => PharmacyCubit(
-              repository: PharmacyRepositoryImpl(
-                EditPharmacyRemoteDataSourceImpl(
-                  Dio(),
-                  AuthLocalDataSourceImpl(),
+          builder: (context) {
+            const storage = FlutterSecureStorage();
+
+            return BlocProvider(
+              create: (_) => PharmacyCubit(
+                repository: PharmacyRepositoryImpl(
+                  EditPharmacyRemoteDataSourceImpl(
+                    Dio(),
+                    AuthLocalDataSourceImpl(),
+                  ),
                 ),
+                storage: storage,
               ),
-            ),
-            child: const PharmacyRegisterScreen(),
-          ),
+              child: const PharmacyRegisterScreen(),
+            );
+          },
         );
       case Routes.track:
         return MaterialPageRoute(

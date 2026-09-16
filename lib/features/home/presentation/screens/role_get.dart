@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../../auth/data/datasource/auth_local_data_source_impl.dart';
 import '../../../auth/domain/entities/user_entity.dart';
@@ -13,6 +16,8 @@ import '../../../setting_pharmacy/data/datasource/edit_pharmacy_remote_date_sour
 import '../../../setting_pharmacy/data/repositories/pharmacy_repositories.dart';
 import '../../../setting_pharmacy/presentation/Cubit/register_pharmacy_cubit.dart';
 import '../../../setting_pharmacy/presentation/screens/pharmacy_edit_screen.dart';
+import '../../../setting_pharmacy/data/models/pharmacy_modal.dart';
+
 import 'customer_home.dart';
 
 class RoleGate extends StatelessWidget {
@@ -29,9 +34,10 @@ class RoleGate extends StatelessWidget {
     print('PHARMACY ID: ${user.pharmacyId}');
 
     switch (user.role) {
-// =========================
-// Customer
-// =========================
+
+    // =========================
+    // Customer
+    // =========================
 
       case UserRole.customer:
         return CustomerHomeScreen(
@@ -41,53 +47,116 @@ class RoleGate extends StatelessWidget {
           userRole: user.role,
         );
 
-// =========================
-// Pharmacist
-// =========================
+    // =========================
+    // Pharmacist
+    // =========================
 
       case UserRole.pharmacist:
 
-// لسه معملش Pharmacy
-        if (user.pharmacyId == null) {
-
-          return BlocProvider(
-            create: (_) => PharmacyCubit(
-              repository: PharmacyRepositoryImpl(
-                EditPharmacyRemoteDataSourceImpl(
-                  Dio(),
-                  AuthLocalDataSourceImpl(),
-                ),
-              ),
-            ),
-            child: const PharmacyRegisterScreen(),
-          );
+      // عنده pharmacyId
+        if (user.pharmacyId != null) {
+          return const PharmacistDashboardGate();
         }
 
-// عنده Pharmacy
-        return BlocProvider(
-          create: (_) => IncomeCubit(
-            repository: OrderRepositoryImpl(
-              OrderRemoteDataSourceImpl(
-                Dio(),
-                AuthLocalDataSourceImpl(),
-              ),
-            ),
-          )
-            ..getOrders()
-            ..startPolling(),
-          child: PharmacyDashboardScreen(
-            onBack: () {
-              Navigator.pop(context);
-            },
-          ),
-        );
+        // pharmacyId == null
+        // نشوف هل عندنا Pharmacy محفوظة في الـ cache
+        return const PharmacistCacheGate();
 
-// =========================
-// Super Admin
-// =========================
+    // =========================
+    // Super Admin
+    // =========================
 
       case UserRole.super_admin:
         return const DashbordeForAdmin();
     }
+  }
+}
+
+
+// =====================================================
+// Pharmacist Cache Gate
+// =====================================================
+
+class PharmacistCacheGate extends StatelessWidget {
+  const PharmacistCacheGate({super.key});
+
+  static const storage = FlutterSecureStorage();
+
+  Future<bool> _hasCachedPharmacy() async {
+    final cachedPharmacy = await storage.read(
+      key: 'pharmacy',
+    );
+
+    // مجرد وجود Pharmacy في الـ cache
+    // معناه إن الصيدلي عنده Pharmacy
+    return cachedPharmacy != null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: _hasCachedPharmacy(),
+      builder: (context, snapshot) {
+
+        // لسه بنقرأ من الـ storage
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CupertinoActivityIndicator();
+        }
+
+        // حصل Error في قراءة الـ storage
+        if (snapshot.hasError) {
+          return const PharmacyRegisterScreen();
+        }
+
+        // Pharmacy موجودة في الـ cache
+        if (snapshot.data == true) {
+          return const PharmacistDashboardGate();
+        }
+
+        // مفيش Pharmacy في الـ cache
+        return BlocProvider(
+          create: (_) => PharmacyCubit(
+            repository: PharmacyRepositoryImpl(
+              EditPharmacyRemoteDataSourceImpl(
+                Dio(),
+                AuthLocalDataSourceImpl(),
+              ),
+            ),
+            storage: storage,
+          ),
+          child: const PharmacyRegisterScreen(),
+        );
+      },
+    );
+  }
+}
+
+
+// =====================================================
+// Pharmacist Dashboard
+// =====================================================
+
+class PharmacistDashboardGate extends StatelessWidget {
+  const PharmacistDashboardGate({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => IncomeCubit(
+        repository: OrderRepositoryImpl(
+          OrderRemoteDataSourceImpl(
+            Dio(),
+            AuthLocalDataSourceImpl(),
+          ),
+        ),
+      )
+        ..getOrders()
+        ..startPolling(),
+      child: PharmacyDashboardScreen(
+        onBack: () {
+          Navigator.pop(context);
+        },
+      ),
+    );
   }
 }
