@@ -40,10 +40,6 @@ class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
       child: Scaffold(
         appBar: AppBar(
           actions: [
-            IconButton(
-                onPressed: () {},
-                icon:
-                    Icon(Icons.notification_add_outlined, color: Colors.green)),
             Spacer(),
             IconButton(
               onPressed: () {

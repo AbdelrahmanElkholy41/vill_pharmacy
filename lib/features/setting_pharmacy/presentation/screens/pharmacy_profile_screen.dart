@@ -36,7 +36,7 @@ class _PharmacyProfileScreenState extends State<PharmacyProfileScreen> {
   void initState() {
     super.initState();
 
-    // استدعاء بيانات الصيدلية
+    // جلب بيانات الصيدلية
     context.read<PharmacyCubit>().getPharmacy();
   }
 
@@ -68,7 +68,6 @@ class _PharmacyProfileScreenState extends State<PharmacyProfileScreen> {
                 ),
                 child: Column(
                   children: [
-
                     // Loading
                     if (state is PharmacyLoading)
                       const Center(
@@ -83,11 +82,6 @@ class _PharmacyProfileScreenState extends State<PharmacyProfileScreen> {
 
                       const SizedBox(height: 16),
 
-                      // لو عندك Status
-                      // StatusChip(
-                      //   isOpen: state.pharmacy.isOpen,
-                      // ),
-
                       const SizedBox(height: 20),
 
                       PharmacyDataCard(
@@ -95,31 +89,45 @@ class _PharmacyProfileScreenState extends State<PharmacyProfileScreen> {
                       ),
 
                       const SizedBox(height: 20),
+
+                      SettingsCard(
+                        newOrderNotifications:
+                        _newOrderNotifications,
+
+                        vibrateOnNewOrder:
+                        _vibrateOnNewOrder,
+
+                        darkMode: _darkMode,
+
+                        // حالة الصيدلية تأتي من PharmacyModel
+                        pharmacyOpen:
+                        state.pharmacy.isOpen,
+
+                        onNewOrderNotificationsChanged: (v) {
+                          setState(() {
+                            _newOrderNotifications = v;
+                          });
+                        },
+
+                        onVibrateChanged: (v) {
+                          setState(() {
+                            _vibrateOnNewOrder = v;
+                          });
+                        },
+
+                        onDarkModeChanged: (v) {
+                          setState(() {
+                            _darkMode = v;
+                          });
+                        },
+
+                        onPharmacyOpenChanged: (v) {
+                          context
+                              .read<PharmacyCubit>()
+                              .pharmacyStatus(v);
+                        },
+                      ),
                     ],
-
-                    SettingsCard(
-                      newOrderNotifications: _newOrderNotifications,
-                      vibrateOnNewOrder: _vibrateOnNewOrder,
-                      darkMode: _darkMode,
-
-                      onNewOrderNotificationsChanged: (v) {
-                        setState(() {
-                          _newOrderNotifications = v;
-                        });
-                      },
-
-                      onVibrateChanged: (v) {
-                        setState(() {
-                          _vibrateOnNewOrder = v;
-                        });
-                      },
-
-                      onDarkModeChanged: (v) {
-                        setState(() {
-                          _darkMode = v;
-                        });
-                      },
-                    ),
 
                     const SizedBox(height: 24),
 
@@ -162,7 +170,9 @@ class _PharmacyProfileScreenState extends State<PharmacyProfileScreen> {
         ),
         label: const Text(
           '',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+          ),
         ),
       ),
 

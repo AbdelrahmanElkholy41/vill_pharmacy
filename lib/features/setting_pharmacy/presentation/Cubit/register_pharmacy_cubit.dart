@@ -70,5 +70,36 @@ class PharmacyCubit extends Cubit<PharmacyState> {
     } catch (e) {
       emit(PharmacyError(e.toString()));
     }
+
+  }
+  Future<void> pharmacyStatus(bool status) async {
+    try {
+      await repository.pharmacyStatus(status);
+
+      final cachedPharmacy = await storage.read(
+        key: 'pharmacy',
+      );
+
+      if (cachedPharmacy != null) {
+        final pharmacy = PharmacyModel.fromJson(
+          jsonDecode(cachedPharmacy),
+        );
+
+        print(pharmacy.isOpen);
+
+        pharmacy.isOpen = status;
+
+        print(pharmacy.isOpen);
+
+        await storage.write(
+          key: 'pharmacy',
+          value: jsonEncode(pharmacy.toJson()),
+        );
+
+        emit(PharmacySuccess(pharmacy));
+      }
+    } catch (e) {
+      emit(PharmacyError(e.toString()));
+    }
   }
 }

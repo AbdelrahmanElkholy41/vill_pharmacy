@@ -82,6 +82,7 @@ class _PharmacyRegisterScreenState
       ),
       area: _areaController.text.trim(),
       phone: _phoneController.text.trim(),
+      isOpen: true,
       location: PharmacyLocation(
         lat: lat,
         lng: lng,

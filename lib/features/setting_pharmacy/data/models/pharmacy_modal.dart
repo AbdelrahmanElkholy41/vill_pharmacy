@@ -9,7 +9,6 @@ class PharmacyProfile {
   final int deliveredCount;
   final int todayOrdersCount;
 
-
   const PharmacyProfile({
     required this.name,
     required this.pharmacistName,
@@ -28,9 +27,7 @@ class PharmacyModel {
   final String area;
   final String phone;
   final PharmacyLocation location;
-   String? approvalStatus;
-   final String? id;
-
+   bool isOpen;
 
   PharmacyModel({
     required this.name,
@@ -38,9 +35,7 @@ class PharmacyModel {
     required this.area,
     required this.phone,
     required this.location,
-    this.approvalStatus,
-     this.id,
-
+    required this.isOpen,
   });
 
   factory PharmacyModel.fromJson(Map<String, dynamic> json) {
@@ -50,7 +45,7 @@ class PharmacyModel {
       area: json['area'],
       phone: json['phone'],
       location: PharmacyLocation.fromJson(json['location']),
-      approvalStatus: json['approvalStatus'], id: json['id'],
+      isOpen: json['isOpen'] ?? false,
     );
   }
 
@@ -61,8 +56,25 @@ class PharmacyModel {
       'area': area,
       'phone': phone,
       'location': location.toJson(),
-      'approvalStatus': approvalStatus,
+      'isOpen': isOpen,
     };
+  }
+  PharmacyModel copyWith({
+    PharmacyLocalizedText? name,
+    PharmacyLocalizedText? address,
+    String? area,
+    String? phone,
+    PharmacyLocation? location,
+    bool? isOpen,
+  }) {
+    return PharmacyModel(
+      name: name ?? this.name,
+      address: address ?? this.address,
+      area: area ?? this.area,
+      phone: phone ?? this.phone,
+      location: location ?? this.location,
+      isOpen: isOpen ?? this.isOpen,
+    );
   }
 }
 
@@ -77,8 +89,8 @@ class PharmacyLocalizedText {
 
   factory PharmacyLocalizedText.fromJson(Map<String, dynamic> json) {
     return PharmacyLocalizedText(
-      ar: json['ar'],
-      en: json['en'],
+      ar: json['ar'] ?? '',
+      en: json['en'] ?? '',
     );
   }
 
@@ -100,18 +112,30 @@ class PharmacyLocation {
   });
 
   factory PharmacyLocation.fromJson(Map<String, dynamic> json) {
-    final coordinates = json['coordinates'] as List;
+    // Backend يرجع GeoJSON:
+    // coordinates = [longitude, latitude]
+    if (json['coordinates'] != null) {
+      final coordinates = json['coordinates'] as List;
 
+      return PharmacyLocation(
+        lng: (coordinates[0] as num).toDouble(),
+        lat: (coordinates[1] as num).toDouble(),
+      );
+    }
+
+    // لو الـBackend رجع lat / lng مباشرة
     return PharmacyLocation(
-      lng: (coordinates[0] as num).toDouble(),
-      lat: (coordinates[1] as num).toDouble(),
+      lat: (json['lat'] as num).toDouble(),
+      lng: (json['lng'] as num).toDouble(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'type': 'Point',
-      'coordinates': [lng, lat],
+      'lat': lat,
+      'lng': lng,
     };
   }
 }
+
+

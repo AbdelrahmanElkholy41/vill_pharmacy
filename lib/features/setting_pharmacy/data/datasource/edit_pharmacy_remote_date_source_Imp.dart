@@ -4,20 +4,19 @@ import 'package:pharmacy_app/features/setting_pharmacy/data/models/pharmacy_moda
 
 import 'edit_pharmacy_remote_date_source.dart';
 
-class EditPharmacyRemoteDataSourceImpl
-    implements EditPharmacyRemoteDataSource {
+class EditPharmacyRemoteDataSourceImpl implements EditPharmacyRemoteDataSource {
   final Dio dio;
   final AuthLocalDataSource localDataSource;
 
   EditPharmacyRemoteDataSourceImpl(
-      this.dio,
-      this.localDataSource,
-      );
+    this.dio,
+    this.localDataSource,
+  );
 
   @override
   Future<PharmacyModel> registerPharmacy(
-      PharmacyModel request,
-      ) async {
+    PharmacyModel request,
+  ) async {
     final token = await localDataSource.getAccessToken();
 
     try {
@@ -32,7 +31,6 @@ class EditPharmacyRemoteDataSourceImpl
             "Content-Type": "application/json",
           },
         ),
-
       );
       print(response.data);
 
@@ -40,15 +38,19 @@ class EditPharmacyRemoteDataSourceImpl
         response.data["data"],
       );
     } on DioException catch (e) {
+      print('STATUS CODE: ${e.response?.statusCode}');
+      print('RESPONSE DATA: ${e.response?.data}');
+      print('REQUEST DATA: ${e.requestOptions.data}');
+
       if (e.response?.statusCode == 409) {
         final message = e.response?.data['message'];
-
         throw Exception(message);
       }
 
       rethrow;
     }
   }
+
   @override
   Future<PharmacyModel> getPharmacy() async {
     final token = await localDataSource.getAccessToken();
@@ -74,5 +76,34 @@ class EditPharmacyRemoteDataSourceImpl
 
       rethrow;
     }
+  }
+  @override
+  Future<void> pharmacyStatus(bool status) async {
+    final token = await localDataSource.getAccessToken();
+print(token);
+    try {
+      await dio.patch(
+        "https://pharmacy-nu-ivory.vercel.app/api/v1/pharmacies/my/open-status",
+        data: {
+          "isOpen": status,
+        },
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
+      );
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 409) {
+        final message = e.response?.data['message'];
+        throw Exception(message);
+      }
+
+      throw Exception(
+        e.response?.data?['message'] ?? "حدث خطأ أثناء تغيير حالة الصيدلية",
+      );
+    }
+
+
   }
 }

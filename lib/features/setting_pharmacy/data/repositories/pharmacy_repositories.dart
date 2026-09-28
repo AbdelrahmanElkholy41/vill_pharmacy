@@ -16,4 +16,7 @@ class PharmacyRepositoryImpl {
   Future<PharmacyModel> getPharmacy() async {
     return await remoteDataSource.getPharmacy();
   }
+  Future<void> pharmacyStatus(bool status) async {
+    return await remoteDataSource.pharmacyStatus(status);
+  }
 }

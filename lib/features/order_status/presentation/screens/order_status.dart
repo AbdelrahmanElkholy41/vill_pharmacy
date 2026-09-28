@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/info_order.dart';
+import '../widgets/mainImage.dart';
+import '../widgets/pgarmacy_responsible.dart';
 
 class OrderStatusScreen extends StatelessWidget {
   final VoidCallback onBack;
@@ -45,49 +47,7 @@ class OrderStatusScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 // Status card
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 28, horizontal: 20),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF0F4FF),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Column(
-                    children: [
-                      const Text('💊',
-                          style: TextStyle(fontSize: 52)),
-                      const SizedBox(height: 14),
-                      const Text('يتم تجهيز الطلب',
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF3B82F6))),
-                      const SizedBox(height: 6),
-                      const Text('الصيدلية تحضر طلبك الآن',
-                          style: TextStyle(
-                              fontSize: 13, color: Color(0xFF6B7280))),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(
-                          4,
-                              (i) => Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 4),
-                            width: i == 1 ? 24 : 8,
-                            height: 8,
-                            decoration: BoxDecoration(
-                              color: i <= 1
-                                  ? const Color(0xFF3B82F6)
-                                  : const Color(0xFFD1D5DB),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                mainIage(),
                 const SizedBox(height: 16),
                 // Info card
                 Container(
@@ -119,92 +79,7 @@ class OrderStatusScreen extends StatelessWidget {
                         color: Color(0xFF111827))),
                 const SizedBox(height: 12),
                 // Pharmacy card
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF0FDF4),
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: const Color(0xFFBBF7D0)),
-                  ),
-                  child: const Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('🧑‍⚕️',
-                              style: TextStyle(fontSize: 28)),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text('صيدلية النور',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF111827))),
-                              SizedBox(height: 4),
-                              Row(children: [
-                                Text('⭐',
-                                    style: TextStyle(fontSize: 12)),
-                                SizedBox(width: 4),
-                                Text('4.5',
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: Color(0xFF6B7280))),
-                                SizedBox(width: 6),
-                                Text('•',
-                                    style: TextStyle(
-                                        color: Color(0xFF9CA3AF))),
-                                SizedBox(width: 6),
-                                Text('١٢٠+ طلب',
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: Color(0xFF6B7280))),
-                              ]),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 12),
-                      Divider(color: Color(0xFFDCFCE7)),
-                      SizedBox(height: 12),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text('شارع الجمهورية - وسط البلد',
-                              style: TextStyle(
-                                  fontSize: 13, color: Color(0xFF374151))),
-                          SizedBox(width: 6),
-                          Text('📍', style: TextStyle(fontSize: 13)),
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text('010 1234 5678',
-                              style: TextStyle(
-                                  fontSize: 13,
-                                  color: Color(0xFF22C55E),
-                                  fontWeight: FontWeight.w600)),
-                          SizedBox(width: 6),
-                          Text('📞', style: TextStyle(fontSize: 13)),
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text('وقت التوصيل المتوقع: ٢٠ دقيقة',
-                              style: TextStyle(
-                                  fontSize: 13, color: Color(0xFF374151))),
-                          SizedBox(width: 6),
-                          Text('🕐', style: TextStyle(fontSize: 13)),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                const pharmacyResponsible(),
                 const SizedBox(height: 24),
               ],
             ),
@@ -214,3 +89,5 @@ class OrderStatusScreen extends StatelessWidget {
     );
   }
 }
+
+

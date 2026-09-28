@@ -15,9 +15,9 @@ class OrderSuccess extends OrderState {
 class OrdersLoading extends OrderState {}
 
 class OrdersSuccess extends OrderState {
-  final List<OrderModel> orders;
+  final OrderModel order;
 
-  OrdersSuccess(this.orders);
+  OrdersSuccess(this.order);
 }
 
 class OrderError extends OrderState {

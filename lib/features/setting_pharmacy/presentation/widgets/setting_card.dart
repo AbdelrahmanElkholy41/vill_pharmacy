@@ -12,6 +12,8 @@ class SettingsCard extends StatelessWidget {
   final ValueChanged<bool> onNewOrderNotificationsChanged;
   final ValueChanged<bool> onVibrateChanged;
   final ValueChanged<bool> onDarkModeChanged;
+  final bool pharmacyOpen;
+  final ValueChanged<bool> onPharmacyOpenChanged;
 
   const SettingsCard({
     required this.newOrderNotifications,
@@ -19,7 +21,7 @@ class SettingsCard extends StatelessWidget {
     required this.darkMode,
     required this.onNewOrderNotificationsChanged,
     required this.onVibrateChanged,
-    required this.onDarkModeChanged,
+    required this.onDarkModeChanged, required this.pharmacyOpen, required this.onPharmacyOpenChanged,
   });
 
   @override
@@ -44,6 +46,12 @@ class SettingsCard extends StatelessWidget {
             label: 'الوضع الليلي',
             value: darkMode,
             onChanged: onDarkModeChanged,
+          ),
+          const InfoDivider(),
+          SettingRow(
+            label: 'فتح الصيدلية',
+            value: pharmacyOpen,
+            onChanged: onPharmacyOpenChanged,
           ),
         ],
       ),
