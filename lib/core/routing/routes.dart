@@ -12,6 +12,7 @@ class Routes {
   static const String profileEdit='/profileEdit';
   static const String customerProfile='/customerProfile';
   static const String UserProfile='/UserProfile';
+  static const String orderDetailsScreen='/orderDetailsScreen';
 
 
 

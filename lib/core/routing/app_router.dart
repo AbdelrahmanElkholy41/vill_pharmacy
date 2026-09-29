@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pharmacy_app/core/routing/routes.dart';
+import 'package:pharmacy_app/features/dashboard_pharmacy/presentation/screens/order_details_screen.dart';
 import 'package:pharmacy_app/features/setting_pharmacy/data/datasource/edit_pharmacy_remote_date_source_Imp.dart';
 import 'package:pharmacy_app/features/user_profile/profile_screen.dart';
 import '../../features/auth/data/datasource/auth_local_data_source_impl.dart';
@@ -20,6 +21,7 @@ import '../../features/dashboard_pharmacy/presentation/screens/dashboard.dart';
 import '../../features/home/presentation/screens/customer_home.dart';
 import '../../features/home/presentation/screens/role_get.dart';
 import '../../features/new_order/data/datasource/remot_data_source_Imp.dart';
+import '../../features/new_order/data/models/create_order_request_model.dart';
 import '../../features/new_order/data/repositories/order_repository_impl.dart.dart';
 import '../../features/new_order/presentation/cubit/order_cubit.dart';
 import '../../features/new_order/presentation/screens/new_order.dart';
@@ -169,6 +171,12 @@ class AppRouter {
         return MaterialPageRoute(builder: (BuildContext context) {
           return const ProfileScreen();
         });
+        case Routes.orderDetailsScreen:
+          return MaterialPageRoute(
+            builder: (_) => OrderDetailsScreen(
+              order: settings.arguments as IncomingOrderModel,
+            ),
+          );
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

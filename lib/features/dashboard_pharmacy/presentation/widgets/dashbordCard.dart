@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/helpers/extensions.dart';
+import '../../../../core/routing/routes.dart';
 import '../../../new_order/data/models/create_order_request_model.dart';
 
 class DashboardOrderCard extends StatelessWidget {
@@ -16,133 +18,142 @@ class DashboardOrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  const Text(
-                    '📋',
-                    style: TextStyle(fontSize: 13),
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    order.isTargeted ? 'موجّه للصيدلية' : 'طلب جديد',
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: Color(0xFF6B7280),
-                    ),
-                  ),
-                ],
-              ),
-              Text(
-                'طلب رقم: ${order.orderNumber}',
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: Color(0xFF6B7280),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              order.details,
-              style: const TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF111827),
-              ),
+    return GestureDetector(
+      onTap: (){
+
+        context.pushNamed(
+          Routes.orderDetailsScreen ,arguments: order
+
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.06),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
             ),
-          ),
-          if (order.hasPrescriptionImage) ...[
-            const SizedBox(height: 8),
-            const Row(
-              mainAxisSize: MainAxisSize.min,
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  '🖼️',
-                  style: TextStyle(fontSize: 12),
+                Row(
+                  children: [
+                    const Text(
+                      '📋',
+                      style: TextStyle(fontSize: 13),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      order.isTargeted ? 'موجّه للصيدلية' : 'طلب جديد',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Color(0xFF6B7280),
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(width: 4),
                 Text(
-                  'يوجد صورة روشتة',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFF22C55E),
+                  'طلب رقم: ${order.orderNumber}',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: Color(0xFF6B7280),
                   ),
                 ),
               ],
             ),
-          ],
-          const SizedBox(height: 14),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: onAccept,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF22C55E),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    elevation: 0,
+            const SizedBox(height: 10),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                order.details,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF111827),
+                ),
+              ),
+            ),
+            if (order.hasPrescriptionImage) ...[
+              const SizedBox(height: 8),
+              const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '🖼️',
+                    style: TextStyle(fontSize: 12),
                   ),
-                  child: const Text(
-                    '✓ قبول',
+                  SizedBox(width: 4),
+                  Text(
+                    'يوجد صورة روشتة',
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
+                      fontSize: 12,
+                      color: Color(0xFF22C55E),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: onAccept,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF22C55E),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: const Text(
+                      '✓ قبول',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 10),
-              order.isTargeted
-                  ? Expanded(
-                      child: ElevatedButton(
-                        onPressed: onReject,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFEF4444),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                const SizedBox(width: 10),
+                order.isTargeted
+                    ? Expanded(
+                        child: ElevatedButton(
+                          onPressed: onReject,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFEF4444),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            elevation: 0,
                           ),
-                          elevation: 0,
-                        ),
-                        child: const Text(
-                          '✕ رفض',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                          child: const Text(
+                            '✕ رفض',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  : SizedBox(),
-            ],
-          ),
-        ],
+                      )
+                    : SizedBox(),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

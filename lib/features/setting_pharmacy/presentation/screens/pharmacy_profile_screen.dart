@@ -23,8 +23,7 @@ class PharmacyProfileScreen extends StatefulWidget {
   });
 
   @override
-  State<PharmacyProfileScreen> createState() =>
-      _PharmacyProfileScreenState();
+  State<PharmacyProfileScreen> createState() => _PharmacyProfileScreenState();
 }
 
 class _PharmacyProfileScreenState extends State<PharmacyProfileScreen> {
@@ -59,7 +58,6 @@ class _PharmacyProfileScreenState extends State<PharmacyProfileScreen> {
           return Scaffold(
             backgroundColor: AppColors.scaffoldBg,
             appBar: _buildAppBar(context),
-
             body: SafeArea(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
@@ -79,52 +77,34 @@ class _PharmacyProfileScreenState extends State<PharmacyProfileScreen> {
                       PharmacyHeader(
                         pharmacy: state.pharmacy,
                       ),
-
                       const SizedBox(height: 16),
-
                       const SizedBox(height: 20),
-
                       PharmacyDataCard(
                         pharmacy: state.pharmacy,
                       ),
-
                       const SizedBox(height: 20),
-
                       SettingsCard(
-                        newOrderNotifications:
-                        _newOrderNotifications,
-
-                        vibrateOnNewOrder:
-                        _vibrateOnNewOrder,
-
+                        newOrderNotifications: _newOrderNotifications,
+                        vibrateOnNewOrder: _vibrateOnNewOrder,
                         darkMode: _darkMode,
-
-                        // حالة الصيدلية تأتي من PharmacyModel
-                        pharmacyOpen:
-                        state.pharmacy.isOpen,
-
+                        pharmacyOpen: state.pharmacy.isOpen,
                         onNewOrderNotificationsChanged: (v) {
                           setState(() {
                             _newOrderNotifications = v;
                           });
                         },
-
                         onVibrateChanged: (v) {
                           setState(() {
                             _vibrateOnNewOrder = v;
                           });
                         },
-
                         onDarkModeChanged: (v) {
                           setState(() {
                             _darkMode = v;
                           });
                         },
-
                         onPharmacyOpenChanged: (v) {
-                          context
-                              .read<PharmacyCubit>()
-                              .pharmacyStatus(v);
+                          context.read<PharmacyCubit>().pharmacyStatus(v);
                         },
                       ),
                     ],
@@ -149,7 +129,6 @@ class _PharmacyProfileScreenState extends State<PharmacyProfileScreen> {
       backgroundColor: AppColors.primaryGreen,
       elevation: 0,
       centerTitle: true,
-
       title: const Text(
         'بروفايل الصيدلية',
         style: TextStyle(
@@ -158,7 +137,6 @@ class _PharmacyProfileScreenState extends State<PharmacyProfileScreen> {
           fontWeight: FontWeight.w600,
         ),
       ),
-
       leading: TextButton.icon(
         onPressed: () {
           Navigator.of(context).maybePop();
@@ -176,20 +154,7 @@ class _PharmacyProfileScreenState extends State<PharmacyProfileScreen> {
         ),
       ),
 
-      actions: [
-        TextButton(
-          onPressed: () {
-            context.pushNamed(Routes.profileEdit);
-          },
-          child: const Text(
-            'تعديل',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-            ),
-          ),
-        ),
-      ],
+
     );
   }
 }
