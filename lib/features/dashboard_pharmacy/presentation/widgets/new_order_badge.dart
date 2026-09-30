@@ -33,3 +33,4 @@ class NewOrderBadge extends StatelessWidget {
     );
   }
 }
+
