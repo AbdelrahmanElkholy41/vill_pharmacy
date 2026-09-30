@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../home/presentation/screens/customer_home.dart';
 
 
 class ChoosesPharmacy extends StatelessWidget {
@@ -88,4 +87,17 @@ class ChoosesPharmacy extends StatelessWidget {
       ),
     );
   }
+}
+class Pharmacy {
+  final String name;
+  final double rating;
+  final String distance;
+  final bool isOpen;
+
+  const Pharmacy({
+    required this.name,
+    required this.rating,
+    required this.distance,
+    required this.isOpen,
+  });
 }

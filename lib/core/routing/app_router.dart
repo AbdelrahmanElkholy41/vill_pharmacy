@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pharmacy_app/core/routing/routes.dart';
 import 'package:pharmacy_app/features/dashboard_pharmacy/presentation/screens/order_details_screen.dart';
+import 'package:pharmacy_app/features/home/data/dataSource/remot_data_source_imp.dart';
 import 'package:pharmacy_app/features/setting_pharmacy/data/datasource/edit_pharmacy_remote_date_source_Imp.dart';
 import 'package:pharmacy_app/features/user_profile/profile_screen.dart';
 import '../../features/auth/data/datasource/auth_local_data_source_impl.dart';
@@ -18,6 +19,8 @@ import '../../features/auth/presentation/screens/login.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/dashboard_pharmacy/presentation/Cubit/income_cubit.dart';
 import '../../features/dashboard_pharmacy/presentation/screens/dashboard.dart';
+import '../../features/home/data/repositories/pharmacy_nearby_repository.dart';
+import '../../features/home/presentation/cubit/pharmacy_near_cubit.dart';
 import '../../features/home/presentation/screens/customer_home.dart';
 import '../../features/home/presentation/screens/role_get.dart';
 import '../../features/new_order/data/datasource/remot_data_source_Imp.dart';
@@ -55,11 +58,18 @@ class AppRouter {
         );
       case Routes.homeScreen:
         return MaterialPageRoute(
-            builder: (_) => CustomerHomeScreen(
-                  onDashboard: () {},
-                  onNewOrder: () {},
-                  onTrack: () {},
-                  userRole: settings.arguments as UserRole,
+            builder: (_) => BlocProvider(
+                  create: (_) => PharmacyNearCubit(PharmacyNearbyRepositoryImp(
+                      NearByPharmacyRemotDataSourceImp(
+                    Dio(),
+                    AuthLocalDataSourceImpl(),
+                  ))),
+                  child: CustomerHomeScreen(
+                    onDashboard: () {},
+                    onNewOrder: () {},
+                    onTrack: () {},
+                    userRole: settings.arguments as UserRole,
+                  ),
                 ));
       case Routes.registrationScreen:
         return MaterialPageRoute(
@@ -171,12 +181,12 @@ class AppRouter {
         return MaterialPageRoute(builder: (BuildContext context) {
           return const ProfileScreen();
         });
-        case Routes.orderDetailsScreen:
-          return MaterialPageRoute(
-            builder: (_) => OrderDetailsScreen(
-              order: settings.arguments as IncomingOrderModel,
-            ),
-          );
+      case Routes.orderDetailsScreen:
+        return MaterialPageRoute(
+          builder: (_) => OrderDetailsScreen(
+            order: settings.arguments as IncomingOrderModel,
+          ),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

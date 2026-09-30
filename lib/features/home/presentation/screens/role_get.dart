@@ -18,6 +18,9 @@ import '../../../setting_pharmacy/presentation/Cubit/register_pharmacy_cubit.dar
 import '../../../setting_pharmacy/presentation/screens/pharmacy_edit_screen.dart';
 import '../../../setting_pharmacy/data/models/pharmacy_modal.dart';
 
+import '../../data/dataSource/remot_data_source_imp.dart';
+import '../../data/repositories/pharmacy_nearby_repository.dart';
+import '../cubit/pharmacy_near_cubit.dart';
 import 'customer_home.dart';
 
 class RoleGate extends StatelessWidget {
@@ -40,12 +43,21 @@ class RoleGate extends StatelessWidget {
     // =========================
 
       case UserRole.customer:
-        return CustomerHomeScreen(
-          onDashboard: () {},
-          onNewOrder: () {},
-          onTrack: () {},
-          userRole: user.role,
+        return BlocProvider(
+          create: (_) => PharmacyNearCubit(PharmacyNearbyRepositoryImp(
+              NearByPharmacyRemotDataSourceImp(
+                Dio(),
+                AuthLocalDataSourceImpl(),
+              ))),
+          child: CustomerHomeScreen(
+            onDashboard: () {},
+            onNewOrder: () {},
+            onTrack: () {},
+            userRole:user.role,
+          ),
         );
+
+
 
     // =========================
     // Pharmacist

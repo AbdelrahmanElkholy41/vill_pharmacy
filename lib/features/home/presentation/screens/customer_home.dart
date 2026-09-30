@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pharmacy_app/core/helpers/extensions.dart';
 import 'package:pharmacy_app/features/auth/domain/entities/user_entity.dart';
 
 import '../../../../core/routing/routes.dart';
 import '../../../auth/domain/entities/user_entity.dart';
+import '../cubit/pharmacy_near_cubit.dart';
+import '../cubit/pharmacy_near_state.dart';
 import '../widgets/parmacy_card.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
@@ -25,14 +28,14 @@ class CustomerHomeScreen extends StatefulWidget {
 }
 
 class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
-  final List<Pharmacy> _pharmacies = [
-    Pharmacy(name: 'صيدلية النور', rating: 4.5, distance: '500م', isOpen: true),
-    Pharmacy(
-        name: 'صيدلية الشفاء', rating: 4.8, distance: '800م', isOpen: true),
-    Pharmacy(
-        name: 'صيدلية الحياة', rating: 4.2, distance: '1.2كم', isOpen: false),
-  ];
-
+  @override
+  void initState() {
+    super.initState();
+    context.read<PharmacyNearCubit>().getNearbyPharmacies(
+     20.0444, // latitude
+      20.2357, // longitude
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -148,28 +151,78 @@ class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
   }
 
   Widget _buildNearbySection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        const Text(
-          'صيدليات قريبة منك',
-          style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF111827)),
-        ),
-        const SizedBox(height: 14),
-        ...List.generate(
-          _pharmacies.length,
-          (i) => Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: PharmacyCard(pharmacy: _pharmacies[i]),
-          ),
-        ),
-      ],
+    return BlocConsumer<PharmacyNearCubit, PharmacyNearState>(
+      listener: (context, state) {
+        if (state is PharmacyNearError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
+        if (state is PharmacyNearLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        if (state is PharmacyNearSuccess) {
+          final pharmacies = state.pharmacies;
+
+          if (pharmacies.isEmpty) {
+            return const Center(
+              child: Text(
+                'لا توجد صيدليات قريبة منك',
+                style: TextStyle(
+                  color: Color(0xFF6B7280),
+                  fontSize: 15,
+                ),
+              ),
+            );
+          }
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              const Text(
+                'صيدليات قريبة منك',
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF111827),
+                ),
+              ),
+              const SizedBox(height: 14),
+
+              ...pharmacies.map(
+                    (pharmacy) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: PharmacyCard(
+                    pharmacy: pharmacy,
+                  ),
+                ),
+              ),
+            ],
+          );
+        }
+
+        if (state is PharmacyNearError) {
+          return Center(
+            child: Text(
+              state.message,
+              style: const TextStyle(
+                color: Colors.red,
+              ),
+            ),
+          );
+        }
+
+        return const SizedBox.shrink();
+      },
     );
   }
-
   Widget _buildBottomNavBar() {
     return Container(
       decoration: BoxDecoration(
@@ -209,19 +262,7 @@ class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
   }
 }
 
-class Pharmacy {
-  final String name;
-  final double rating;
-  final String distance;
-  final bool isOpen;
 
-  const Pharmacy({
-    required this.name,
-    required this.rating,
-    required this.distance,
-    required this.isOpen,
-  });
-}
 
 class OrderRequest {
   final String id;
