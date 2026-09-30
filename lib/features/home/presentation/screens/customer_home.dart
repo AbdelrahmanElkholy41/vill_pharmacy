@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:pharmacy_app/core/helpers/extensions.dart';
 import 'package:pharmacy_app/features/auth/domain/entities/user_entity.dart';
 
@@ -28,13 +29,47 @@ class CustomerHomeScreen extends StatefulWidget {
 }
 
 class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
+  Future<void> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    if (!serviceEnabled) {
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+
+      if (permission == LocationPermission.denied) {
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return;
+    }
+
+    final position = await Geolocator.getCurrentPosition();
+
+    print("LAT-----------------: ${position.latitude}");
+    print("LNG: ${position.longitude}");
+
+    if (!mounted) return;
+
+    context.read<PharmacyNearCubit>().getNearbyPharmacies(
+      position.latitude,
+      position.longitude,
+    );
+  }
   @override
   void initState() {
     super.initState();
-    context.read<PharmacyNearCubit>().getNearbyPharmacies(
-     20.0444, // latitude
-      20.2357, // longitude
-    );
+    _getCurrentLocation();
+
   }
   @override
   Widget build(BuildContext context) {

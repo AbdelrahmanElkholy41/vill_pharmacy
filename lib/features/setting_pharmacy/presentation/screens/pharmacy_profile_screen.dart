@@ -4,7 +4,8 @@ import 'package:pharmacy_app/core/helpers/extensions.dart';
 
 import '../../../../core/routing/routes.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../user_profile/profile_screen.dart' hide AppColors;
+import '../../../user_profile/presentation/screen/profile_screen.dart' hide AppColors;
+import '../../../user_profile/presentation/widget/logout_buttom.dart';
 import '../../data/models/pharmacy_modal.dart';
 import '../Cubit/register_pharmacy_cubit.dart';
 import '../Cubit/register_pharmacy_state.dart';

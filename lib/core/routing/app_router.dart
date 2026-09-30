@@ -6,7 +6,6 @@ import 'package:pharmacy_app/core/routing/routes.dart';
 import 'package:pharmacy_app/features/dashboard_pharmacy/presentation/screens/order_details_screen.dart';
 import 'package:pharmacy_app/features/home/data/dataSource/remot_data_source_imp.dart';
 import 'package:pharmacy_app/features/setting_pharmacy/data/datasource/edit_pharmacy_remote_date_source_Imp.dart';
-import 'package:pharmacy_app/features/user_profile/profile_screen.dart';
 import '../../features/auth/data/datasource/auth_local_data_source_impl.dart';
 import '../../features/auth/data/datasource/auth_remote_data_source_impl.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
@@ -29,12 +28,11 @@ import '../../features/new_order/data/repositories/order_repository_impl.dart.da
 import '../../features/new_order/presentation/cubit/order_cubit.dart';
 import '../../features/new_order/presentation/screens/new_order.dart';
 import '../../features/order_status/presentation/screens/order_status.dart';
-import '../../features/setting_pharmacy/data/datasource/edit_pharmacy_remote_date_source.dart';
-import '../../features/setting_pharmacy/data/models/pharmacy_modal.dart';
 import '../../features/setting_pharmacy/data/repositories/pharmacy_repositories.dart';
 import '../../features/setting_pharmacy/presentation/Cubit/register_pharmacy_cubit.dart';
 import '../../features/setting_pharmacy/presentation/screens/pharmacy_edit_screen.dart';
 import '../../features/setting_pharmacy/presentation/screens/pharmacy_profile_screen.dart';
+import '../../features/user_profile/presentation/screen/profile_screen.dart';
 
 class AppRouter {
   Route generateRoute(RouteSettings settings) {
