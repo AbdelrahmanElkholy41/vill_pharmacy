@@ -22,6 +22,7 @@ class NearByPharmacyRemotDataSourceImp implements NearByPharmacyRemotDataSource 
       ),
     );
 
+
     final List<dynamic> data = response.data["data"];
     return data
         .map(
