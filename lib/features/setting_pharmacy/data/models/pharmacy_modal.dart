@@ -138,4 +138,28 @@ class PharmacyLocation {
   }
 }
 
+class RegisterPharmacyRequest {
+  final PharmacyLocalizedText name;
+  final PharmacyLocalizedText address;
+  final String area;
+  final String phone;
+  final PharmacyLocation location;
 
+  RegisterPharmacyRequest({
+    required this.name,
+    required this.address,
+    required this.area,
+    required this.phone,
+    required this.location,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name.toJson(),
+      'address': address.toJson(),
+      'area': area,
+      'phone': phone,
+      'location': location.toJson(),
+    };
+  }
+}

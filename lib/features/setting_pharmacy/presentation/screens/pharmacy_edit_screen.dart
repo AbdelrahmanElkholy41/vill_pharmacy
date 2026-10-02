@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:pharmacy_app/core/helpers/extensions.dart';
+import 'package:pharmacy_app/core/routing/routes.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../data/models/pharmacy_modal.dart';
@@ -19,8 +22,7 @@ class PharmacyRegisterScreen extends StatefulWidget {
       _PharmacyRegisterScreenState();
 }
 
-class _PharmacyRegisterScreenState
-    extends State<PharmacyRegisterScreen> {
+class _PharmacyRegisterScreenState extends State<PharmacyRegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final _nameArController = TextEditingController();
@@ -35,18 +37,100 @@ class _PharmacyRegisterScreenState
   final _latController = TextEditingController();
   final _lngController = TextEditingController();
 
-  @override
-  void dispose() {
-    _nameArController.dispose();
-    _nameEnController.dispose();
-    _addressArController.dispose();
-    _addressEnController.dispose();
-    _areaController.dispose();
-    _phoneController.dispose();
-    _latController.dispose();
-    _lngController.dispose();
+  bool _isGettingLocation = true;
 
-    super.dispose();
+  @override
+  void initState() {
+    super.initState();
+
+    _getCurrentLocation();
+  }
+
+  Future<void> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    if (!serviceEnabled) {
+      if (!mounted) return;
+
+      setState(() {
+        _isGettingLocation = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('من فضلك فعّل خدمة الموقع'),
+        ),
+      );
+
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+
+      if (permission == LocationPermission.denied) {
+        if (!mounted) return;
+
+        setState(() {
+          _isGettingLocation = false;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('يجب السماح للتطبيق بالوصول إلى الموقع'),
+          ),
+        );
+
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      if (!mounted) return;
+
+      setState(() {
+        _isGettingLocation = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'تم رفض صلاحية الموقع بشكل دائم، فعّلها من إعدادات الهاتف',
+          ),
+        ),
+      );
+
+      return;
+    }
+
+    try {
+      final position = await Geolocator.getCurrentPosition();
+
+      if (!mounted) return;
+
+      setState(() {
+        _latController.text = position.latitude.toString();
+        _lngController.text = position.longitude.toString();
+        _isGettingLocation = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() {
+        _isGettingLocation = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('حدث خطأ أثناء الحصول على موقعك'),
+        ),
+      );
+    }
   }
 
   void _registerPharmacy() {
@@ -65,13 +149,13 @@ class _PharmacyRegisterScreenState
     if (lat == null || lng == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('من فضلك أدخل Latitude و Longitude صحيحين'),
+          content: Text('لم يتم تحديد موقع الصيدلية'),
         ),
       );
       return;
     }
 
-    final pharmacy = PharmacyModel(
+    final pharmacy = RegisterPharmacyRequest(
       name: PharmacyLocalizedText(
         ar: _nameArController.text.trim(),
         en: _nameEnController.text.trim(),
@@ -82,7 +166,6 @@ class _PharmacyRegisterScreenState
       ),
       area: _areaController.text.trim(),
       phone: _phoneController.text.trim(),
-      isOpen: true,
       location: PharmacyLocation(
         lat: lat,
         lng: lng,
@@ -92,6 +175,20 @@ class _PharmacyRegisterScreenState
     context.read<PharmacyCubit>().registerPharmacy(
       pharmacy,
     );
+  }
+
+  @override
+  void dispose() {
+    _nameArController.dispose();
+    _nameEnController.dispose();
+    _addressArController.dispose();
+    _addressEnController.dispose();
+    _areaController.dispose();
+    _phoneController.dispose();
+    _latController.dispose();
+    _lngController.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -108,8 +205,7 @@ class _PharmacyRegisterScreenState
                 ),
               ),
             );
-
-            Navigator.of(context).pop();
+context.pushNamed(Routes.login);
           }
 
           if (state is PharmacyError) {
@@ -126,7 +222,6 @@ class _PharmacyRegisterScreenState
 
           return Scaffold(
             backgroundColor: AppColors.scaffoldBg,
-
             appBar: AppBar(
               backgroundColor: AppColors.primaryGreen,
               centerTitle: true,
@@ -140,7 +235,6 @@ class _PharmacyRegisterScreenState
                 ),
               ),
             ),
-
             body: SafeArea(
               child: Form(
                 key: _formKey,
@@ -155,7 +249,6 @@ class _PharmacyRegisterScreenState
 
                       const SizedBox(height: 20),
 
-                      // بيانات الصيدلية
                       SectionCard(
                         title: 'بيانات الصيدلية',
                         child: Column(
@@ -165,43 +258,33 @@ class _PharmacyRegisterScreenState
                               controller: _nameArController,
                               icon: Icons.storefront_outlined,
                             ),
-
                             const SizedBox(height: 14),
-
                             LabeledField(
                               label: 'اسم الصيدلية بالإنجليزي',
                               controller: _nameEnController,
                               icon: Icons.storefront_outlined,
                             ),
-
                             const SizedBox(height: 14),
-
                             LabeledField(
                               label: 'العنوان بالعربي',
                               controller: _addressArController,
                               icon: Icons.location_on_outlined,
                               maxLines: 2,
                             ),
-
                             const SizedBox(height: 14),
-
                             LabeledField(
                               label: 'العنوان بالإنجليزي',
                               controller: _addressEnController,
                               icon: Icons.location_on_outlined,
                               maxLines: 2,
                             ),
-
                             const SizedBox(height: 14),
-
                             LabeledField(
                               label: 'المنطقة',
                               controller: _areaController,
                               icon: Icons.map_outlined,
                             ),
-
                             const SizedBox(height: 14),
-
                             LabeledField(
                               label: 'رقم الهاتف',
                               controller: _phoneController,
@@ -213,28 +296,43 @@ class _PharmacyRegisterScreenState
 
                       const SizedBox(height: 16),
 
-                      // Location
                       SectionCard(
                         title: 'موقع الصيدلية',
-                        child: Row(
+                        child: Column(
                           children: [
-                            Expanded(
-                              child: LabeledField(
-                                label: 'Latitude',
-                                controller: _latController,
-                                icon: Icons.location_on_outlined,
+                            if (_isGettingLocation)
+                              const Padding(
+                                padding: EdgeInsets.all(16),
+                                child: Column(
+                                  children: [
+                                    CircularProgressIndicator(),
+                                    SizedBox(height: 10),
+                                    Text(
+                                      'جاري تحديد موقع الصيدلية...',
+                                    ),
+                                  ],
+                                ),
+                              )
+                            else
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: LabeledField(
+                                      label: 'Latitude',
+                                      controller: _latController,
+                                      icon: Icons.location_on_outlined,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: LabeledField(
+                                      label: 'Longitude',
+                                      controller: _lngController,
+                                      icon: Icons.location_on_outlined,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-
-                            const SizedBox(width: 12),
-
-                            Expanded(
-                              child: LabeledField(
-                                label: 'Longitude',
-                                controller: _lngController,
-                                icon: Icons.location_on_outlined,
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -242,8 +340,10 @@ class _PharmacyRegisterScreenState
                       const SizedBox(height: 28),
 
                       SaveButton(
-                        saving: saving,
-                        onPressed: _registerPharmacy,
+                        saving: saving || _isGettingLocation,
+                        onPressed: _isGettingLocation
+                            ? () {}
+                            : _registerPharmacy,
                       ),
 
                       const SizedBox(height: 12),

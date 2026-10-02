@@ -15,8 +15,8 @@ class EditPharmacyRemoteDataSourceImpl implements EditPharmacyRemoteDataSource {
 
   @override
   Future<PharmacyModel> registerPharmacy(
-    PharmacyModel request,
-  ) async {
+      RegisterPharmacyRequest request,
+      ) async {
     final token = await localDataSource.getAccessToken();
 
     try {
@@ -32,6 +32,7 @@ class EditPharmacyRemoteDataSourceImpl implements EditPharmacyRemoteDataSource {
           },
         ),
       );
+
       print(response.data);
 
       return PharmacyModel.fromJson(
@@ -50,6 +51,7 @@ class EditPharmacyRemoteDataSourceImpl implements EditPharmacyRemoteDataSource {
       rethrow;
     }
   }
+
 
   @override
   Future<PharmacyModel> getPharmacy() async {
@@ -106,4 +108,6 @@ print(token);
 
 
   }
+
+
 }

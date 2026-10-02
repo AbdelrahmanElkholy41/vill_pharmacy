@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pharmacy_app/features/setting_pharmacy/data/repositories/pharmacy_repositories.dart';
@@ -17,7 +18,7 @@ class PharmacyCubit extends Cubit<PharmacyState> {
   }) : super(PharmacyInitial());
 
   Future<void> registerPharmacy(
-      PharmacyModel pharmacy,
+      RegisterPharmacyRequest pharmacy,
       ) async {
     emit(PharmacyLoading());
 
@@ -99,7 +100,12 @@ class PharmacyCubit extends Cubit<PharmacyState> {
         emit(PharmacySuccess(pharmacy));
       }
     } catch (e) {
-      emit(PharmacyError(e.toString()));
+      if (e is DioException) {
+        print('STATUS CODE: ${e.response?.statusCode}');
+        print('RESPONSE DATA: ${e.response?.data}');
+      }
+
+      rethrow;
     }
   }
 }
