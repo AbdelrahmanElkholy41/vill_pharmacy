@@ -56,11 +56,14 @@ class IncomingOrderModel {
   final bool hasPrescriptionImage;
   final bool isTargeted;
   final DateTime createdAt;
+
   final String? prescriptionImage;
   final double? price;
   final int? estimatedDeliveryMinutes;
   final String? rejectionReason;
 
+  // بيانات العميل
+  final CustomerOrderModel? customer;
 
   IncomingOrderModel({
     required this.id,
@@ -69,27 +72,94 @@ class IncomingOrderModel {
     required this.hasPrescriptionImage,
     required this.isTargeted,
     required this.createdAt,
+    this.prescriptionImage,
     this.price,
-    this.estimatedDeliveryMinutes, this.rejectionReason, this.prescriptionImage,
+    this.estimatedDeliveryMinutes,
+    this.rejectionReason,
+    this.customer,
   });
 
-  factory IncomingOrderModel.fromJson(Map<String, dynamic> json) {
-
+  factory IncomingOrderModel.fromJson(
+      Map<String, dynamic> json,
+      ) {
     return IncomingOrderModel(
-      id: json["id"],
-      orderNumber: json["orderNumber"],
-      details: json["details"],
-      hasPrescriptionImage: json["hasPrescriptionImage"],
-      isTargeted: json["isTargeted"],
-      createdAt: DateTime.parse(json["createdAt"]),
+      id: json['id'] as String,
+      orderNumber: json['orderNumber'] as String,
+      details: json['details'] as String? ?? '',
+      hasPrescriptionImage:
+      json['hasPrescriptionImage'] as bool? ?? false,
+      isTargeted: json['isTargeted'] as bool? ?? false,
+      createdAt: DateTime.parse(json['createdAt'] as String),
 
-      price: (json["price"] as num?)?.toDouble(),
+      // رابط صورة الروشتة
+      prescriptionImage:
+      json['prescriptionImageUrl'] as String?,
 
+      price: (json['price'] as num?)?.toDouble(),
       estimatedDeliveryMinutes:
-      (json["estimatedDeliveryMinutes"] as num?)?.toInt(),
-      rejectionReason: json["rejectionReason"],
-      prescriptionImage: json["image"],
+      (json['estimatedDeliveryMinutes'] as num?)?.toInt(),
+      rejectionReason: json['rejectionReason'] as String?,
+
+      // بيانات العميل
+      customer: json['customer'] is Map<String, dynamic>
+          ? CustomerOrderModel.fromJson(
+        json['customer'] as Map<String, dynamic>,
+      )
+          : null,
     );
   }
+}
 
+class CustomerOrderModel {
+  final String id;
+  final String fullName;
+  final String phone;
+  final String address;
+  final CustomerLocationModel? location;
+  final String? locationUrl;
+
+  CustomerOrderModel({
+    required this.id,
+    required this.fullName,
+    required this.phone,
+    required this.address,
+    this.location,
+    this.locationUrl,
+  });
+
+  factory CustomerOrderModel.fromJson(
+      Map<String, dynamic> json,
+      ) {
+    return CustomerOrderModel(
+      id: json['id'] as String? ?? '',
+      fullName: json['fullName'] as String? ?? '',
+      phone: json['phone'] as String? ?? '',
+      address: json['address'] as String? ?? '',
+      location: json['location'] is Map<String, dynamic>
+          ? CustomerLocationModel.fromJson(
+        json['location'] as Map<String, dynamic>,
+      )
+          : null,
+      locationUrl: json['locationUrl'] as String?,
+    );
   }
+}
+
+class CustomerLocationModel {
+  final double? lat;
+  final double? lng;
+
+  CustomerLocationModel({
+    this.lat,
+    this.lng,
+  });
+
+  factory CustomerLocationModel.fromJson(
+      Map<String, dynamic> json,
+      ) {
+    return CustomerLocationModel(
+      lat: (json['lat'] as num?)?.toDouble(),
+      lng: (json['lng'] as num?)?.toDouble(),
+    );
+  }
+}

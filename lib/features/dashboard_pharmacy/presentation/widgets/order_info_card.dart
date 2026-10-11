@@ -13,10 +13,8 @@ class OrderInfoCard extends StatelessWidget {
   final String address;
 
   const OrderInfoCard({
-    super.key,
-    this.customerName = '',
-    this.orderNumber = '',
-    this.address = '',
+    super.key, required this.customerName, required this.orderNumber, required this.address,
+
   });
 
   @override

@@ -18,8 +18,7 @@ class PharmacyRegisterScreen extends StatefulWidget {
   });
 
   @override
-  State<PharmacyRegisterScreen> createState() =>
-      _PharmacyRegisterScreenState();
+  State<PharmacyRegisterScreen> createState() => _PharmacyRegisterScreenState();
 }
 
 class _PharmacyRegisterScreenState extends State<PharmacyRegisterScreen> {
@@ -173,8 +172,8 @@ class _PharmacyRegisterScreenState extends State<PharmacyRegisterScreen> {
     );
 
     context.read<PharmacyCubit>().registerPharmacy(
-      pharmacy,
-    );
+          pharmacy,
+        );
   }
 
   @override
@@ -205,7 +204,7 @@ class _PharmacyRegisterScreenState extends State<PharmacyRegisterScreen> {
                 ),
               ),
             );
-context.pushNamed(Routes.login);
+            context.pushNamed(Routes.login);
           }
 
           if (state is PharmacyError) {
@@ -246,9 +245,7 @@ context.pushNamed(Routes.login);
                   child: Column(
                     children: [
                       const _AvatarPicker(),
-
                       const SizedBox(height: 20),
-
                       SectionCard(
                         title: 'بيانات الصيدلية',
                         child: Column(
@@ -293,9 +290,7 @@ context.pushNamed(Routes.login);
                           ],
                         ),
                       ),
-
                       const SizedBox(height: 16),
-
                       SectionCard(
                         title: 'موقع الصيدلية',
                         child: Column(
@@ -336,16 +331,12 @@ context.pushNamed(Routes.login);
                           ],
                         ),
                       ),
-
                       const SizedBox(height: 28),
-
                       SaveButton(
                         saving: saving || _isGettingLocation,
-                        onPressed: _isGettingLocation
-                            ? () {}
-                            : _registerPharmacy,
+                        onPressed:
+                            _isGettingLocation ? () {} : _registerPharmacy,
                       ),
-
                       const SizedBox(height: 12),
                     ],
                   ),

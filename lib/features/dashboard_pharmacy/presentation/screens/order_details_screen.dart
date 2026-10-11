@@ -15,7 +15,6 @@ class OrderDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: AppColors.background,
@@ -26,14 +25,17 @@ class OrderDetailsScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-
-                PrescriptionImageCard(imageUrl:order.prescriptionImage),
+                PrescriptionImageCard(imageUrl: order.prescriptionImage),
                 const SizedBox(height: 16),
                 const NewOrderBadge(),
                 const SizedBox(height: 16),
-                const OrderInfoCard(),
+                OrderInfoCard(
+                  customerName: order.customer!.fullName,
+                  orderNumber: order.customer!.phone,
+                  address: order.customer!.address,
+                ),
                 const SizedBox(height: 16),
-                const OrderNotesCard(notes: ''),
+                 OrderNotesCard(notes: order.details),
               ],
             ),
           ),
@@ -42,8 +44,7 @@ class OrderDetailsScreen extends StatelessWidget {
           onAccept: () {
             print(order.prescriptionImage);
           },
-          onReject: () {
-          },
+          onReject: () {},
         ),
       ),
     );
@@ -67,7 +68,8 @@ class OrderDetailsScreen extends StatelessWidget {
         icon: const Icon(Icons.arrow_forward, size: 22),
         onPressed: () => Navigator.of(context).maybePop(),
       ),
-      shape: const Border(bottom: BorderSide(color: AppColors.border, width: 1)),
+      shape:
+          const Border(bottom: BorderSide(color: AppColors.border, width: 1)),
     );
   }
 }

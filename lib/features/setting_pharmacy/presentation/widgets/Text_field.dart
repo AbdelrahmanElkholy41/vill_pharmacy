@@ -9,7 +9,7 @@ class LabeledField extends StatelessWidget {
   final int maxLines;
 
 
-  const LabeledField({
+  const LabeledField({super.key,
     required this.label,
     required this.controller,
     required this.icon,

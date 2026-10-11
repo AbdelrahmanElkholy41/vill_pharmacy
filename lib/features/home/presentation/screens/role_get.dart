@@ -9,7 +9,6 @@ import '../../../auth/data/datasource/auth_local_data_source_impl.dart';
 import '../../../auth/domain/entities/user_entity.dart';
 import '../../../dashboard_pharmacy/presentation/Cubit/income_cubit.dart';
 import '../../../dashboard_pharmacy/presentation/screens/dashboard.dart';
-import '../../../dashbord_admin/presentaion/screens/dashborde_for_admin.dart';
 import '../../../new_order/data/datasource/remot_data_source_Imp.dart';
 import '../../../new_order/data/repositories/order_repository_impl.dart.dart';
 import '../../../setting_pharmacy/data/datasource/edit_pharmacy_remote_date_source_Imp.dart';
@@ -79,7 +78,8 @@ class RoleGate extends StatelessWidget {
     // =========================
 
       case UserRole.super_admin:
-        return const DashbordeForAdmin();
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
   }
 }
