@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../new_order/data/models/create_order_request_model.dart';
+import '../Cubit/income_cubit.dart';
+import '../widgets/dialog_card_accepted.dart';
 import '../widgets/new_order_badge.dart';
 import '../widgets/order_decision_bar.dart';
 import '../widgets/order_info_card.dart';
@@ -42,7 +45,22 @@ class OrderDetailsScreen extends StatelessWidget {
         ),
         bottomNavigationBar: OrderDecisionBar(
           onAccept: () {
-            print(order.prescriptionImage);
+           final incomeCubit = context.read<IncomeCubit>();
+            showDialog(
+              context: context,
+              builder: (_) {
+                return DialogCard(
+                  onConfirm: (price, deliveryTime) {
+                   incomeCubit.acceptOrder(
+                     order.id,
+                     price,
+                     deliveryTime,
+                   );
+                    Navigator.of(context).pop();
+                  },
+                );
+              },
+            );
           },
           onReject: () {},
         ),

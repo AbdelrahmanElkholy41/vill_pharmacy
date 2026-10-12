@@ -181,8 +181,18 @@ class AppRouter {
         });
       case Routes.orderDetailsScreen:
         return MaterialPageRoute(
-          builder: (_) => OrderDetailsScreen(
-            order: settings.arguments as IncomingOrderModel,
+          builder: (_) => BlocProvider(
+            create: (_) => IncomeCubit(
+              repository: OrderRepositoryImpl(
+                OrderRemoteDataSourceImpl(
+                  Dio(),
+                  AuthLocalDataSourceImpl(),
+                ),
+              ),
+            ),
+            child: OrderDetailsScreen(
+              order: settings.arguments as IncomingOrderModel,
+            ),
           ),
         );
       default:
