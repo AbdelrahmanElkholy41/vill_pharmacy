@@ -13,6 +13,7 @@ class Routes {
   static const String customerProfile='/customerProfile';
   static const String UserProfile='/UserProfile';
   static const String orderDetailsScreen='/orderDetailsScreen';
+  static const String deliveryTrackingScreen='/deliveryTrackingScreen';
 
 
 

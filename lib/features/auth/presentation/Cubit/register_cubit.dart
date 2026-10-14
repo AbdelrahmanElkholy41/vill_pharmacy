@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pharmacy_app/features/auth/presentation/Cubit/register_state.dart';
 
+import '../../../../core/widget/toast_message.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/usecases/register_use_case.dart';
 
@@ -43,11 +44,9 @@ class RegisterCubit extends Cubit<RegisterState> {
 
     } catch (e) {
 
-      emit(
-        RegisterError(e.toString()),
-      );
+      emit(RegisterError(AppToast.getErrorMessage(e)));      }
+
 
     }
   }
 
-}

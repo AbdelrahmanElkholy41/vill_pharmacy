@@ -40,7 +40,6 @@ class PharmacyCubit extends Cubit<PharmacyState> {
     emit(PharmacyLoading());
 
     try {
-      // 1. حاول تجيب الصيدلية من الكاش
       final cachedPharmacy = await storage.read(
         key: 'pharmacy',
       );
@@ -87,6 +86,7 @@ class PharmacyCubit extends Cubit<PharmacyState> {
         );
 
         print(pharmacy.isOpen);
+
 
         pharmacy.isOpen = status;
 

@@ -1,8 +1,11 @@
+
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pharmacy_app/features/new_order/data/repositories/order_repository_impl.dart.dart';
 
+import '../../../../core/widget/toast_message.dart';
 import 'income_state.dart';
 
 class IncomeCubit extends Cubit<IncomeState> {
@@ -16,7 +19,7 @@ class IncomeCubit extends Cubit<IncomeState> {
   bool _isFetching = false;
 
   Future<void> getOrders({bool showLoading = true}) async {
-    if (_isFetching) return;
+    if (_isFetching || isClosed) return;
 
     _isFetching = true;
 
@@ -32,30 +35,33 @@ class IncomeCubit extends Cubit<IncomeState> {
       }
     } catch (e) {
       if (!isClosed) {
-        emit(IncomeError(e.toString()));
-      }
+        emit(IncomeError(AppToast.getErrorMessage(e)));      }
     } finally {
       _isFetching = false;
     }
   }
 
-  Future<void> acceptOrder(String orderId,double price,int deliveryTime) async {
+  Future<void> acceptOrder(
+      String orderId,
+      double price,
+      int deliveryTime,
+      ) async {
     try {
-      await repository.acceptOrder(orderId ,price,deliveryTime);
-
+      await repository.acceptOrder(orderId, price, deliveryTime);
       await getOrders(showLoading: false);
     } catch (e) {
-      emit(IncomeError(e.toString()));
+      if (!isClosed) {
+        emit(IncomeError(AppToast.getErrorMessage(e)));      }
     }
   }
 
-  Future<void> rejectOrder(String orderId,String reson) async {
+  Future<void> rejectOrder(String orderId, String reason) async {
     try {
-      await repository.rejectOrder(orderId,reson);
-
+      await repository.rejectOrder(orderId, reason);
       await getOrders(showLoading: false);
     } catch (e) {
-      emit(IncomeError(e.toString()));
+      if (!isClosed) {
+        emit(IncomeError(AppToast.getErrorMessage(e)));      }
     }
   }
 

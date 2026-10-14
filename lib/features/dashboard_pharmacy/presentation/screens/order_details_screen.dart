@@ -20,6 +20,7 @@ class OrderDetailsScreen extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+
         backgroundColor: AppColors.background,
         appBar: _buildAppBar(context),
         body: SafeArea(

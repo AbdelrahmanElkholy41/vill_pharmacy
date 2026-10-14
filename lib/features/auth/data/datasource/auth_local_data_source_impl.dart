@@ -45,7 +45,6 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   }
   @override
   Future<void> saveUser(UserEntity user) async {
-
     await storage.write(
       key: userKey,
       value: jsonEncode({
@@ -54,29 +53,31 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
         "name": user.name,
         "phone": user.phone,
         "role": user.role.name,
+        "pharmacyId": user.pharmacyId,
       }),
     );
-
   }
+
   @override
   Future<UserEntity?> getUser() async {
-
     final data = await storage.read(key: userKey);
 
-    if(data == null) return null;
+    if (data == null) return null;
 
-    final json = jsonDecode(data);
+    final json = jsonDecode(data) as Map<String, dynamic>;
 
     return UserEntity(
-      id: json['id'],
-      email: json['email'],
-      name: json['name'],
-      phone: json['phone'],
+      id: json['id'] as String,
+      email: json['email'] as String,
+      name: json['name'] as String,
+      phone: json['phone'] as String,
       role: json['role'] == 'customer'
           ? UserRole.customer
+          : json['role'] == 'super_admin'
+          ? UserRole.super_admin
           : UserRole.pharmacist,
+      pharmacyId: json['pharmacyId'] as String?,
     );
-
   }
 
 }

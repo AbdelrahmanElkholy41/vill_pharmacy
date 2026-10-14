@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/widget/toast_message.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/usecases/login_use_case.dart';
 
@@ -38,10 +39,8 @@ class LoginCubit extends Cubit<LoginState> {
 
     } catch (e) {
 
-      emit(
-        LoginError(e.toString()),
-      );
+      emit(LoginError(AppToast.getErrorMessage(e)));      }
+
 
     }
   }
-}

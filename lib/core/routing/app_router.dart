@@ -18,6 +18,7 @@ import '../../features/auth/presentation/screens/login.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/dashboard_pharmacy/presentation/Cubit/income_cubit.dart';
 import '../../features/dashboard_pharmacy/presentation/screens/dashboard.dart';
+import '../../features/dashboard_pharmacy/presentation/screens/delivery_tracking_screen.dart';
 import '../../features/home/data/repositories/pharmacy_nearby_repository.dart';
 import '../../features/home/presentation/cubit/pharmacy_near_cubit.dart';
 import '../../features/home/presentation/screens/customer_home.dart';
@@ -195,6 +196,13 @@ class AppRouter {
             ),
           ),
         );
+        case Routes.deliveryTrackingScreen:
+          return MaterialPageRoute(builder: (_) {
+            return const DeliveryTrackingScreen();
+          }
+
+
+          );
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

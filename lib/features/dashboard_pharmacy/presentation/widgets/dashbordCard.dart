@@ -19,12 +19,8 @@ class DashboardOrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-
-        context.pushNamed(
-          Routes.orderDetailsScreen ,arguments: order
-
-        );
+      onTap: () {
+        context.pushNamed(Routes.orderDetailsScreen, arguments: order);
       },
       child: Container(
         padding: const EdgeInsets.all(16),
@@ -46,14 +42,26 @@ class DashboardOrderCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Text(
-                      '📋',
-                      style: TextStyle(fontSize: 13),
+                    Row(
+                      children: [
+                        const Text(
+                          '📋',
+                          style: TextStyle(fontSize: 13),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          order.isTargeted ? 'موجّه للصيدلية' : 'طلب جديد',
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: Color(0xFF6B7280),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 4),
                     Text(
-                      order.isTargeted ? 'موجّه للصيدلية' : 'طلب جديد',
+                      ' رقم: ${order.orderNumber}',
                       style: const TextStyle(
                         fontSize: 13,
                         color: Color(0xFF6B7280),
@@ -61,13 +69,17 @@ class DashboardOrderCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                Text(
-                  'طلب رقم: ${order.orderNumber}',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: Color(0xFF6B7280),
-                  ),
+                Row(
+                  children: [
+                    const Icon(Icons.location_on_outlined,size: 13,color: Color(0xFF6B7280),),
+                    Text(order.customer!.address,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Color(0xFF6B7280),
+                        ))
+                  ],
                 ),
+
               ],
             ),
             const SizedBox(height: 10),

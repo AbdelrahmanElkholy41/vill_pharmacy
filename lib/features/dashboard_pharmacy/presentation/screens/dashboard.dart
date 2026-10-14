@@ -6,6 +6,7 @@ import 'package:pharmacy_app/features/dashboard_pharmacy/presentation/widgets/di
 
 import '../../../../core/routing/routes.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widget/toast_message.dart';
 import '../../../setting_pharmacy/data/models/pharmacy_modal.dart';
 import '../Cubit/income_cubit.dart';
 import '../widgets/dashbordCard.dart';
@@ -27,16 +28,20 @@ class PharmacyDashboardScreen extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        floatingActionButton:  FloatingActionButton(
+            onPressed: () {
+              context.pushNamed(Routes.deliveryTrackingScreen);
+            }
+        ),
         backgroundColor: const Color(0xFFF8FAFC),
         body: SafeArea(
           child: BlocConsumer<IncomeCubit, IncomeState>(
             listener: (context, state) {
               if (state is IncomeError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.message),
-                    backgroundColor: const Color(0xFFEF4444),
-                  ),
+                AppToast.show(
+                  context,
+                  message: state.message,
+                  type: ToastType.error,
                 );
               }
             },
@@ -52,6 +57,7 @@ class PharmacyDashboardScreen extends StatelessWidget {
               }
 
               if (state is IncomeSuccess) {
+
                 return _buildSuccess(context, state);
               }
 
@@ -194,10 +200,11 @@ class PharmacyDashboardScreen extends StatelessWidget {
                               );
                             },
                           );
-                        },
+                          },
 
 
-                        onReject: () {
+
+                          onReject: () {
                           final incomeCubit = context.read<IncomeCubit>();
 
                           showDialog(

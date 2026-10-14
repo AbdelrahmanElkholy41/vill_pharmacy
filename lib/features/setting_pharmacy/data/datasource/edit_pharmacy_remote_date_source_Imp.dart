@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pharmacy_app/features/auth/data/datasource/auth_local_data_source.dart';
 import 'package:pharmacy_app/features/setting_pharmacy/data/models/pharmacy_modal.dart';
-
 import 'edit_pharmacy_remote_date_source.dart';
 
 class EditPharmacyRemoteDataSourceImpl implements EditPharmacyRemoteDataSource {
@@ -15,13 +15,11 @@ class EditPharmacyRemoteDataSourceImpl implements EditPharmacyRemoteDataSource {
 
   @override
   Future<PharmacyModel> registerPharmacy(
-      RegisterPharmacyRequest request,
-      ) async {
+    RegisterPharmacyRequest request,
+  ) async {
     final token = await localDataSource.getAccessToken();
 
     try {
-      print('------------------');
-
       final response = await dio.post(
         "https://pharmacy-nu-ivory.vercel.app/api/v1/pharmacies/register",
         data: request.toJson(),
@@ -33,15 +31,23 @@ class EditPharmacyRemoteDataSourceImpl implements EditPharmacyRemoteDataSource {
         ),
       );
 
-      print(response.data);
+      if (kDebugMode) {
+        print(response.data);
+      }
 
       return PharmacyModel.fromJson(
         response.data["data"],
       );
     } on DioException catch (e) {
-      print('STATUS CODE: ${e.response?.statusCode}');
-      print('RESPONSE DATA: ${e.response?.data}');
-      print('REQUEST DATA: ${e.requestOptions.data}');
+      if (kDebugMode) {
+        print('STATUS CODE: ${e.response?.statusCode}');
+      }
+      if (kDebugMode) {
+        print('RESPONSE DATA: ${e.response?.data}');
+      }
+      if (kDebugMode) {
+        print('REQUEST DATA: ${e.requestOptions.data}');
+      }
 
       if (e.response?.statusCode == 409) {
         final message = e.response?.data['message'];
@@ -51,7 +57,6 @@ class EditPharmacyRemoteDataSourceImpl implements EditPharmacyRemoteDataSource {
       rethrow;
     }
   }
-
 
   @override
   Future<PharmacyModel> getPharmacy() async {
@@ -79,10 +84,19 @@ class EditPharmacyRemoteDataSourceImpl implements EditPharmacyRemoteDataSource {
       rethrow;
     }
   }
+
   @override
   Future<void> pharmacyStatus(bool status) async {
     final token = await localDataSource.getAccessToken();
-print(token);
+    final reToken = await localDataSource.getRefreshToken();
+
+    if (kDebugMode) {
+      print(token);
+    }
+    if (kDebugMode) {
+      print(reToken);
+    }
+
     try {
       await dio.patch(
         "https://pharmacy-nu-ivory.vercel.app/api/v1/pharmacies/my/open-status",
@@ -105,9 +119,5 @@ print(token);
         e.response?.data?['message'] ?? "حدث خطأ أثناء تغيير حالة الصيدلية",
       );
     }
-
-
   }
-
-
 }
