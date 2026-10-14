@@ -105,7 +105,9 @@ class _PharmacyProfileScreenState extends State<PharmacyProfileScreen> {
                           });
                         },
                         onPharmacyOpenChanged: (v) {
+
                           context.read<PharmacyCubit>().pharmacyStatus(v);
+
                         },
                       ),
                     ],
