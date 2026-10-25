@@ -62,6 +62,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   Future<UserEntity?> getUser() async {
     final data = await storage.read(key: userKey);
 
+
     if (data == null) return null;
 
     final json = jsonDecode(data) as Map<String, dynamic>;
