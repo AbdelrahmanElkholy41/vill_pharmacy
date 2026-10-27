@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../new_order/data/models/create_order_request_model.dart';
+import '../../../new_order/data/models/order_modal.dart';
 import '../Cubit/income_cubit.dart';
 import '../widgets/dialog_card_accepted.dart';
 import '../widgets/new_order_badge.dart';

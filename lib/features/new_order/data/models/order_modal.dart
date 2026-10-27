@@ -65,6 +65,7 @@ class IncomingOrderModel {
   // بيانات العميل
   final CustomerOrderModel? customer;
 
+
   IncomingOrderModel({
     required this.id,
     required this.orderNumber,
@@ -99,7 +100,6 @@ class IncomingOrderModel {
       estimatedDeliveryMinutes:
       (json['estimatedDeliveryMinutes'] as num?)?.toInt(),
       rejectionReason: json['rejectionReason'] as String?,
-
       // بيانات العميل
       customer: json['customer'] is Map<String, dynamic>
           ? CustomerOrderModel.fromJson(

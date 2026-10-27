@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/helpers/extensions.dart';
 import '../../../../core/routing/routes.dart';
-import '../../../new_order/data/models/create_order_request_model.dart';
+import '../../../new_order/data/models/order_modal.dart';
 
 class DashboardOrderCard extends StatelessWidget {
   final IncomingOrderModel order;
   final VoidCallback onAccept;
   final VoidCallback onReject;
+
+
 
   const DashboardOrderCard({
     super.key,

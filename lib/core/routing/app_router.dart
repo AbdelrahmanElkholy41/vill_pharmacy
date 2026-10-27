@@ -16,6 +16,9 @@ import '../../features/auth/presentation/Cubit/login_cubit.dart';
 import '../../features/auth/presentation/Cubit/register_cubit.dart';
 import '../../features/auth/presentation/screens/login.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
+import '../../features/dashboard_pharmacy/data/dataSource/all_order_remote_datasource_imp.dart';
+import '../../features/dashboard_pharmacy/data/repository/repositori_imp.dart';
+import '../../features/dashboard_pharmacy/presentation/Cubit/all_order_cubit.dart';
 import '../../features/dashboard_pharmacy/presentation/Cubit/income_cubit.dart';
 import '../../features/dashboard_pharmacy/presentation/screens/dashboard.dart';
 import '../../features/dashboard_pharmacy/presentation/screens/delivery_tracking_screen.dart';
@@ -24,7 +27,7 @@ import '../../features/home/presentation/cubit/pharmacy_near_cubit.dart';
 import '../../features/home/presentation/screens/customer_home.dart';
 import '../../features/home/presentation/screens/role_get.dart';
 import '../../features/new_order/data/datasource/remot_data_source_Imp.dart';
-import '../../features/new_order/data/models/create_order_request_model.dart';
+import '../../features/new_order/data/models/order_modal.dart';
 import '../../features/new_order/data/repositories/order_repository_impl.dart.dart';
 import '../../features/new_order/presentation/cubit/order_cubit.dart';
 import '../../features/new_order/presentation/screens/new_order.dart';
@@ -197,12 +200,24 @@ class AppRouter {
           ),
         );
         case Routes.deliveryTrackingScreen:
-          return MaterialPageRoute(builder: (_) {
-            return const DeliveryTrackingScreen();
-          }
+          return MaterialPageRoute(
+              builder: (_) => BlocProvider(
+                  create: (_) => AllOrderCubit(repositoriImp: RepositoriImp(
+                    AllOrderRemoteDatasourceImp(
+                      Dio(),
+                      AuthLocalDataSourceImpl(),
+                    ),
+
+                  )
+                 
+                    
+                  )..getAllOrders(),
+            child: const DeliveryTrackingScreen())
+
+    );
 
 
-          );
+
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

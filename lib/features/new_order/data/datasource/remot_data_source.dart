@@ -1,4 +1,4 @@
-import '../models/create_order_request_model.dart';
+import '../models/order_modal.dart';
 
 abstract class OrderRemoteDataSource {
   Future<OrderModel> createOrder(

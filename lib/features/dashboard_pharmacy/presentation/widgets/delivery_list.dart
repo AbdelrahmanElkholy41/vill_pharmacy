@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:pharmacy_app/features/dashboard_pharmacy/presentation/widgets/status_card.dart';
 
-import '../../../new_order/data/models/create_order_request_model.dart';
+import '../../../new_order/data/models/order_modal.dart';
+import '../../data/modal/all_order_modal.dart';
 import 'dashbordCard.dart';
 import 'delivery_empty_state.dart';
 
 class DeliveryList extends StatelessWidget {
-  final List<IncomingOrderModel>? items;
+  final List<AllOrderModal>? items;
   final String emptyMessage;
 
   const DeliveryList({
@@ -16,18 +18,17 @@ class DeliveryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final orders = items ?? <IncomingOrderModel>[];
 
-    if (orders.isEmpty) {
+    if (items!.isEmpty) {
       return DeliveryEmptyState(message: emptyMessage);
     }
 
     return ListView.separated(
       padding: const EdgeInsets.all(16),
-      itemCount: orders.length,
+      itemCount: items!.length,
       separatorBuilder: (_, __) => const SizedBox(height: 12),
-      itemBuilder: (_, i) => DashboardOrderCard(
-        order: orders[i],
+      itemBuilder: (_, i) => StatusCard(
+        order:  items![i],
         onAccept: () {},
         onReject: () {},
       ),

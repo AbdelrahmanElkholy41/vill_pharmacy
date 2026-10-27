@@ -1,4 +1,4 @@
-import '../../../new_order/data/models/create_order_request_model.dart';
+import '../../../new_order/data/models/order_modal.dart';
 abstract class IncomeState {}
 
 class IncomeInitial extends IncomeState {}

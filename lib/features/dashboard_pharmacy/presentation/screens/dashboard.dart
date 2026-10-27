@@ -5,9 +5,7 @@ import 'package:pharmacy_app/features/dashboard_pharmacy/presentation/Cubit/inco
 import 'package:pharmacy_app/features/dashboard_pharmacy/presentation/widgets/dialog_card_regict.dart';
 
 import '../../../../core/routing/routes.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widget/toast_message.dart';
-import '../../../setting_pharmacy/data/models/pharmacy_modal.dart';
 import '../Cubit/income_cubit.dart';
 import '../widgets/dashbordCard.dart';
 import '../widgets/dialog_card_accepted.dart';
@@ -113,7 +111,7 @@ class PharmacyDashboardScreen extends StatelessWidget {
               context.read<IncomeCubit>()
                 ..getOrders()
                 ..startPolling();
-            },
+              },
             child: const Text('إعادة المحاولة'),
           ),
         ],

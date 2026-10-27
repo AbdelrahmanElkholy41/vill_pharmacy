@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:pharmacy_app/features/new_order/data/models/create_order_request_model.dart';
+import 'package:pharmacy_app/features/new_order/data/models/order_modal.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../data/modal/all_order_modal.dart';
 import '../widgets/delivery_list.dart';
 
 /// شاشة الصيدلي: المنتجات في الطريق + المنتجات اللي وصلت
 class DeliveryTrackingScreen extends StatelessWidget {
-  final List<IncomingOrderModel>? items;
+  final List<AllOrderModal>? items;
 
   const DeliveryTrackingScreen({
     super.key,
@@ -15,10 +16,10 @@ class DeliveryTrackingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final allItems = items ?? <IncomingOrderModel>[];
+    final allItems = items ?? <AllOrderModal>[];
 
     final onTheWay = allItems.reversed.toList();
-    final delivered = <IncomingOrderModel>[];
+    final delivered = <AllOrderModal>[];
 
     return Directionality(
       textDirection: TextDirection.rtl,

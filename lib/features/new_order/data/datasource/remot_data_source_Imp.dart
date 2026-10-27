@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:pharmacy_app/features/new_order/data/datasource/remot_data_source.dart';
 
 import '../../../auth/data/datasource/auth_local_data_source.dart';
-import '../models/create_order_request_model.dart';
+import '../models/order_modal.dart';
 
 class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
   final Dio dio;

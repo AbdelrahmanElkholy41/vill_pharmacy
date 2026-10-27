@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../data/models/create_order_request_model.dart';
+import '../../data/models/order_modal.dart';
 import '../../data/repositories/order_repository_impl.dart.dart';
 import 'order_state.dart';
 

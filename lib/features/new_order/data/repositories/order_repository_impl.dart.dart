@@ -1,5 +1,6 @@
+import '../../../dashboard_pharmacy/data/modal/all_order_modal.dart';
 import '../datasource/remot_data_source.dart';
-import '../models/create_order_request_model.dart';
+import '../models/order_modal.dart';
 
 class OrderRepositoryImpl {
   final OrderRemoteDataSource remoteDataSource;
