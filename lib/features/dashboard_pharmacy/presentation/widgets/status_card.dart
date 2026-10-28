@@ -1,6 +1,6 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pharmacy_app/core/helpers/spacing.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../data/modal/all_order_modal.dart';
@@ -13,253 +13,262 @@ class StatusCard extends StatelessWidget {
     required this.order,
   });
 
+  bool get isDelivering =>
+      order.status == 'accepted' || order.status == 'preparing';
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      width: double.infinity,
+      padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(14.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
-            blurRadius: 10,
+            blurRadius: 8.r,
             offset: const Offset(0, 2),
           ),
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // Header
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 8.w,
+            runSpacing: 8.h,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
-                    children: [
-                      const Text(
-                        '📋',
-                        style: TextStyle(fontSize: 13),
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        order.isTargeted ? 'موجّه للصيدلية' : 'طلب جديد',
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: Color(0xFF6B7280),
-                        ),
-                      ),
-                    ],
+                  Icon(
+                    Icons.receipt_long_outlined,
+                    size: 17.sp,
+                    color: Colors.grey.shade700,
                   ),
+                  SizedBox(width: 5.w),
                   Text(
-                    ' رقم: ${order.orderNumber}',
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: Color(0xFF6B7280),
+                    order.isTargeted ? 'موجّه للصيدلية' : 'طلب جديد',
+                    style: TextStyle(
+                      fontSize: 11.sp,
+                      color: Colors.grey.shade700,
+                    ),
+                  ),
+                  SizedBox(width: 8.w),
+                  Text(
+                    'رقم: ${order.orderNumber}',
+                    style: TextStyle(
+                      fontSize: 11.sp,
+                      color: Colors.grey.shade600,
                     ),
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.purple.withOpacity(0.12),
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.06),
-                            blurRadius: 10,
-                            offset: const Offset(0, 2),
-                          ),
-                        ]),
-                    child: Text(
-                      order.status == 'accepted' || order.status == 'preparing'
-                          ? '  في الطريق  '
-                          : '  تم التوصيل  ',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        color: Colors.purple,
-                      ),
-                    ),
-                  )
-                ],
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 9.w,
+                  vertical: 5.h,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.purple.withOpacity(0.10),
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: Text(
+                  isDelivering ? 'في الطريق' : 'تم التوصيل',
+                  style: TextStyle(
+                    fontSize: 11.sp,
+                    color: Colors.purple,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 10),
-          Column(
+
+          SizedBox(height: 12.h),
+
+          // Order details
+          Text(
+            order.details,
+            textAlign: TextAlign.right,
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xFF222222),
+            ),
+          ),
+
+          // Prescription image indicator
+          if (order.hasPrescriptionImage) ...[
+            SizedBox(height: 6.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  'يوجد صورة روشتة',
+                  style: TextStyle(
+                    fontSize: 11.sp,
+                    color: Colors.green.shade700,
+                  ),
+                ),
+                SizedBox(width: 4.w),
+                Icon(
+                  Icons.image_outlined,
+                  size: 16.sp,
+                  color: Colors.green.shade700,
+                ),
+              ],
+            ),
+          ],
+
+          SizedBox(height: 12.h),
+          Divider(height: 1, color: Colors.grey.shade200),
+          SizedBox(height: 12.h),
+
+          // Customer, address and price horizontally
+          Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      order.details,
-                      style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF111827),
-                      ),
-                    ),
-                  ),
-                  if (order.hasPrescriptionImage) ...[
-                    const SizedBox(height: 8),
-                    const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          '🖼️',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                        SizedBox(width: 4),
-                        Text(
-                          textAlign: TextAlign.end,
-                          'يوجد صورة روشتة',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color(0xFF22C55E),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ],
-              ),
-              const SizedBox(height: 14),
-              Row(children: [
-                Icon(
-                  Icons.person_3_sharp,
-                  size: 18,
-                  color: Colors.purple.withOpacity(0.8),
-                ),
-                horizontalSpace(4.w),
-                Text(
-                  order.customer.fullName,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.primaryDark,
-                  ),
-                ),
-                horizontalSpace(4.w),
-                Icon(
-                  Icons.home_outlined,
-                  size: 18,
-                  color: Colors.purple.withOpacity(0.8),
-                ),
-                horizontalSpace(4.w),
-                Text(order.customer.address ?? ' العنوان غير متوفر  ',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: AppColors.primaryDark,
-                    )),
-                horizontalSpace(4.w),
-                Icon(Icons.monetization_on_outlined,
-                    size: 18, color: Colors.purple.withOpacity(0.8)),
-                horizontalSpace(4.w),
-                Text(order.price.toString(),
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                    )),
-                Text(
-                  " جنية",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green.withOpacity(0.8),
-                  ),
-                )
-              ])
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
               Expanded(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.06),
-                        blurRadius: 10,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                flex: 3,
+                child: _InfoItem(
+                  icon: Icons.person_outline,
+                  text: order.customer.fullName,
+                ),
+              ),
+              SizedBox(width: 8.w),
+              Expanded(
+                flex: 4,
+                child: _InfoItem(
+                  icon: Icons.location_on_outlined,
+                  text: order.customer.address ?? 'العنوان غير متوفر',
+                ),
+              ),
+              SizedBox(width: 8.w),
+              Expanded(
+                flex: 2,
+                child: _InfoItem(
+                  icon: Icons.payments_outlined,
+                  text: '${order.price} ج',
+                  color: Colors.green.shade700,
+                  bold: true,
+                ),
+              ),
+            ],
+          ),
+
+          SizedBox(height: 14.h),
+
+          // Delivery status
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(vertical: 10.h),
+            decoration: BoxDecoration(
+              color: Colors.green.withOpacity(0.09),
+              borderRadius: BorderRadius.circular(9.r),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: Text(
+                    isDelivering ? 'جاري التوصيل' : 'تم التوصيل بنجاح',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.green.shade700,
+                    ),
                   ),
-                  alignment: Alignment.center,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      order.status == 'accepted' || order.status == 'preparing'
-                          ? Text(
-                              'جاري التوصيل ',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green.withOpacity(0.8),
-                              ),
-                            )
-                          : Text(
-                              'تم التوصيل بنجاح',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green.withOpacity(0.8),
-                              ),
-                            ),
-                      const SizedBox(width: 10),
-                      order.status == 'accepted' || order.status == 'preparing'
-                          ? Icon(
-                              Icons.delivery_dining_outlined,
-                              color: Colors.green.withOpacity(0.8),
-                              size: 20,
-                            )
-                          : Icon(
-                              Icons.check_circle,
-                              color: Colors.green.withOpacity(0.8),
-                              size: 20,
-                            )
-                    ],
+                ),
+                SizedBox(width: 6.w),
+                Icon(
+                  isDelivering
+                      ? Icons.delivery_dining_outlined
+                      : Icons.check_circle_outline,
+                  size: 18.sp,
+                  color: Colors.green.shade700,
+                ),
+              ],
+            ),
+          ),
+
+          // Reject button
+          if (order.isTargeted) ...[
+            SizedBox(height: 9.h),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  // اربط هنا دالة رفض الطلب الموجودة عندك.
+                },
+                icon: Icon(Icons.close, size: 16.sp),
+                label: Text(
+                  'رفض الطلب',
+                  style: TextStyle(fontSize: 12.sp),
+                ),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.red,
+                  side: const BorderSide(color: Colors.red),
+                  padding: EdgeInsets.symmetric(vertical: 8.h),
+                  minimumSize: Size(0, 36.h),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(9.r),
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
-              order.isTargeted
-                  ? Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFEF4444),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          elevation: 0,
-                        ),
-                        child: const Text(
-                          '✕ رفض',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    )
-                  : const SizedBox(),
-            ],
-          ),
+            ),
+          ],
         ],
       ),
+    );
+  }
+}
+
+class _InfoItem extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  final Color? color;
+  final bool bold;
+
+  const _InfoItem({
+    required this.icon,
+    required this.text,
+    this.color,
+    this.bold = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final itemColor = color ?? AppColors.primaryDark;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(
+          icon,
+          size: 16.sp,
+          color: color ?? Colors.purple.withOpacity(0.8),
+        ),
+        SizedBox(width: 4.w),
+        Expanded(
+          child: Text(
+            text,
+            textAlign: TextAlign.right,
+            softWrap: true,
+            style: TextStyle(
+              fontSize: 11.sp,
+              fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+              color: itemColor,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
