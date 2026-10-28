@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/widget/toast_message.dart';
@@ -37,9 +39,10 @@ class LoginCubit extends Cubit<LoginState> {
       );
 
 
-    } catch (e) {
+    } on DioException catch (e) {
 
-      emit(LoginError(AppToast.getErrorMessage(e)));      }
+      emit(LoginError(AppToast.getErrorMessage(e)));
+    }
 
 
     }

@@ -53,7 +53,6 @@ class AllOrderCubit extends Cubit<AllOrderState> {
     try {
       final orders = await repositoriImp.getAllOrders();
 
-      print("ORDERS FOUND: $orders");
 
       if (!isClosed) {
         emit(AllOrderSuccess(orders));
@@ -66,4 +65,5 @@ class AllOrderCubit extends Cubit<AllOrderState> {
     }
   }
 
-}
+  }
+

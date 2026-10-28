@@ -194,6 +194,7 @@ class PharmacyDashboardScreen extends StatelessWidget {
                                     price,
                                     deliveryTime,
                                   );
+                                  incomeCubit.prepareOrder(order.id);
                                 },
                               );
                             },
@@ -219,9 +220,7 @@ class PharmacyDashboardScreen extends StatelessWidget {
 
                             },
                           );
-
-                          print("ORDER ID: ${order.id}");
-                        },
+                          },
                       ),
                     );
                   },

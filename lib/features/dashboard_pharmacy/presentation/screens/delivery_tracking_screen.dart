@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,7 +31,9 @@ class DeliveryTrackingScreen extends StatelessWidget {
             .toList();
 
         final onTheWay = allItems
-            .where((order) => order.status.toLowerCase()== 'accepted')
+            .where((order) =>
+                order.status.toLowerCase() == 'accepted' ||
+                order.status.toLowerCase() == 'preparing')
             .toList()
             .reversed
             .toList();

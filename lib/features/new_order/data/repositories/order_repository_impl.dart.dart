@@ -22,4 +22,7 @@ class OrderRepositoryImpl {
   Future<void> rejectOrder(String orderId,String reson) async {
     return await remoteDataSource.rejectOrder(orderId,reson);
 }
+  Future<void> prepareOrder(String orderId) async {
+    return await remoteDataSource .prepareOrder(orderId);
+  }
 }

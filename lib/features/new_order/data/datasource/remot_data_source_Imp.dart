@@ -97,7 +97,19 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
 
         }
         ));
-
-
   }
+  @override
+  Future<void> prepareOrder(String orderId) async {
+    final token = await localDataSource.getAccessToken();
+    final response = await dio.patch(
+        "https://pharmacy-nu-ivory.vercel.app/api/v1/orders/$orderId/preparing",
+
+        options: Options(
+            headers: {
+              "Authorization": "Bearer $token",
+
+            }
+        ));
+  }
+
 }

@@ -8,6 +8,8 @@ abstract class OrderRemoteDataSource {
   Future<List<IncomingOrderModel>> getOrders();
   Future<void> acceptOrder(String orderId, double price, int deliveryTime);
   Future<void> rejectOrder(String orderId, String reson);
+  Future<void> prepareOrder(String orderId);
+
 }
 
 

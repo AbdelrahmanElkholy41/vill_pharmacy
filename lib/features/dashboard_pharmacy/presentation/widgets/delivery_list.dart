@@ -29,8 +29,6 @@ class DeliveryList extends StatelessWidget {
       separatorBuilder: (_, __) => const SizedBox(height: 12),
       itemBuilder: (_, i) => StatusCard(
         order:  items![i],
-        onAccept: () {},
-        onReject: () {},
       ),
     );
   }

@@ -65,6 +65,17 @@ class IncomeCubit extends Cubit<IncomeState> {
         emit(IncomeError(AppToast.getErrorMessage(e)));      }
     }
   }
+  Future<void> prepareOrder(String orderId) async {
+
+    try {
+      await repository.prepareOrder(orderId);
+
+    } catch (e) {
+      if (!isClosed) {
+        emit(IncomeError(AppToast.getErrorMessage(e)));      }
+    }
+
+  }
 
   void startPolling() {
     if (_timer != null) return;

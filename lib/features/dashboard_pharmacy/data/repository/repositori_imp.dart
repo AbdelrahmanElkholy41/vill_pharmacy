@@ -7,5 +7,6 @@ class RepositoriImp {
   Future<List<AllOrderModal>> getAllOrders() async {
     return await allOrderRemoteDatasourceImp.getAllOrders();
   }
+
 }
 
