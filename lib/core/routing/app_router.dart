@@ -31,6 +31,7 @@ import '../../features/new_order/data/models/order_modal.dart';
 import '../../features/new_order/data/repositories/order_repository_impl.dart.dart';
 import '../../features/new_order/presentation/cubit/order_cubit.dart';
 import '../../features/new_order/presentation/screens/new_order.dart';
+import '../../features/order_status/presentation/screens/my_orders_screen.dart';
 import '../../features/order_status/presentation/screens/order_status.dart';
 import '../../features/setting_pharmacy/data/repositories/pharmacy_repositories.dart';
 import '../../features/setting_pharmacy/presentation/Cubit/register_pharmacy_cubit.dart';
@@ -199,24 +200,23 @@ class AppRouter {
             ),
           ),
         );
-        case Routes.deliveryTrackingScreen:
-          return MaterialPageRoute(
-              builder: (_) => BlocProvider(
-                  create: (_) => AllOrderCubit(repositoriImp: RepositoriImp(
-                    AllOrderRemoteDatasourceImp(
-                      Dio(),
-                      AuthLocalDataSourceImpl(),
-                    ),
-
-                  )
-                 
-                    
-                  )..getAllOrders(),
-            child: const DeliveryTrackingScreen())
-
-    );
-
-
+      case Routes.deliveryTrackingScreen:
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                create: (_) => AllOrderCubit(
+                        repositoriImp: RepositoriImp(
+                      AllOrderRemoteDatasourceImp(
+                        Dio(),
+                        AuthLocalDataSourceImpl(),
+                      ),
+                    ))
+                      ..getAllOrders(),
+                child: const DeliveryTrackingScreen()));
+      case Routes.customerOrders:
+        return MaterialPageRoute(
+            builder: (_) => const MyOrdersScreen(
+                  orders: sampleOrders,
+                ));
 
       default:
         return MaterialPageRoute(

@@ -172,9 +172,9 @@ class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
           elevation: 4,
           shadowColor: const Color(0xFF22C55E).withOpacity(0.4),
         ),
-        child: Row(
+        child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Text('اطلب دواء الآن',
                 style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
             SizedBox(width: 8),
@@ -277,7 +277,7 @@ class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
           Expanded(
             child: ElevatedButton(
               onPressed: () {
-                context.pushNamed(Routes.track);
+                context.pushNamed(Routes.customerOrders);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF22C55E),
@@ -297,18 +297,3 @@ class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
   }
 }
 
-
-
-class OrderRequest {
-  final String id;
-  final String address;
-  final String medicineName;
-  final bool hasPrescription;
-
-  const OrderRequest({
-    required this.id,
-    required this.address,
-    required this.medicineName,
-    required this.hasPrescription,
-  });
-}

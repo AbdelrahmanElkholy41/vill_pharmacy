@@ -14,6 +14,7 @@ class Routes {
   static const String UserProfile='/UserProfile';
   static const String orderDetailsScreen='/orderDetailsScreen';
   static const String deliveryTrackingScreen='/deliveryTrackingScreen';
+  static const String customerOrders='/customerOrders';
 
 
 

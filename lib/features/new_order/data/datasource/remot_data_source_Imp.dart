@@ -29,7 +29,7 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
         ),
 
     });
-
+print(token);
     final response = await dio.post(
       "https://pharmacy-nu-ivory.vercel.app/api/v1/orders",
       data: formData,
