@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:pharmacy_app/features/order_status/data/modal/order_history_customer.dart';
 import 'order_actions_row.dart';
 import 'order_eta_strip.dart';
 import 'order_info_row.dart';
-import 'order_model.dart';
 import 'order_status_chip.dart';
 import 'orders_palette.dart';
 
 class OrderCard extends StatelessWidget {
-  final OrderModel1 order;
+  final OrderHistoryModel order;
   final VoidCallback? onDetails;
   final VoidCallback? onCall;
   final VoidCallback? onTrack;
@@ -37,8 +37,8 @@ class OrderCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          if (order.status == OrderStatus.onTheWay && order.etaMinutes != null)
-            OrderEtaStrip(minutes: order.etaMinutes!),
+          if (order.status == OrderStatus && order.estimatedDeliveryMinutes != null)
+            OrderEtaStrip(minutes: order.estimatedDeliveryMinutes!),
           Padding(
             padding: const EdgeInsets.all(14),
             child: Column(
@@ -56,19 +56,12 @@ class OrderCard extends StatelessWidget {
                                   fontSize: 10,
                                   color: OrdersPalette.textMuted)),
                           const SizedBox(height: 4),
-                          Text(order.title,
+                          Text(order.details,
                               style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w800,
                                   color: OrdersPalette.textDark)),
-                          if (order.extraItems > 0)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 4),
-                              child: Text('+ ${order.extraItems} منتج آخر',
-                                  style: const TextStyle(
-                                      fontSize: 11,
-                                      color: OrdersPalette.orange)),
-                            ),
+
                         ],
                       ),
                     ),
@@ -77,8 +70,8 @@ class OrderCard extends StatelessWidget {
                 ),
                 const Divider(height: 24, color: OrdersPalette.border),
                 OrderInfoRow(
-                    pharmacyName: order.pharmacyName,
-                    timeLabel: order.timeLabel),
+                    pharmacyName: 'لسه',
+                    timeLabel: order.createdAt.timeZoneName),
                 const SizedBox(height: 14),
                 OrderActionsRow(
                   status: order.status,

@@ -14,8 +14,8 @@ import 'features/auth/domain/usecases/logout_use_case.dart';
 import 'features/auth/presentation/Cubit/auth_cubit.dart';
 import 'features/auth/presentation/screens/app_start.dart';
 
-
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     BlocProvider(
       create: (_) =>AuthCubit(
@@ -32,6 +32,7 @@ void main() {
     ),
   );
 }
+
 
 
 class PharmacyApp extends StatelessWidget {

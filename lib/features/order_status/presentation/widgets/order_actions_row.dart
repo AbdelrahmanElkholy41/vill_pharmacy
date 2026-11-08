@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'order_model.dart';
+import '../../data/modal/order_history_customer.dart';
 import 'orders_palette.dart';
 
 class OrderActionsRow extends StatelessWidget {

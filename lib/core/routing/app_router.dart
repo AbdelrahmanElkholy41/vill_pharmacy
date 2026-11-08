@@ -5,6 +5,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pharmacy_app/core/routing/routes.dart';
 import 'package:pharmacy_app/features/dashboard_pharmacy/presentation/screens/order_details_screen.dart';
 import 'package:pharmacy_app/features/home/data/dataSource/remot_data_source_imp.dart';
+import 'package:pharmacy_app/features/order_status/data/datasource/order_history_remote_dataSource.dart';
+import 'package:pharmacy_app/features/order_status/data/modal/order_history_customer.dart';
 import 'package:pharmacy_app/features/setting_pharmacy/data/datasource/edit_pharmacy_remote_date_source_Imp.dart';
 import '../../features/auth/data/datasource/auth_local_data_source_impl.dart';
 import '../../features/auth/data/datasource/auth_remote_data_source_impl.dart';
@@ -31,6 +33,9 @@ import '../../features/new_order/data/models/order_modal.dart';
 import '../../features/new_order/data/repositories/order_repository_impl.dart.dart';
 import '../../features/new_order/presentation/cubit/order_cubit.dart';
 import '../../features/new_order/presentation/screens/new_order.dart';
+import '../../features/order_status/data/dataSource/order_history_remote_dataSource_imp.dart';
+import '../../features/order_status/data/repoistory/order_history_repoistory.dart';
+import '../../features/order_status/presentation/cubit/order_history_cubit.dart';
 import '../../features/order_status/presentation/screens/my_orders_screen.dart';
 import '../../features/order_status/presentation/screens/order_status.dart';
 import '../../features/setting_pharmacy/data/repositories/pharmacy_repositories.dart';
@@ -214,8 +219,16 @@ class AppRouter {
                 child: const DeliveryTrackingScreen()));
       case Routes.customerOrders:
         return MaterialPageRoute(
-            builder: (_) => const MyOrdersScreen(
-                  orders: sampleOrders,
+            builder: (_) => BlocProvider(
+                  create: (_) => OrderHistoryCubit(
+                    OrderHistoryRepoistory(
+                      OrderHistoryRemoteDatasourceImp(
+                        Dio(),
+                        AuthLocalDataSourceImpl(),
+                      ),
+                    ),
+                  )..getOrderHistory(),
+                  child: const MyOrdersScreen(),
                 ));
 
       default:

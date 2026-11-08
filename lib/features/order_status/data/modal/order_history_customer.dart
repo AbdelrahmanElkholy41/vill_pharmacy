@@ -1,4 +1,24 @@
 
+enum OrderStatus {
+  onTheWay,
+  searching,
+  delivered,
+}
+
+OrderStatus parseOrderStatus(String? status) {
+  switch (status) {
+    case 'on_the_way':
+      return OrderStatus.onTheWay;
+
+    case 'delivered':
+      return OrderStatus.delivered;
+      default:
+  return OrderStatus.searching;
+
+
+  }
+}
+
 class OrderHistoryModel {
   final String id;
   final String orderNumber;
@@ -9,7 +29,7 @@ class OrderHistoryModel {
   final String details;
   final String? prescriptionImageUrl;
   final bool hasPrescriptionImage;
-  final String status;
+  final OrderStatus status;
   final double? price;
   final String currency;
   final int? estimatedDeliveryMinutes;
@@ -44,7 +64,9 @@ class OrderHistoryModel {
     required this.updatedAt,
   });
 
-  factory OrderHistoryModel.fromJson(Map<String, dynamic> json) {
+  factory OrderHistoryModel.fromJson(
+      Map<String, dynamic> json,
+      ) {
     return OrderHistoryModel(
       id: json['id'] as String,
       orderNumber: json['orderNumber'] as String,
@@ -53,10 +75,11 @@ class OrderHistoryModel {
       acceptedPharmacyId: json['acceptedPharmacyId'] as String?,
       acceptedBy: json['acceptedBy'] as String?,
       details: json['details'] as String? ?? '',
-      prescriptionImageUrl: json['prescriptionImageUrl'] as String?,
+      prescriptionImageUrl:
+      json['prescriptionImageUrl'] as String?,
       hasPrescriptionImage:
       json['hasPrescriptionImage'] as bool? ?? false,
-      status: json['status'] as String? ?? 'pending',
+      status: parseOrderStatus(json['status'] as String?),
       price: (json['price'] as num?)?.toDouble(),
       currency: json['currency'] as String? ?? 'EGP',
       estimatedDeliveryMinutes:
@@ -87,7 +110,7 @@ class OrderHistoryModel {
       'details': details,
       'prescriptionImageUrl': prescriptionImageUrl,
       'hasPrescriptionImage': hasPrescriptionImage,
-      'status': status,
+      'status': _statusToJson(status),
       'price': price,
       'currency': currency,
       'estimatedDeliveryMinutes': estimatedDeliveryMinutes,
@@ -100,4 +123,17 @@ class OrderHistoryModel {
       'updatedAt': updatedAt.toIso8601String(),
     };
   }
+
+  String _statusToJson(OrderStatus status) {
+    switch (status) {
+      case OrderStatus.onTheWay:
+        return 'on_the_way';
+      case OrderStatus.searching:
+        return 'searching';
+      case OrderStatus.delivered:
+        return 'delivered';
+    }
+  }
+
+  bool get isActive => status != OrderStatus.delivered;
 }
