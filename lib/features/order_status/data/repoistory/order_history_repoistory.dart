@@ -9,4 +9,8 @@ class OrderHistoryRepoistory {
   Future<List<OrderHistoryModel>> getOrderHistory() {
     return remoteDatasource.getOrderHistory();
   }
+  Future<void>orderDelivered(String orderId){
+    return remoteDatasource.orderDelivered(orderId);
+  }
+
 }

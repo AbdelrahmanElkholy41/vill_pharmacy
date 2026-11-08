@@ -4,7 +4,7 @@ import 'order_actions_row.dart';
 import 'order_eta_strip.dart';
 import 'order_info_row.dart';
 import 'order_status_chip.dart';
-import 'orders_palette.dart';
+import '../../../../core/theme/orders_palette.dart';
 
 class OrderCard extends StatelessWidget {
   final OrderHistoryModel order;
@@ -76,7 +76,9 @@ class OrderCard extends StatelessWidget {
                 OrderActionsRow(
                   status: order.status,
                   onDetails: onDetails ?? () {},
-                  onCall: onCall ?? () {},
+                  onCall: onCall ?? () {
+                    print(order.id);
+                  },
                   onTrack: onTrack ?? () {},
                   onReorder: onReorder ?? () {},
                 ),

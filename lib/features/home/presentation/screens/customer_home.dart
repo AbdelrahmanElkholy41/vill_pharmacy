@@ -5,7 +5,8 @@ import 'package:pharmacy_app/core/helpers/extensions.dart';
 import 'package:pharmacy_app/features/auth/domain/entities/user_entity.dart';
 
 import '../../../../core/routing/routes.dart';
-import '../../../auth/domain/entities/user_entity.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/orders_palette.dart';
 import '../cubit/pharmacy_near_cubit.dart';
 import '../cubit/pharmacy_near_state.dart';
 import '../widgets/parmacy_card.dart';
@@ -164,7 +165,7 @@ class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
           context.pushNamed(Routes.newOrder);
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF22C55E),
+          backgroundColor:  OrdersPalette.primary,
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 18),
           shape:
@@ -280,7 +281,7 @@ class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
                 context.pushNamed(Routes.customerOrders);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF22C55E),
+                backgroundColor: OrdersPalette.primary,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(

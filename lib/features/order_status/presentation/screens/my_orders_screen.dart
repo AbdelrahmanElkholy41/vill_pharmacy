@@ -7,7 +7,7 @@ import '../cubit/order_history_cubit.dart';
 import '../cubit/order_history_stats.dart';
 import '../widgets/order_card.dart';
 import '../widgets/orders_header.dart';
-import '../widgets/orders_palette.dart';
+import '../../../../core/theme/orders_palette.dart';
 import '../widgets/orders_tabs.dart';
 import '../widgets/pending_orders_banner.dart';
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import '../../data/modal/order_history_customer.dart';
-import 'orders_palette.dart';
+import '../../../../core/theme/orders_palette.dart';
 
 class OrderActionsRow extends StatelessWidget {
   final OrderStatus status;
@@ -47,7 +48,7 @@ class OrderActionsRow extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
             ),
-            child: const Icon(Icons.phone_outlined, size: 20),
+            child: const Icon(Iconsax.messages, size: 20),
           ),
         ],
         const SizedBox(width: 8),
@@ -67,8 +68,7 @@ class OrderActionsRow extends StatelessWidget {
                 )
               : ElevatedButton.icon(
                   onPressed: onTrack,
-                  icon: const Icon(Icons.location_on_outlined, size: 18),
-                  label: const Text('تابع الطلب'),
+                  label: const Text("تأكيد الوصول",overflow: TextOverflow.ellipsis,),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: OrdersPalette.primary,
                     foregroundColor: Colors.white,

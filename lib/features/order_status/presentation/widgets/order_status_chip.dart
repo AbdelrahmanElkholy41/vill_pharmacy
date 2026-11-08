@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import '../../data/modal/order_history_customer.dart';
-import 'orders_palette.dart';
+import '../../../../core/theme/orders_palette.dart';
 
 class OrderStatusChip extends StatelessWidget {
   final OrderStatus status;

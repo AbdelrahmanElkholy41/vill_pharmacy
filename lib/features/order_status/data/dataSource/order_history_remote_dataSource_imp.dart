@@ -15,6 +15,7 @@ class OrderHistoryRemoteDatasourceImp
   @override
   Future<List<OrderHistoryModel>> getOrderHistory() async {
     final token = await localDataSource.getAccessToken();
+    print(token);
 
     try {
       final response = await dio.get(
@@ -41,6 +42,23 @@ class OrderHistoryRemoteDatasourceImp
         ),
       )
           .toList();
+    } on DioException {
+      rethrow;
+    }
+  }
+  @override
+  Future<void> orderDelivered(String orderId) async {
+    final token = await localDataSource.getAccessToken();
+
+    try {
+      await dio.post(
+        'https://pharmacy-nu-ivory.vercel.app/api/v1/orders/$orderId/delivered',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
     } on DioException {
       rethrow;
     }

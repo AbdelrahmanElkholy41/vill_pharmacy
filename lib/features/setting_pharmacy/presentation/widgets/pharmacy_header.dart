@@ -15,7 +15,7 @@ class PharmacyHeader extends StatelessWidget {
           width: 72,
           height: 72,
           decoration: const BoxDecoration(
-            color: AppColors.lightGreenBg,
+            color: AppColors.primary,
             shape: BoxShape.circle,
           ),
           child: const Icon(

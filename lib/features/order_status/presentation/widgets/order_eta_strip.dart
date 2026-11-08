@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'orders_palette.dart';
+import '../../../../core/theme/orders_palette.dart';
 
 class OrderEtaStrip extends StatelessWidget {
   final int minutes;

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -74,14 +73,17 @@ class StatusCard extends StatelessWidget {
                   vertical: 5.h,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.purple.withOpacity(0.10),
+                  border: Border.all(color: Colors.purple.withOpacity(0.10)),
+                  color: isDelivering
+                      ? Colors.amberAccent[400]
+                      : Colors.green[400],
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Text(
                   isDelivering ? 'في الطريق' : 'تم التوصيل',
                   style: TextStyle(
                     fontSize: 11.sp,
-                    color: Colors.purple,
+                    color: Colors.green[50],
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -150,7 +152,7 @@ class StatusCard extends StatelessWidget {
               ),
               SizedBox(width: 8.w),
               Expanded(
-                flex: 2,
+                flex:3,
                 child: _InfoItem(
                   icon: Icons.payments_outlined,
                   text: '${order.price} ج',
@@ -265,7 +267,7 @@ class _InfoItem extends StatelessWidget {
               fontSize: 11.sp,
               fontWeight: bold ? FontWeight.bold : FontWeight.normal,
               color: itemColor,
-            ),
+            ),overflow:  TextOverflow.ellipsis,
           ),
         ),
       ],

@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pharmacy_app/core/helpers/extensions.dart';
 
-import '../../../../core/routing/routes.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../user_profile/presentation/screen/profile_screen.dart' hide AppColors;
 import '../../../user_profile/presentation/widget/logout_buttom.dart';
-import '../../data/models/pharmacy_modal.dart';
 import '../Cubit/register_pharmacy_cubit.dart';
 import '../Cubit/register_pharmacy_state.dart';
 import '../widgets/pharmacy_data.dart';
 import '../widgets/pharmacy_header.dart';
 import '../widgets/setting_card.dart';
-import '../widgets/state_pharmacu.dart';
-import '../widgets/state_row.dart';
 
 class PharmacyProfileScreen extends StatefulWidget {
   final VoidCallback? onLogout;
@@ -129,7 +123,7 @@ class _PharmacyProfileScreenState extends State<PharmacyProfileScreen> {
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.primaryGreen,
+      backgroundColor: AppColors.primary,
       elevation: 0,
       centerTitle: true,
       title: const Text(

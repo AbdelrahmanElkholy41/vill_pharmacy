@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Swap these for your existing AppColors constants.
 class OrdersPalette {
   static const primary = Color(0xFF0B5D45);
   static const background = Color(0xFFF2F8F5);
