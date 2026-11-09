@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+
 import 'package:pharmacy_app/core/helpers/extensions.dart';
 import 'package:pharmacy_app/features/auth/domain/entities/user_entity.dart';
 
 import '../../../../core/routing/routes.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/orders_palette.dart';
 import '../cubit/pharmacy_near_cubit.dart';
 import '../cubit/pharmacy_near_state.dart';
+import '../widgets/bottom_nav_bar.dart';
+import '../widgets/header.dart';
+import '../widgets/order_buttom.dart';
 import '../widgets/parmacy_card.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
@@ -30,48 +33,111 @@ class CustomerHomeScreen extends StatefulWidget {
 }
 
 class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
-  Future<void> _getCurrentLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
+  bool _isGettingLocation = false;
+  bool _locationServiceDisabled = false;
+  bool _permissionPermanentlyDenied = false;
+  String? _locationMessage;
 
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-
-    if (!serviceEnabled) {
-      return;
-    }
-
-    permission = await Geolocator.checkPermission();
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-
-      if (permission == LocationPermission.denied) {
-        return;
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return;
-    }
-
-    final position = await Geolocator.getCurrentPosition();
-
-    print("LAT-----------------: ${position.latitude}");
-    print("LNG: ${position.longitude}");
-
-    if (!mounted) return;
-
-    context.read<PharmacyNearCubit>().getNearbyPharmacies(
-      position.latitude,
-      position.longitude,
-    );
-  }
   @override
   void initState() {
     super.initState();
     _getCurrentLocation();
-
   }
+
+  Future<void> _getCurrentLocation() async {
+    if (_isGettingLocation) return;
+
+    setState(() {
+      _isGettingLocation = true;
+      _locationMessage = null;
+      _locationServiceDisabled = false;
+      _permissionPermanentlyDenied = false;
+    });
+
+    try {
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+      if (!serviceEnabled) {
+        _showLocationError(
+          'خدمة الموقع غير مفعلة. من فضلك فعل الموقع من إعدادات الهاتف.',
+          serviceDisabled: true,
+        );
+        return;
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (permission == LocationPermission.denied) {
+        _showLocationError(
+          'نحتاج إلى صلاحية الموقع لعرض الصيدليات القريبة منك.',
+        );
+        return;
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        _showLocationError(
+          'صلاحية الموقع مرفوضة نهائيًا. يمكنك تفعيلها من إعدادات التطبيق.',
+          permanentlyDenied: true,
+        );
+        return;
+      }
+
+      final position = await Geolocator.getCurrentPosition();
+
+      if (!mounted) return;
+
+      await context.read<PharmacyNearCubit>().getNearbyPharmacies(
+            position.latitude,
+            position.longitude,
+          );
+    } on LocationServiceDisabledException {
+      _showLocationError(
+        'خدمة الموقع غير مفعلة. من فضلك فعل الموقع من إعدادات الهاتف.',
+        serviceDisabled: true,
+      );
+    } on PermissionDeniedException {
+      _showLocationError(
+        'لم نتمكن من الوصول إلى موقعك. راجع صلاحيات التطبيق.',
+      );
+    } catch (_) {
+      _showLocationError(
+        'حدث خطأ أثناء تحديد موقعك. حاول مرة أخرى.',
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isGettingLocation = false;
+        });
+      }
+    }
+  }
+
+  void _showLocationError(
+    String message, {
+    bool serviceDisabled = false,
+    bool permanentlyDenied = false,
+  }) {
+    if (!mounted) return;
+
+    setState(() {
+      _locationMessage = message;
+      _locationServiceDisabled = serviceDisabled;
+      _permissionPermanentlyDenied = permanentlyDenied;
+    });
+  }
+
+  Future<void> _openLocationSettings() async {
+    if (_locationServiceDisabled) {
+      await Geolocator.openLocationSettings();
+    } else if (_permissionPermanentlyDenied) {
+      await Geolocator.openAppSettings();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -79,7 +145,6 @@ class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
       child: Scaffold(
         appBar: AppBar(
           actions: [
-            Spacer(),
             IconButton(
               onPressed: () {
                 context.pushNamed(Routes.UserProfile);
@@ -101,17 +166,17 @@ class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
                   child: Column(
                     children: [
                       const SizedBox(height: 32),
-                      _buildHeader(),
+                      const Header(),
                       const SizedBox(height: 28),
-                      _buildOrderButton(),
+                      OrderButton(context: context),
                       const SizedBox(height: 32),
-                      _buildNearbySection(),
+                      buildNearbySection(),
                       const SizedBox(height: 20),
                     ],
                   ),
                 ),
               ),
-              _buildBottomNavBar(),
+              BottomNavBar(context: context,),
             ],
           ),
         ),
@@ -119,180 +184,162 @@ class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget buildNearbySection() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          width: 72,
-          height: 72,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.green.withOpacity(0.15),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'صيدليات قريبة منك',
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF111827),
               ),
-            ],
+            ),
+            IconButton(
+              tooltip: 'تحديث الصيدليات',
+              onPressed: _isGettingLocation ? null : _getCurrentLocation,
+              icon: _isGettingLocation
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : const Icon(
+                      Icons.refresh,
+                      color: Colors.green,
+                    ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        if (_locationMessage != null) _buildLocationError(),
+        if (_isGettingLocation && _locationMessage == null)
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.all(24),
+              child: CircularProgressIndicator(),
+            ),
           ),
-          child:
-              const Center(child: Text('💊', style: TextStyle(fontSize: 36))),
-        ),
-        const SizedBox(height: 16),
-        const Text(
-          'صيدلية القرية',
-          style: TextStyle(
-            fontSize: 26,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF14532D),
+        if (!_isGettingLocation && _locationMessage == null)
+          BlocBuilder<PharmacyNearCubit, PharmacyNearState>(
+            builder: (context, state) {
+              if (state is PharmacyNearLoading) {
+                return const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(24),
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+
+              if (state is PharmacyNearSuccess) {
+                final pharmacies = state.pharmacies;
+
+                if (pharmacies.isEmpty) {
+                  return _buildMessage(
+                    'لا توجد صيدليات قريبة منك',
+                  );
+                }
+
+                return Column(
+                  children: pharmacies.map((pharmacy) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: PharmacyCard(
+                        pharmacy: pharmacy,
+                      ),
+                    );
+                  }).toList(),
+                );
+              }
+
+              if (state is PharmacyNearError) {
+                return _buildMessage(
+                  state.message,
+                  showRetry: true,
+                );
+              }
+
+              return _buildMessage(
+                'اضغط على تحديث لعرض الصيدليات القريبة منك',
+              );
+            },
           ),
-        ),
-        const SizedBox(height: 6),
-        const Text(
-          'خدمة توصيل الأدوية',
-          style: TextStyle(fontSize: 14, color: Color(0xFF6B7280)),
-        ),
       ],
     );
   }
 
-  Widget _buildOrderButton() {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () {
-          context.pushNamed(Routes.newOrder);
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor:  OrdersPalette.primary,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 18),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-          elevation: 4,
-          shadowColor: const Color(0xFF22C55E).withOpacity(0.4),
-        ),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('اطلب دواء الآن',
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-            SizedBox(width: 8),
-            Text('💊', style: TextStyle(fontSize: 18)),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNearbySection() {
-    return BlocConsumer<PharmacyNearCubit, PharmacyNearState>(
-      listener: (context, state) {
-        if (state is PharmacyNearError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-            ),
-          );
-        }
-      },
-      builder: (context, state) {
-        if (state is PharmacyNearLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
-        if (state is PharmacyNearSuccess) {
-          final pharmacies = state.pharmacies;
-
-          if (pharmacies.isEmpty) {
-            return const Center(
-              child: Text(
-                'لا توجد صيدليات قريبة منك',
-                style: TextStyle(
-                  color: Color(0xFF6B7280),
-                  fontSize: 15,
-                ),
-              ),
-            );
-          }
-
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              const Text(
-                'صيدليات قريبة منك',
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF111827),
-                ),
-              ),
-              const SizedBox(height: 14),
-
-              ...pharmacies.map(
-                    (pharmacy) => Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: PharmacyCard(
-                    pharmacy: pharmacy,
-                  ),
-                ),
-              ),
-            ],
-          );
-        }
-
-        if (state is PharmacyNearError) {
-          return Center(
-            child: Text(
-              state.message,
-              style: const TextStyle(
-                color: Colors.red,
-              ),
-            ),
-          );
-        }
-
-        return const SizedBox.shrink();
-      },
-    );
-  }
-  Widget _buildBottomNavBar() {
+  Widget _buildLocationError() {
     return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            blurRadius: 12,
-            offset: const Offset(0, -3),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.black12),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Row(
+      child: Column(
         children: [
-          const SizedBox(width: 12),
-          Expanded(
-            child: ElevatedButton(
-              onPressed: () {
-                context.pushNamed(Routes.customerOrders);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: OrdersPalette.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
-                elevation: 2,
-              ),
-              child: const Text('تتبع طلبك',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+          const Icon(
+            Icons.location_off_outlined,
+            color: Colors.orange,
+            size: 32,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            _locationMessage!,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 14),
+          ),
+          const SizedBox(height: 12),
+          ElevatedButton(
+            onPressed: _isGettingLocation
+                ? null
+                : _locationServiceDisabled || _permissionPermanentlyDenied
+                    ? _openLocationSettings
+                    : _getCurrentLocation,
+            child: Text(
+              _locationServiceDisabled || _permissionPermanentlyDenied
+                  ? 'فتح الإعدادات'
+                  : 'إعادة المحاولة',
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildMessage(
+    String message, {
+    bool showRetry = false,
+  }) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Color(0xFF6B7280),
+                fontSize: 14,
+              ),
+            ),
+            if (showRetry)
+              TextButton.icon(
+                onPressed: _getCurrentLocation,
+                icon: const Icon(Icons.refresh),
+                label: const Text('إعادة المحاولة'),
+              ),
+          ],
+        ),
       ),
     );
   }

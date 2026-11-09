@@ -20,12 +20,21 @@ class PharmacyDashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final incomeCubit = context.read<IncomeCubit>();
 
-    print("INCOME CUBIT FOUND: $incomeCubit");
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        bottomNavigationBar:BottomNavigationBar(
+            items:  [
+          BottomNavigationBarItem(icon:
+        Icon(Icons.home),label: 'الرئيسية'),
+              BottomNavigationBarItem(icon:  Icon(Icons.local_pharmacy),label: 'صيدلية',)
+
+
+       ],
+        ),
+          
+
         floatingActionButton:  FloatingActionButton(
             onPressed: () {
               context.pushNamed(Routes.deliveryTrackingScreen);
