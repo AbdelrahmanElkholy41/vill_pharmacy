@@ -15,7 +15,6 @@ import '../../../setting_pharmacy/data/datasource/edit_pharmacy_remote_date_sour
 import '../../../setting_pharmacy/data/repositories/pharmacy_repositories.dart';
 import '../../../setting_pharmacy/presentation/Cubit/register_pharmacy_cubit.dart';
 import '../../../setting_pharmacy/presentation/screens/pharmacy_edit_screen.dart';
-import '../../../setting_pharmacy/data/models/pharmacy_modal.dart';
 
 import '../../data/dataSource/remot_data_source_imp.dart';
 import '../../data/repositories/pharmacy_nearby_repository.dart';
@@ -32,9 +31,6 @@ class RoleGate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('USER ROLE: ${user.role}');
-    print('PHARMACY ID: ${user.pharmacyId}');
-
     switch (user.role) {
 
     // =========================
