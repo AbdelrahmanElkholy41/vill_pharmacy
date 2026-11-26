@@ -12,6 +12,7 @@ class UserEntity extends Equatable {
   final String name;
   final String phone;
   final UserRole role;
+  final String? address;
 
 
 // null لو Customer
@@ -24,7 +25,7 @@ class UserEntity extends Equatable {
     required this.name,
     required this.phone,
     required this.role,
-    this.pharmacyId,
+    this.pharmacyId,  this.address,
   });
 
   bool get isPharmacist => role == UserRole.pharmacist;
@@ -43,6 +44,7 @@ class UserEntity extends Equatable {
         phone,
         role,
         pharmacyId,
+    address,
       ];
 }
 
@@ -62,13 +64,15 @@ class RegisterEntity {
   final String phone;
   final String password;
   final UserRole role;
+  final String address;
+
 
   RegisterEntity({
     required this.fullName,
     required this.email,
     required this.phone,
     required this.password,
-    required this.role,
+    required this.role, required this.address,
   });
 }
 

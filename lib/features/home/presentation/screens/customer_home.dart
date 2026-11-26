@@ -7,6 +7,8 @@ import 'package:pharmacy_app/features/auth/domain/entities/user_entity.dart';
 
 import '../../../../core/routing/routes.dart';
 import '../../../../core/theme/orders_palette.dart';
+import '../../../order_status/data/modal/order_history_customer.dart';
+import '../../../user_profile/presentation/screen/profile_screen.dart';
 import '../cubit/pharmacy_near_cubit.dart';
 import '../cubit/pharmacy_near_state.dart';
 import '../widgets/bottom_nav_bar.dart';
@@ -19,13 +21,15 @@ class CustomerHomeScreen extends StatefulWidget {
   final VoidCallback onNewOrder;
   final VoidCallback onTrack;
   final UserRole userRole;
+  final UserEntity user;
+
 
   const CustomerHomeScreen({
     super.key,
     required this.onDashboard,
     required this.onNewOrder,
     required this.onTrack,
-    required this.userRole,
+    required this.userRole, required this.user,
   });
 
   @override
@@ -147,7 +151,12 @@ class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
           actions: [
             IconButton(
               onPressed: () {
-                context.pushNamed(Routes.UserProfile);
+                context.pushNamed(
+                  Routes.UserProfile,
+                  arguments:widget.user,
+
+                );
+
               },
               icon: const Icon(
                 Icons.person_2_outlined,

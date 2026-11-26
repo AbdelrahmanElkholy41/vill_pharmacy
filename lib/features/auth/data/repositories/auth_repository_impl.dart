@@ -21,7 +21,6 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<AuthResponseEntity> login(LoginEntity request) async {
 
-    print("REPOSITORY START");
 
     final loginRequest = LoginRequestModel(
       email: request.email,
@@ -29,7 +28,6 @@ class AuthRepositoryImpl implements AuthRepository {
     );
 
 
-    print("CALL REMOTE");
 
     final response = await remoteDataSource.login(loginRequest);
 
@@ -57,7 +55,6 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<AuthResponseEntity> register(RegisterEntity request) async {
 
-    print("REPOSITORY START");
 
 
     final registerRequest = registerRequestModel(
@@ -65,14 +62,9 @@ class AuthRepositoryImpl implements AuthRepository {
       email: request.email,
       phone: request.phone,
       password: request.password,
-      role: request.role,
+      role: request.role, address: request.address,
 
     );
-
-
-    print(request.role);
-    print("CALL REMOTE");
-
 
     final response = await remoteDataSource.register(registerRequest);
 
@@ -88,9 +80,6 @@ class AuthRepositoryImpl implements AuthRepository {
     await localDataSource.saveUser(
       response.data.user.toEntity(),
     );
-    print(await localDataSource.getAccessToken());
-    print(await localDataSource.getRefreshToken());
-    print(await localDataSource.getUser());
 
     return AuthResponseEntity(
       user: response.data.user.toEntity(),
@@ -106,11 +95,9 @@ class AuthRepositoryImpl implements AuthRepository {
     final retoken = await localDataSource.getRefreshToken();
 
     if (retoken != null) {
-      print('LOGOUTre TOKEN: $retoken');
 
     }
     if (token != null) {
-      print('LOGOUT TOKEN: $token');
       await remoteDataSource.logout(token);
     }
 

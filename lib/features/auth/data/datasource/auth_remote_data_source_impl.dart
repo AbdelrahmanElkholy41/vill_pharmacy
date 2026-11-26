@@ -15,7 +15,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<AuthResponseModel> login(LoginRequestModel request) async {
 
-    print("REMOTE START");
 
     try {
 
@@ -27,21 +26,17 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         },
       );
 
-      print("STATUS CODE: ${response.statusCode}");
-      print("DATA: ${response.data}");
 
       return AuthResponseModel.fromJson(response.data);
 
     } catch(e) {
 
-      print("REMOTE ERROR: $e");
 
       rethrow;
     }
   }
   @override
   Future<void> logout(String token) async {
-    print('LOGOUT TOKEN: $token');
     try {
       final response = await dio.post(
         'https://pharmacy-nu-ivory.vercel.app/api/v1/auth/logout',
@@ -52,12 +47,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         ),
       );
 
-      print('LOGOUT STATUS: ${response.statusCode}');
-      print('LOGOUT RESPONSE: ${response.data}');
+
     } on DioException catch (e) {
-      print('LOGOUT STATUS: ${e.response?.statusCode}');
-      print('LOGOUT RESPONSE: ${e.response?.data}');
-      print('LOGOUT HEADERS: ${e.response?.headers}');
+
       rethrow;
     }
   }
@@ -73,27 +65,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           'password': request.password,
           'phone': request.phone,
           'role': request.role.name,
+          'address': request.address,
         },
       );
-      print("-------------------------------------");
-print(request.role);
-      print("STATUS CODE: ${response.statusCode}");
-      print("DATA: ${response.data}");
-
       return AuthResponseModel.fromJson(response.data);
 
     } catch (e) {
 
       if (e is DioException) {
 
-        print("STATUS CODE: ${e.response?.statusCode}");
-
-        print("RESPONSE DATA:");
-        print(e.response?.data);
-
       }
-
-      print("REMOTE ERROR: $e");
 
       rethrow;
     }

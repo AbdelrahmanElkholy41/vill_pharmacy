@@ -21,59 +21,80 @@ class PharmacyProfile {
     required this.todayOrdersCount,
   });
 }
+
+
 class PharmacyModel {
+  final String id;
   final PharmacyLocalizedText name;
   final PharmacyLocalizedText address;
   final String area;
   final String phone;
   final PharmacyLocation location;
-   bool isOpen;
+  final bool isOpen;
+  final double rating;
+  final int ordersCount;
 
   PharmacyModel({
+    required this.id,
     required this.name,
     required this.address,
     required this.area,
     required this.phone,
     required this.location,
     required this.isOpen,
+    required this.rating,
+    required this.ordersCount,
   });
 
   factory PharmacyModel.fromJson(Map<String, dynamic> json) {
     return PharmacyModel(
+      id: json['id'] ?? '',
       name: PharmacyLocalizedText.fromJson(json['name']),
       address: PharmacyLocalizedText.fromJson(json['address']),
-      area: json['area'],
-      phone: json['phone'],
+      area: json['area'] ?? '',
+      phone: json['phone'] ?? '',
       location: PharmacyLocation.fromJson(json['location']),
       isOpen: json['isOpen'] ?? false,
+      rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
+      ordersCount: json['ordersCount'] ?? 0,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'name': name.toJson(),
       'address': address.toJson(),
       'area': area,
       'phone': phone,
       'location': location.toJson(),
       'isOpen': isOpen,
+      'rating': rating,
+      'ordersCount': ordersCount,
     };
   }
+
   PharmacyModel copyWith({
+    String? id,
     PharmacyLocalizedText? name,
     PharmacyLocalizedText? address,
     String? area,
     String? phone,
     PharmacyLocation? location,
     bool? isOpen,
+    double? rating,
+    int? ordersCount,
   }) {
     return PharmacyModel(
+      id: id ?? this.id,
       name: name ?? this.name,
       address: address ?? this.address,
       area: area ?? this.area,
       phone: phone ?? this.phone,
       location: location ?? this.location,
       isOpen: isOpen ?? this.isOpen,
+      rating: rating ?? this.rating,
+      ordersCount: ordersCount ?? this.ordersCount,
     );
   }
 }

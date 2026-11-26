@@ -54,6 +54,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
         "phone": user.phone,
         "role": user.role.name,
         "pharmacyId": user.pharmacyId,
+        "address": user.address,
       }),
     );
   }
@@ -72,13 +73,25 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       email: json['email'] as String,
       name: json['name'] as String,
       phone: json['phone'] as String,
-      role: json['role'] == 'customer'
-          ? UserRole.customer
-          : json['role'] == 'super_admin'
-          ? UserRole.super_admin
-          : UserRole.pharmacist,
+      role: _mapRole(json['role'] as String),
       pharmacyId: json['pharmacyId'] as String?,
+      address: json['address'] as String?,
+
     );
   }
+  UserRole _mapRole(String role) {
+    switch (role) {
+      case 'customer':
+        return UserRole.customer;
 
+      case 'pharmacist':
+        return UserRole.pharmacist;
+
+      case 'super_admin':
+        return UserRole.super_admin;
+
+      default:
+        throw Exception('Unknown user role: $role');
+    }
+  }
 }

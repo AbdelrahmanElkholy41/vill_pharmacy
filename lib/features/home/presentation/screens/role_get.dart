@@ -48,7 +48,8 @@ class RoleGate extends StatelessWidget {
             onDashboard: () {},
             onNewOrder: () {},
             onTrack: () {},
-            userRole:user.role,
+            userRole:user.role, user: user,
+
           ),
         );
 

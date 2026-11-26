@@ -81,15 +81,14 @@ class PharmacyCubit extends Cubit<PharmacyState> {
       );
 
       if (cachedPharmacy != null) {
-        final pharmacy = PharmacyModel.fromJson(
+        var pharmacy = PharmacyModel.fromJson(
           jsonDecode(cachedPharmacy),
         );
 
         print(pharmacy.isOpen);
 
 
-        pharmacy.isOpen = status;
-
+        pharmacy = pharmacy.copyWith(isOpen: status);
         print(pharmacy.isOpen);
 
         await storage.write(

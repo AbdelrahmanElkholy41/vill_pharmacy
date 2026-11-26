@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../../core/theme/orders_palette.dart';
 import '../cubit/order_history_cubit.dart';
 import '../cubit/order_history_stats.dart';

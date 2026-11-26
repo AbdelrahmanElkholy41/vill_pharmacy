@@ -11,7 +11,7 @@ class UserModel {
   final DateTime? deletedAt;
   final DateTime createdAt;
   final DateTime updatedAt;
-
+  final String? address;
   UserModel({
     required this.id,
     required this.fullName,
@@ -23,6 +23,7 @@ class UserModel {
     required this.deletedAt,
     required this.createdAt,
     required this.updatedAt,
+     this.address,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -34,6 +35,7 @@ class UserModel {
       role: json['role'] as String,
       status: json['status'] as String,
       pharmacyId: json['pharmacyId'] as String?,
+      address: json['address'] as String?,
       deletedAt: json['deletedAt'] != null
           ? DateTime.parse(json['deletedAt'] as String)
           : null,
@@ -58,6 +60,7 @@ class UserModel {
       'deletedAt': deletedAt?.toIso8601String(),
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
+      'address': address,
     };
   }
 
@@ -72,7 +75,7 @@ class UserModel {
       name: fullName,
       phone: phone,
       role: _mapRole(role),
-      pharmacyId: pharmacyId,
+      pharmacyId: pharmacyId, address: address,
     );
   }
 

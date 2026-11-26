@@ -11,6 +11,7 @@ class RegisterFields extends StatelessWidget{
   final TextEditingController phone;
   final TextEditingController password;
   final TextEditingController confirm;
+  final TextEditingController address;
 
 
 
@@ -22,7 +23,8 @@ class RegisterFields extends StatelessWidget{
     required this.email,
     required this.phone,
     required this.password,
-    required this.confirm,
+    required this.confirm, required this.address,
+
 
   });
 
@@ -87,7 +89,19 @@ class RegisterFields extends StatelessWidget{
 
         const SizedBox(height:16),
 
+        AuthTextField(
 
+
+          label:'العنوان',
+
+          hint:'ش 10 ',
+
+          controller:address,
+
+          prefixIcon:const Icon(Icons.home),
+
+        ),
+        const SizedBox(height:16),
 
         AuthTextField(
 
@@ -114,6 +128,7 @@ class RegisterFields extends StatelessWidget{
           isPassword:true, hint: '',
 
         ),
+
 
 
 

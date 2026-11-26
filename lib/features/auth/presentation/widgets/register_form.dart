@@ -34,6 +34,7 @@ class _RegisterFormState extends State<RegisterForm>{
   final phone = TextEditingController();
   final password = TextEditingController();
   final confirm = TextEditingController();
+  final address = TextEditingController();
 
 
   UserRole role = UserRole.customer;
@@ -48,6 +49,7 @@ class _RegisterFormState extends State<RegisterForm>{
     phone.dispose();
     password.dispose();
     confirm.dispose();
+    address.dispose();
 
     super.dispose();
 
@@ -71,6 +73,8 @@ class _RegisterFormState extends State<RegisterForm>{
       password: password.text,
 
       role: role,
+      address: address.text,
+
 
 
 
@@ -146,9 +150,10 @@ class _RegisterFormState extends State<RegisterForm>{
               password:password,
 
               confirm:confirm,
+              address:address,
+
 
             ),
-
 
 
             const SizedBox(height:25),

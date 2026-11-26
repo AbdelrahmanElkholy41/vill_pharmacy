@@ -26,6 +26,7 @@ import '../../features/dashboard_pharmacy/presentation/screens/dashboard.dart';
 import '../../features/dashboard_pharmacy/presentation/screens/delivery_tracking_screen.dart';
 import '../../features/home/data/repositories/pharmacy_nearby_repository.dart';
 import '../../features/home/presentation/cubit/pharmacy_near_cubit.dart';
+import '../../features/home/presentation/screens/CustomerShell.dart';
 import '../../features/home/presentation/screens/customer_home.dart';
 import '../../features/home/presentation/screens/role_get.dart';
 import '../../features/new_order/data/datasource/remot_data_source_Imp.dart';
@@ -77,6 +78,7 @@ class AppRouter {
                     onNewOrder: () {},
                     onTrack: () {},
                     userRole: settings.arguments as UserRole,
+                    user: settings.arguments as UserEntity,
                   ),
                 ));
       case Routes.registrationScreen:
@@ -186,9 +188,13 @@ class AppRouter {
           ),
         );
       case Routes.UserProfile:
-        return MaterialPageRoute(builder: (BuildContext context) {
-          return const ProfileScreen();
-        });
+        final user = settings.arguments as UserEntity;
+
+        return MaterialPageRoute(
+          builder: (_) => CustomerShell(
+            child: ProfileScreen(user: user),
+          ),
+        );
       case Routes.orderDetailsScreen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(

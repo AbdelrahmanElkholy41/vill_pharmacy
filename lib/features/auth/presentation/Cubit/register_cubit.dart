@@ -18,7 +18,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     required String email,
     required String password,
     required String phone,
-    required UserRole role,
+    required UserRole role, required String address,
   }) async {
 
 
@@ -32,7 +32,7 @@ class RegisterCubit extends Cubit<RegisterState> {
           email: email,
           password: password,
           phone: phone,
-          role: role,
+          role: role, address:address,
         ),
       );
 
