@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../auth/domain/entities/user_entity.dart';
-import '../../../order_status/data/modal/order_history_customer.dart';
 import '../../../order_status/presentation/cubit/order_history_cubit.dart';
 import '../../../order_status/presentation/cubit/order_history_stats.dart';
 import '../../../order_status/presentation/widgets/info_order.dart';
@@ -34,7 +33,7 @@ class ProfileScreen extends StatelessWidget {
                       user: user,
                     ),
                     const SizedBox(height: 16),
-                    _PreviousOrdersCard(),
+                    const _PreviousOrdersCard(),
                     const SizedBox(height: 16),
                     SettingsCard(),
                     const SizedBox(height: 16),

@@ -3,6 +3,7 @@ enum OrderStatus {
   onTheWay,
   searching,
   delivered,
+  rejected,
 }
 
 OrderStatus parseOrderStatus(String? status) {
@@ -10,12 +11,17 @@ OrderStatus parseOrderStatus(String? status) {
     case 'on_the_way':
       return OrderStatus.onTheWay;
 
+    case 'searching':
+      return OrderStatus.searching;
+
     case 'delivered':
       return OrderStatus.delivered;
-      default:
-  return OrderStatus.searching;
 
+    case 'rejected':
+      return OrderStatus.rejected;
 
+    default:
+      return OrderStatus.searching;
   }
 }
 
@@ -132,6 +138,9 @@ class OrderHistoryModel {
         return 'searching';
       case OrderStatus.delivered:
         return 'delivered';
+        case OrderStatus.rejected:
+        return 'rejected';
+
     }
   }
 

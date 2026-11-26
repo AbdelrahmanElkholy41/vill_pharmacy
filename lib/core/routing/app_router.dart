@@ -169,17 +169,27 @@ class AppRouter {
                   },
                 ));
 
+
       case Routes.newOrder:
+        final pharmacyCubit = settings.arguments as PharmacyNearCubit;
+
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => OrderCubit(
-              OrderRepositoryImpl(
-                OrderRemoteDataSourceImpl(
-                  Dio(),
-                  AuthLocalDataSourceImpl(),
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider<PharmacyNearCubit>.value(
+                value: pharmacyCubit,
+              ),
+              BlocProvider<OrderCubit>(
+                create: (_) => OrderCubit(
+                  OrderRepositoryImpl(
+                    OrderRemoteDataSourceImpl(
+                      Dio(),
+                      AuthLocalDataSourceImpl(),
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
             child: NewOrderScreen(
               onBack: () {
                 Navigator.pop(_);
@@ -187,6 +197,7 @@ class AppRouter {
             ),
           ),
         );
+
       case Routes.UserProfile:
         final user = settings.arguments as UserEntity;
 

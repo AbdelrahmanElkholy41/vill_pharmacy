@@ -21,8 +21,8 @@ class OrderHistoryRemoteDatasourceImp
       final response = await dio.get(
         'https://pharmacy-nu-ivory.vercel.app/api/v1/orders/my',
         queryParameters: {
-          'page': 2,
-          'limit': 10,
+          'page': 1,
+          'limit': 15,
           'sortOrder': 'desc',
         },
         options: Options(

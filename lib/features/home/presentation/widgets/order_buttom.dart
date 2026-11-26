@@ -1,16 +1,14 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/helpers/extensions.dart';
 import '../../../../core/routing/routes.dart';
 import '../../../../core/theme/orders_palette.dart';
+import '../cubit/pharmacy_near_cubit.dart';
 
 class OrderButton extends StatelessWidget {
-  const OrderButton({
-    super.key,
-    required this.context,
-  });
-
-  final BuildContext context;
+  const OrderButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +16,12 @@ class OrderButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          context.pushNamed(Routes.newOrder);
+          final pharmacyCubit = context.read<PharmacyNearCubit>();
+
+          context.pushNamed(
+            Routes.newOrder,
+            arguments: pharmacyCubit,
+          );
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: OrdersPalette.primary,

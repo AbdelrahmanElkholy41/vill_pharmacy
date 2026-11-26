@@ -177,7 +177,7 @@ class _PharmacyHomeScreenState extends State<CustomerHomeScreen> {
                       const SizedBox(height: 32),
                       const Header(),
                       const SizedBox(height: 28),
-                      OrderButton(context: context),
+                      const OrderButton(),
                       const SizedBox(height: 32),
                       buildNearbySection(),
                       const SizedBox(height: 20),

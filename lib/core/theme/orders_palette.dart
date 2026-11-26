@@ -11,4 +11,6 @@ class OrdersPalette {
   static const searching = Color(0xFFE0A100);
   static const searchingBg = Color(0xFFFFF6D9);
   static const onTheWayBg = Color(0xFFE3F5EC);
+  static const rejected = Color(0xFFE8782A);
+  static const rejectedBg = Color(0xFFFFF6D9);
 }

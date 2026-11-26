@@ -29,6 +29,13 @@ class OrderStatusChip extends StatelessWidget {
       OrdersPalette.primary,
       OrdersPalette.onTheWayBg,
       ),
+      OrderStatus.rejected => (
+      'تم رفض الطلب',
+      OrdersPalette.rejected,
+      OrdersPalette.rejectedBg,
+      ),
+
+
     };
 
     return Container(
