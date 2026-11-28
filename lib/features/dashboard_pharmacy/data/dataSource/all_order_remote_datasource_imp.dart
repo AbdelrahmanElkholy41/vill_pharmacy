@@ -12,7 +12,6 @@ class AllOrderRemoteDatasourceImp implements AllOrderRemoteDatasource {
   @override
   Future<List<AllOrderModal>> getAllOrders() async {
     final token = await localDataSource.getAccessToken();
-    print(token);
     final response = await dio.get(
 
       "https://pharmacy-nu-ivory.vercel.app/api/v1/orders/pharmacy/all",

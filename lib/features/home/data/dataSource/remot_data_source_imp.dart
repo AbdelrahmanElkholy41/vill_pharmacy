@@ -13,6 +13,8 @@ class NearByPharmacyRemotDataSourceImp implements NearByPharmacyRemotDataSource 
   @override
   Future<List<PharmacyModel>> getNearbyPharmacy(double lat, double lng) async {
     final token = await localDataSource.getAccessToken();
+    final refesh= await localDataSource.getRefreshToken();
+print(refesh);
     final response = await dio.get(
       "https://pharmacy-nu-ivory.vercel.app/api/v1/pharmacies/nearby?lat=$lat&lng=$lng&maxDistanceMeters=1000000",
       options: Options(
