@@ -3,9 +3,10 @@ import '../../../../core/theme/orders_palette.dart';
 
 class OrderInfoRow extends StatelessWidget {
   final String pharmacyName;
-  final String timeLabel;
+  final DateTime timeLabel;
+
   const OrderInfoRow(
-      {super.key, required this.pharmacyName, required this.timeLabel});
+      {super.key, required this.pharmacyName, required this.timeLabel,});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class OrderInfoRow extends StatelessWidget {
       children: [
         _Item(icon: Icons.storefront_outlined, text: pharmacyName),
         const Spacer(),
-        _Item(icon: Icons.access_time, text: timeLabel),
+        _Item(icon: Icons.access_time, text: "$timeLabel"),
       ],
     );
   }

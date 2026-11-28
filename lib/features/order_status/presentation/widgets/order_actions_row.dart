@@ -66,7 +66,9 @@ class OrderActionsRow extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12)),
                   ),
                 )
-              : ElevatedButton.icon(
+              :
+          status == OrderStatus.onTheWay?
+          ElevatedButton.icon(
                   onPressed: onTrack,
                   label: const Text("تأكيد الوصول",overflow: TextOverflow.ellipsis,),
                   style: ElevatedButton.styleFrom(
@@ -77,7 +79,7 @@ class OrderActionsRow extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12)),
                   ),
-                ),
+                ): SizedBox(),
         ),
       ],
     );

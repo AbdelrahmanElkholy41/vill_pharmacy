@@ -20,25 +20,42 @@ class PharmacyDashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        bottomNavigationBar:BottomNavigationBar(
-            items:  [
-          BottomNavigationBarItem(icon:
-        Icon(Icons.home),label: 'الرئيسية'),
-              BottomNavigationBarItem(icon:  Icon(Icons.local_pharmacy),label: 'صيدلية',)
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: 0,
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) {
+            switch (index) {
+              case 0:
+              // إحنا بالفعل في الداشبورد
+                break;
 
+              case 1:
+                context.pushNamed(Routes.deliveryTrackingScreen);
+                break;
 
-       ],
-        ),
-          
-
-        floatingActionButton:  FloatingActionButton(
-            onPressed: () {
-              context.pushNamed(Routes.deliveryTrackingScreen);
+              case 2:
+                context.pushNamed(Routes.pharmacyProfile);
+                break;
             }
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'الرئيسية',
+            ),
+
+            BottomNavigationBarItem(
+              icon: Icon(Icons.dashboard),
+              label: 'طلباتك',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.local_pharmacy),
+              label: 'صيدلية',
+            ),
+          ],
         ),
         backgroundColor: const Color(0xFFF8FAFC),
         body: SafeArea(
@@ -64,7 +81,6 @@ class PharmacyDashboardScreen extends StatelessWidget {
               }
 
               if (state is IncomeSuccess) {
-
                 return _buildSuccess(context, state);
               }
 
@@ -120,7 +136,7 @@ class PharmacyDashboardScreen extends StatelessWidget {
               context.read<IncomeCubit>()
                 ..getOrders()
                 ..startPolling();
-              },
+            },
             child: const Text('إعادة المحاولة'),
           ),
         ],
@@ -136,8 +152,8 @@ class PharmacyDashboardScreen extends StatelessWidget {
     return Column(
       children: [
         // Header
-        Padding(
-          padding: const EdgeInsets.fromLTRB(
+        const Padding(
+          padding: EdgeInsets.fromLTRB(
             16,
             16,
             16,
@@ -146,7 +162,7 @@ class PharmacyDashboardScreen extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'لوحة تحكم الصيدلية',
                 style: TextStyle(
                   fontSize: 24,
@@ -154,17 +170,7 @@ class PharmacyDashboardScreen extends StatelessWidget {
                   color: Color(0xFF111827),
                 ),
               ),
-              IconButton(
-                onPressed: () {
-                  context.pushNamed(
-                    Routes.pharmacyProfile,
-                  );
-                },
-                icon: const Icon(
-                  Icons.local_pharmacy,
-                  size: 24,
-                ),
-              ),
+
             ],
           ),
         ),
@@ -208,11 +214,8 @@ class PharmacyDashboardScreen extends StatelessWidget {
                               );
                             },
                           );
-                          },
-
-
-
-                          onReject: () {
+                        },
+                        onReject: () {
                           final incomeCubit = context.read<IncomeCubit>();
 
                           showDialog(
@@ -220,16 +223,12 @@ class PharmacyDashboardScreen extends StatelessWidget {
                             builder: (_) {
                               return DialogCardRegict(
                                 onConfirm: (reason) {
-                                  incomeCubit.rejectOrder(order.id,
-                                  reason
-
-                                  );
+                                  incomeCubit.rejectOrder(order.id, reason);
                                 },
                               );
-
                             },
                           );
-                          },
+                        },
                       ),
                     );
                   },

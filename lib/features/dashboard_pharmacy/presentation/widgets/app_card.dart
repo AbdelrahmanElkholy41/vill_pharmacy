@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
-
-/// ============================================================
-/// حاوية بطاقة عامة (Rounded + Shadow خفيف) يُعاد استخدامها
-/// ============================================================
 class AppCard extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry padding;

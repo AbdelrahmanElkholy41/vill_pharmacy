@@ -71,7 +71,7 @@ class OrderCard extends StatelessWidget {
                 const Divider(height: 24, color: OrdersPalette.border),
                 OrderInfoRow(
                     pharmacyName: 'لسه',
-                    timeLabel: order.createdAt.timeZoneName),
+                    timeLabel: order.createdAt),
                 const SizedBox(height: 14),
                 OrderActionsRow(
                   status: order.status,

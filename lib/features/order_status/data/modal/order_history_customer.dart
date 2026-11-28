@@ -6,12 +6,12 @@ enum OrderStatus {
   rejected,
 }
 
-OrderStatus parseOrderStatus(String? status) {
+OrderStatus parseOrderStatus(String status) {
   switch (status) {
-    case 'on_the_way':
+    case 'accepted':
       return OrderStatus.onTheWay;
 
-    case 'searching':
+    case 'pending':
       return OrderStatus.searching;
 
     case 'delivered':
@@ -85,7 +85,7 @@ class OrderHistoryModel {
       json['prescriptionImageUrl'] as String?,
       hasPrescriptionImage:
       json['hasPrescriptionImage'] as bool? ?? false,
-      status: parseOrderStatus(json['status'] as String?),
+      status: parseOrderStatus(json['status'] as String),
       price: (json['price'] as num?)?.toDouble(),
       currency: json['currency'] as String? ?? 'EGP',
       estimatedDeliveryMinutes:
